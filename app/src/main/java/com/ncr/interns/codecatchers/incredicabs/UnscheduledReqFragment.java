@@ -38,9 +38,6 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         // Required empty public constructor
     }
 
-    Context mContext;
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
