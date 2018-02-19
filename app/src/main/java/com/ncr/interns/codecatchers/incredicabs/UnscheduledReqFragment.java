@@ -27,25 +27,26 @@ import java.util.Locale;
  * A simple {@link Fragment} subclass.
  */
 public class UnscheduledReqFragment extends android.support.v4.app.Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
-    int mYear,mMonth,mDay,mHour,mMinute;
-    EditText fromDate,toDate,managerQLid,reasonForRequest,dropLocation,timepicker;
+    int mYear, mMonth, mDay, mHour, mMinute;
+    EditText fromDate, toDate, managerQLid, reasonForRequest, dropLocation, timepicker;
     Button submit;
     Spinner spinner_location;
     View rootView;
-    String locationArray[] = {"Home","Office"};
+    String locationArray[] = {"Home", "Office"};
+
     public UnscheduledReqFragment() {
         // Required empty public constructor
     }
-    Context mContext;
 
+    Context mContext;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-       //Inflating the xml layout
-        View rootView = inflater.inflate(R.layout.content_request, container,false);
+        //Inflating the xml layout
+        View rootView = inflater.inflate(R.layout.content_request, container, false);
 
         //getting the id's
         submit = rootView.findViewById(R.id.btn_submit);
@@ -53,13 +54,13 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         toDate = rootView.findViewById(R.id.text_ToDate);
         timepicker = rootView.findViewById(R.id.time_picker);
         managerQLid = rootView.findViewById(R.id.text_managerQLID);
-        reasonForRequest =rootView.findViewById(R.id.text_reasonForRequest);
-        dropLocation =rootView.findViewById(R.id.text_dropLocation);
+        reasonForRequest = rootView.findViewById(R.id.text_reasonForRequest);
+        dropLocation = rootView.findViewById(R.id.text_dropLocation);
 
         spinner_location = rootView.findViewById(R.id.spinner_location);
         spinner_location.setOnItemSelectedListener(this);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,locationArray);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, locationArray);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_location.setAdapter(adapter);
 
@@ -109,6 +110,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         datePickerDialog.show();
 
     }
+
     private void methodToSelectTime(final EditText datePicker) {
 
         final Calendar dateSelection = Calendar.getInstance();
@@ -124,23 +126,22 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             }
         }, mHour, mMinute, false);
         timePickerDialog.show();
-        
+
 
     }
 
 
-
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.text_fromDate:
                 methodToSelectDate(fromDate);
                 break;
             case R.id.text_ToDate:
-                    methodToSelectDate(toDate);
+                methodToSelectDate(toDate);
                 break;
             case R.id.time_picker:
-                    methodToSelectTime(timepicker);
+                methodToSelectTime(timepicker);
                 break;
 
         }
