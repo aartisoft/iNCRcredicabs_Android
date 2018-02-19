@@ -69,12 +69,12 @@
         android:layout_marginTop="29dp"
         android:text="Select Time" />
 
-        <EditText
-        android:id="@+id/time_picker"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView6"
-        android:layout_centerHorizontal="true" />
+            <EditText
+                android:id="@+id/time_picker"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/textView6"
+                android:layout_alignStart="@+id/spinner_location" />
 
         <TextView
         android:id="@+id/textView7"
