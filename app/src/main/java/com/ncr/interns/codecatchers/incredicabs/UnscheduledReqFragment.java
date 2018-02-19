@@ -124,7 +124,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             }
         }, mHour, mMinute, false);
         timePickerDialog.show();
-        timePickerDialog.show();
+        
 
     }
 
