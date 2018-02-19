@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+
+        <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Unscheduled Request"
+        android:textSize="30sp" />
+
+        <EditText
+        android:id="@+id/text_fromDate"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView3"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="26dp"
+        android:ems="10"
+        android:hint="From date"
+            android:focusable="false"
+            android:editable="false"/>
+
+        <EditText
+        android:id="@+id/text_ToDate"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/text_fromDate"
+        android:layout_alignBottom="@+id/text_fromDate"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="To Date"
+        android:focusable="false"
+        android:editable="false"
+            />
+
+        <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/text_fromDate"
+        android:layout_below="@+id/text_fromDate"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="29dp"
+        android:text="Select Time" />
+
+        <EditText
+        android:id="@+id/time_picker"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView6"
+        android:layout_centerHorizontal="true" />
+
+        <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView6"
+        android:layout_below="@+id/time_picker"
+        android:layout_marginTop="24dp"
+        android:text="Select Location" />
+
+        <Spinner
+        android:id="@+id/spinner_location"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView7"
+        android:layout_marginStart="26dp"
+        android:layout_toEndOf="@+id/textView7" />
+
+        <EditText
+        android:id="@+id/text_dropLocation"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignStart="@+id/text_fromDate"
+        android:layout_below="@+id/textView7"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:inputType="textMultiLine" />
+
+        <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView7"
+        android:layout_below="@+id/text_dropLocation"
+        android:layout_marginTop="28dp"
+        android:text="Approver"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <EditText
+        android:id="@+id/text_managerQLID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView8"
+        android:layout_alignBottom="@+id/textView8"
+        android:layout_alignEnd="@+id/text_ToDate"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/text_reasonForRequest"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_alignEnd="@+id/text_managerQLID"
+                android:layout_below="@+id/text_managerQLID"
+                android:layout_marginTop="30dp"
+                android:ems="10"
+                android:hint="Enter your Reason for request"
+                android:inputType="textMultiLine" />
+
+        <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_reasonForRequest"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Submit" />
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+</FrameLayout>
+
