@@ -43,7 +43,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     Spinner spinner_location;
     View rootView;
     CheckBox sat, sun;
-    String url = "http://192.168.43.209:8080/DemoProject/re/sample";
+    String url = "http://192.168.43.209:8080/DemoProject/req/unscheduled";
     int i = 0;
     String locationArray[] = {"Home", "Office"};
 
