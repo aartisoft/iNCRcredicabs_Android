@@ -59,13 +59,6 @@ public class Dashboard extends AppCompatActivity
         prepareDashboard();
 
 
-
-
-
-
-
-
-
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
