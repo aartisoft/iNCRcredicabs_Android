@@ -63,8 +63,8 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.MyVi
                 {
                     Intent intent = new Intent(mContext, MainRequestActivity.class);
                     mContext.startActivity(intent);
-                }
-                Toast.makeText(mContext, holder.title.getText(), Toast.LENGTH_SHORT).show();
+                }else{
+                Toast.makeText(mContext, holder.title.getText(), Toast.LENGTH_SHORT).show();}
             }
         });
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
