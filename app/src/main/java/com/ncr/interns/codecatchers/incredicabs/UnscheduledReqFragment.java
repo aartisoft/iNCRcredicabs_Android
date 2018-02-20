@@ -64,6 +64,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         //added date and time pickers
         fromDate.setOnClickListener(this);
         toDate.setOnClickListener(this);
+        timepicker.setOnClickListener(this);
 
         //Handling the Submit button
         submit.setOnClickListener(new View.OnClickListener() {
