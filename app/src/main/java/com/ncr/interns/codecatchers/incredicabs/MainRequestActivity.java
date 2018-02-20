@@ -18,8 +18,8 @@ public class MainRequestActivity extends AppCompatActivity {
         FragmentRequestAdapter fragmentRequestAdapter = new FragmentRequestAdapter(getSupportFragmentManager());
         viewPager.setAdapter(fragmentRequestAdapter);
 
-        TabLayout tabLayout = findViewById(R.id.slider_view);
-        tabLayout.setupWithViewPager(viewPager);
+//        TabLayout tabLayout = findViewById(R.id.slider_view);
+//        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override

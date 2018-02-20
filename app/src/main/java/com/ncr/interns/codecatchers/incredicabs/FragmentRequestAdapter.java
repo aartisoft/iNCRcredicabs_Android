@@ -17,18 +17,21 @@ public class FragmentRequestAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
 
         if(position == 0){
-            return new RegularReqFragment();
+           // return new RegularReqFragment();
+            return  new UnscheduledReqFragment();
         }
-        else if(position == 1){
-            return new ScheduledReqFragment();
-        }
-        else
-            return new UnscheduledReqFragment() ;
-    }
+//        else if(position == 1){
+//            return new ScheduledReqFragment();
+//        }
+//        else
+//            return new RegularReqFragment();
+//            //return new UnscheduledReqFragment() ;
+        return new UnscheduledReqFragment();
+  }
 
     @Override
     public int getCount() {
-        return 3;
+        return 1;
     }
 
     @Override
@@ -36,11 +39,11 @@ public class FragmentRequestAdapter extends FragmentPagerAdapter {
 
         switch (position)
         {
-            case 0: return "Regular Cabs";
+            case 0: return "Unscheduled Cabs";
 
-            case 1: return "Scheduled Cabs";
-
-            case 2: return "Unscheduled Cabs";
+//            case 1: return "Scheduled Cabs";
+//
+//            case 2: return "Regular cabs";
         }
 
         return super.getPageTitle(position);
