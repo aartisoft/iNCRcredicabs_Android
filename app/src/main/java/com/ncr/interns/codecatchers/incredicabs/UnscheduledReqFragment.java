@@ -6,6 +6,9 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.NestedScrollView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +37,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class UnscheduledReqFragment extends android.support.v4.app.Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     int mYear, mMonth, mDay, mHour, mMinute;
@@ -43,10 +48,10 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     Spinner spinner_location;
     View rootView;
     CheckBox sat, sun;
-    String url = "http://192.168.43.209:8080/DemoProject/re/sample";
+    String url = "http://192.168.0.141:8080/DemoProject/re/sample";
     int i = 0;
-    String locationArray[] = {"Home", "Office"};
-
+    String locationArray[] = {"Select","Home", "Office"};
+    NestedScrollView nsv;
     public UnscheduledReqFragment() {
         // Required empty public constructor
     }
@@ -72,6 +77,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         managerQLid = rootView.findViewById(R.id.text_managerQLID);
         reasonForRequest = rootView.findViewById(R.id.text_reasonForRequest);
         dropLocation = rootView.findViewById(R.id.text_dropLocation);
+        nsv=rootView.findViewById(R.id.nestedsv);
         //  timepickerfrom = rootView.findViewById(R.id.time_pickerfrom);
         sat = rootView.findViewById(R.id.cbsat);
         sun = rootView.findViewById(R.id.cbsun);
@@ -94,7 +100,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         fromDate.setOnClickListener(this);
         toDate.setOnClickListener(this);
         timepicker.setOnClickListener(this);
-
+managerQLid.setText(getActivity().getSharedPreferences(null,MODE_PRIVATE).getString("Mgr_Qlid","RB250491"));
 
         //Handling the Submit button
         submit.setOnClickListener(new View.OnClickListener() {
@@ -106,12 +112,13 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                     i = 2;
                 if (sun.isChecked() && sat.isChecked())
                     i = 3;
-                Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
+                if(validation()){
                 JSONObject jsonBody = new JSONObject();
                 try {
-                    jsonBody.put("Emp_QLID", "1234");
+                    jsonBody.put("Emp_QLID",getActivity().getSharedPreferences(null,MODE_PRIVATE).getString("Emp_qlid","RB250491") );
                     jsonBody.put("Shift_ID", "4");
-                    jsonBody.put("Mgr_QLID", "456");
+                    jsonBody.put("Mgr_QLID", managerQLid.getText().toString());
                     jsonBody.put("Weekend", String.valueOf(i));
                     jsonBody.put("Destination", dest);
                     jsonBody.put("Reason", reasonForRequest.getText().toString());
@@ -168,6 +175,9 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                         });
 
                 RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
+            }else{
+                  //  Toast.makeText(getActivity(), "Please check your entered information", Toast.LENGTH_LONG).show();
+                }
 
             }
         });
@@ -287,17 +297,19 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         // Toast.makeText(getActivity(), ""+position, Toast.LENGTH_SHORT).show();
-        if (position == 0) {
+        if (position == 1) {
             dest = "H";
-
-            displayLocationSpinner.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
+            displayLocationSpinner.setVisibility(View.VISIBLE);
+            displayLocationSpinner.setText(getActivity().getSharedPreferences(null,MODE_PRIVATE).getString("Emp_Address1","BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon"));
             dropLocation.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
-        }
-        else{
-            dest = "O";
 
+        }
+        else if(position==2){
+            dest = "O";
+            displayLocationSpinner.setVisibility(View.VISIBLE);
             displayLocationSpinner.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
-            dropLocation.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
+
+            dropLocation.setText(getActivity().getSharedPreferences(null,MODE_PRIVATE).getString("Emp_Address1","BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon"));
         }
 
 
@@ -307,4 +319,92 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+    public Boolean validation(){
+
+        if(TextUtils.isEmpty(startdate))
+        {   Snackbar snackbar = Snackbar
+                .make(nsv, "From Date Can't be empty", Snackbar.LENGTH_LONG);
+            snackbar.show();
+           // fromDate.setError("Can't be empty");
+        }else{ if(TextUtils.isEmpty(enddate))
+        {
+            //toDate.setError("Can't be empty");
+            Snackbar snackbar = Snackbar
+                    .make(nsv, "To Date Can't be empty", Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }else {
+            if(TextUtils.isEmpty(endtime))
+            {
+      //  timepicker.setError("Can't be empty");
+                Snackbar snackbar = Snackbar
+                        .make(nsv, "Time Can't be empty", Snackbar.LENGTH_LONG);
+                snackbar.show();
+
+            }else {
+                    if(TextUtils.isEmpty( managerQLid.getText().toString()))
+                    {
+                        managerQLid.setError("Can't be empty");
+                        Snackbar snackbar = Snackbar
+                                .make(nsv, "Manager ID Can't be empty", Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
+                    else { if(isValid(managerQLid.getText().toString()))
+                    {
+                        if(TextUtils.isEmpty(reasonForRequest.getText().toString()))
+                        {
+                            reasonForRequest.setError("Can't be empty");
+                    Snackbar snackbar = Snackbar
+                            .make(nsv, " Reason Can't be empty", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+
+                        }else {return true;}}else{
+                        Snackbar snackbar = Snackbar
+                                .make(nsv, "ID is not valid", Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
+
+
+                }
+
+            }
+        }
+
+        }
+  return false;
+    }
+
+    public static boolean isValid(String str)
+
+    {
+        if(!(str.length() == 8)){
+            return false;
+        }
+
+        else if(!(((str.charAt(0)<='Z' && str.charAt(0)>='A'))||((str.charAt(0)<='z')&&(str.charAt(0)>='a')) &&((str.charAt(1)<='Z' && str.charAt(1)>='A'))||((str.charAt(1)<='z')&&(str.charAt(1)>='a'))))
+        {
+
+            return false;
+
+
+        }
+        else if(true){
+            for(int i=2;i<str.length();i++){
+                int a=str.charAt(i);
+
+
+                if((a<=57) && (a>=48)){
+
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+        }
+
+        return true;
+    }
+
 }
