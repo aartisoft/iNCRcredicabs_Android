@@ -51,13 +51,10 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         // Required empty public constructor
     }
 
-<<<<<<< HEAD
-=======
     Context mContext;
     String startdate, enddate, starttime, endtime, locations, drop, dest;
 
 
->>>>>>> GauravS
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -97,10 +94,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         fromDate.setOnClickListener(this);
         toDate.setOnClickListener(this);
         timepicker.setOnClickListener(this);
-<<<<<<< HEAD
-=======
-        //timepickerfrom.setOnClickListener(this);
->>>>>>> GauravS
+
 
         //Handling the Submit button
         submit.setOnClickListener(new View.OnClickListener() {
@@ -295,7 +289,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         // Toast.makeText(getActivity(), ""+position, Toast.LENGTH_SHORT).show();
         if (position == 0) {
             dest = "H";
-            
+
             displayLocationSpinner.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
             dropLocation.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
         }
