@@ -3,9 +3,9 @@
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nestedsv"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/nestedsv">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -203,32 +203,32 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="3"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:weightSum="3">
 
                     <TextView
+                        android:id="@+id/display_location_spinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text=""
-                        android:textSize="20dp"
-                        android:textColor="#000000"
                         android:layout_margin="10dp"
-                        android:textStyle="italic"
-                        android:id="@+id/display_location_spinner"
                         android:layout_weight="1"
-                        android:visibility="gone"/>
+                        android:text=""
+                        android:textColor="#000000"
+                        android:textSize="20dp"
+                        android:textStyle="italic"
+                        android:visibility="gone" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
+                        android:layout_weight="1"
                         android:background="#848080"
                         android:gravity="left"
                         android:padding="5dp"
                         android:text="Drop Location"
                         android:textColor="#ffffff"
                         android:textSize="18sp"
-                        android:layout_weight="1"
                         android:textStyle="bold" />
 
                     <EditText
@@ -266,17 +266,44 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <EditText
+                    <!--<EditText-->
+                    <!--android:id="@+id/text_managerQLID"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_margin="2dp"-->
+                    <!--android:layout_weight=".70"-->
+                    <!--android:background="@drawable/background_edittext"-->
+                    <!--android:ems="10"-->
+                    <!--android:inputType="textPersonName"-->
+                    <!--android:padding="@dimen/edittxt_padding" />-->
+                    <Spinner
                         android:id="@+id/text_managerQLID"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="2dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
                         android:layout_weight=".70"
                         android:background="@drawable/background_edittext"
-                        android:ems="10"
-                        android:inputType="textPersonName"
-                        android:padding="@dimen/edittxt_padding" />
+                        android:gravity="center"
+                        android:padding="5dp"></Spinner>
 
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/EditText_managerQLID"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="@drawable/background_edittext"
+                        android:editable="false"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:padding="@dimen/edittxt_padding" />
 
                 </LinearLayout>
 
