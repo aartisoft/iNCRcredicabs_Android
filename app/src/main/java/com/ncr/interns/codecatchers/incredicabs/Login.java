@@ -17,6 +17,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.android.volley.Request.Method.HEAD;
+
 public class Login extends AppCompatActivity {
 
     Button login;
@@ -36,13 +38,15 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Login.this,Dashboard.class);
+
+                Intent intent = new Intent(Login.this, Dashboard.class);
                 startActivity(intent);
             }
         });
 //        login.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
+
 //
 //
 //                //json for request
@@ -69,6 +73,7 @@ public class Login extends AppCompatActivity {
 //                                try {
 //                                    if (response.getString("status").equalsIgnoreCase("success")) {
 //
+
 //                                        String Emp_qlid = response.getString("Emp_qlid");
 //                                        String Mgr_Qlid = response.getString("Mgr_Qlid");
 //                                        String Emp_Address1 = response.getString("Emp_Address1");
@@ -78,6 +83,17 @@ public class Login extends AppCompatActivity {
 //                                        //  Toast.makeText(Login.this, Emp_qlid+Mgr_Qlid+Emp_Address1, Toast.LENGTH_LONG).show();
 //
 //                                        Intent intent = new Intent(Login.this, Dashboard.class);
+
+//                                        String Emp_qlid=response.getString( "Emp_qlid");
+//                                        String Mgr_Qlid=response.getString( "Mgr_Qlid");
+//                                        String Emp_Address1=response.getString( "Emp_Address1");
+//                                        getSharedPreferences(null,MODE_PRIVATE).edit().putString("Emp_qlid",Emp_qlid).apply();
+//                                        getSharedPreferences(null,MODE_PRIVATE).edit().putString("Mgr_Qlid",Mgr_Qlid).apply();
+//                                        getSharedPreferences(null,MODE_PRIVATE).edit().putString("Emp_Address1",Emp_Address1).apply();
+//                                      //  Toast.makeText(Login.this, Emp_qlid+Mgr_Qlid+Emp_Address1, Toast.LENGTH_LONG).show();
+//
+//                                        Intent intent = new Intent(Login.this,Dashboard.class);
+
 //                                        startActivity(intent);
 //                                    } else {
 //                                        Toast.makeText(Login.this, "Invalid Credentials", Toast.LENGTH_LONG).show();
@@ -100,15 +116,13 @@ public class Login extends AppCompatActivity {
 //                RESTService.getInstance(Login.this).addToRequestQueue(jsonObjRequest);
 //
 //            }
-//        });
 
     }
-
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        finish();
+        @Override
+        protected void onStop () {
+            super.onStop();
+            finish();
+        }
     }
-}
+
 

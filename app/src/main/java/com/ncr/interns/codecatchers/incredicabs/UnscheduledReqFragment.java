@@ -1,9 +1,12 @@
 package com.ncr.interns.codecatchers.incredicabs;
 
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.Snackbar;
@@ -114,68 +117,136 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (sat.isChecked())
-                    i = 1;
-                if (sun.isChecked())
-                    i = 2;
-                if (sun.isChecked() && sat.isChecked())
-                    i = 3;
 
-                Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
-                JSONObject jsonBody;
+//                if (sat.isChecked())
+//                    i = 1;
+//                if (sun.isChecked())
+//                    i = 2;
+//                if (sun.isChecked() && sat.isChecked())
+//                    i = 3;
+//
+//                Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
+//                JSONObject jsonBody = new JSONObject();
+//                try {
+//                    jsonBody.put("Emp_QLID", "1234");
+//                    jsonBody.put("Shift_ID", "4");
+//                    jsonBody.put("Mgr_QLID", "456");
+//                    jsonBody.put("Weekend", String.valueOf(i));
+//                    jsonBody.put("Destination", dest);
+//                    jsonBody.put("Reason", reasonForRequest.getText().toString());
+//                    jsonBody.put("Start_Date_Time", "2018/12/12");
+//                    jsonBody.put("End_Date_Time", enddate + " " + endtime + ":00");
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//
+//                //json for request
+//                JSONObject jsonBodyRequest = new JSONObject();
+//                try {
+//                    jsonBodyRequest.put("from", "karangupta.199317@gmail.com");
+//                    jsonBodyRequest.put("recepient1", "karangupta.199317@gmail.com");
+//                    jsonBodyRequest.put("recepient2", "haffiza123@gmail.com");
+//                    jsonBodyRequest.put("subject", "You were expecting me");
+//                    jsonBodyRequest.put("message", "this is test mail from rest api");
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                // Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
+//                if (validation()) {
+//                    jsonBody = new JSONObject();
+//                    try {
+//                        jsonBody.put("Emp_QLID", getActivity().getSharedPreferences(null, MODE_PRIVATE).getString("Emp_qlid", "RB250491"));
+//                        jsonBody.put("Shift_ID", "4");
+//                        jsonBody.put("Mgr_QLID", managerQLid.getText().toString());
+//                        jsonBody.put("Weekend", String.valueOf(i));
+//                        jsonBody.put("Destination", dest);
+//                        jsonBody.put("Reason", reasonForRequest.getText().toString());
+//                        jsonBody.put("Start_Date_Time", "2018/12/12");
+//                        jsonBody.put("End_Date_Time", enddate + " " + endtime + ":00");
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//
+//
+//                    //json for request
+//                    jsonBodyRequest = new JSONObject();
+//                    try {
+//                        jsonBodyRequest.put("from", "karangupta.199317@gmail.com");
+//                        jsonBodyRequest.put("recepient1", "karangupta.199317@gmail.com");
+//                        jsonBodyRequest.put("recepient2", "haffiza123@gmail.com");
+//                        jsonBodyRequest.put("subject", "You were expecting me");
+//                        jsonBodyRequest.put("message", "this is test mail from rest api");
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//
+//                    JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST,
+//                            url,
+//                            jsonBody,
+//                            new Response.Listener<JSONObject>() {
+//                                @Override
+//                                public void onResponse(JSONObject response) {
+//
+//                                    Log.i("VOLLEY", "inside onResponse method:UnscheduledRequest");
+//                                    Log.i("VOLLEY", response.toString());
+//
+//                                    try {
+//                                        if (response.getString("status").equalsIgnoreCase("success")) {
+//                                            Toast.makeText(getActivity(), "Your request is in process", Toast.LENGTH_LONG).show();
+//                                        } else {
+//                                            Toast.makeText(getActivity(), "Failed to make request", Toast.LENGTH_LONG).show();
+//                                        }
+//                                    } catch (JSONException e) {
+//                                        e.printStackTrace();
+//                                    }
+//
+//                                }
+//                            },
+//                            new Response.ErrorListener() {
+//                                @Override
+//                                public void onErrorResponse(VolleyError error) {
+//                                    // Do something when error occurred
+//                                    Log.d("VOLLEY", "Something went wrong");
+//                                    error.printStackTrace();
+//                                }
+//                            });
+//
+//
+//                RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
+//
+//                    RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
+//                } else {
+//                    //  Toast.makeText(getActivity(), "Please check your entered information", Toast.LENGTH_LONG).show();
+//                }
+//
+//
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Confirmation").setMessage("You are requesting cab for these many days, Do you want to continue")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //TODO set positive Action
 
-                // Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
-                if (validation()) {
-                    jsonBody = new JSONObject();
-                    try {
-                        jsonBody.put("Emp_QLID", getActivity().getSharedPreferences(null, MODE_PRIVATE).getString("Emp_qlid", "RB250491"));
-                        jsonBody.put("Shift_ID", "4");
-                        // jsonBody.put("Mgr_QLID", managerQLid.getText().toString());
-                        jsonBody.put("Weekend", String.valueOf(i));
-                        jsonBody.put("Destination", dest);
-                        jsonBody.put("Reason", reasonForRequest.getText().toString());
-                        jsonBody.put("Start_Date_Time", fromDate);
-                        jsonBody.put("End_Date_Time", enddate);
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-                    JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-
-                            Log.i("VOLLEY", "inside onResponse method:UnscheduledRequest");
-                            Log.i("VOLLEY", response.toString());
-
-                            try {
-                                if (response.getString("status").equalsIgnoreCase("success")) {
-                                    Toast.makeText(getActivity(), "Your request is in process", Toast.LENGTH_LONG).show();
-                                } else {
-                                    Toast.makeText(getActivity(), "Failed to make request", Toast.LENGTH_LONG).show();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
                             }
+                        }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                       //code to set the Action for the Negitive button
+                        dialog.cancel();
 
-                        }
-                    },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    // Do something when error occurred
-                                    Log.d("VOLLEY", "Something went wrong");
-                                    error.printStackTrace();
-                                }
-                            });
-                    RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
+                    }
+                }).setIcon(android.R.drawable.ic_dialog_alert).show();
 
-                    RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
-                } else {
-                    //  Toast.makeText(getActivity(), "Please check your entered information", Toast.LENGTH_LONG).show();
-                }
-            }//On Click listner Finish
+
+           }
+
         });
         // Toast.makeText(getActivity(), "Works!!!", Toast.LENGTH_SHORT).show();
         return rootView;
