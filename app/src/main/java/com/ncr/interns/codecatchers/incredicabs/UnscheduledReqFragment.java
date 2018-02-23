@@ -43,7 +43,7 @@ import java.util.Locale;
 import static android.content.Context.MODE_PRIVATE;
 
 
-public class UnscheduledReqFragment extends android.support.v4.app.Fragment implements View.OnClickListener{
+public class UnscheduledReqFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
     int mYear, mMonth, mDay, mHour, mMinute;
     EditText fromDate, toDate, reasonForRequest, dropLocation, timepicker; //timepickerfrom;
     EditText managerQLid_textField;
@@ -71,7 +71,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.content_request, container, false);
+        final View rootView = inflater.inflate(R.layout.content_request, container, false);
 
         //getting the id's
         managerQLid_textField = rootView.findViewById(R.id.EditText_managerQLID);
@@ -102,7 +102,6 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         spinner_location.setAdapter(adapter);
 
 
-
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, ApproverArray);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         managerQLid.setAdapter(adapter2);
@@ -118,134 +117,94 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             @Override
             public void onClick(View v) {
 
-//                if (sat.isChecked())
-//                    i = 1;
-//                if (sun.isChecked())
-//                    i = 2;
-//                if (sun.isChecked() && sat.isChecked())
-//                    i = 3;
-//
-//                Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
-//                JSONObject jsonBody = new JSONObject();
-//                try {
-//                    jsonBody.put("Emp_QLID", "1234");
-//                    jsonBody.put("Shift_ID", "4");
-//                    jsonBody.put("Mgr_QLID", "456");
-//                    jsonBody.put("Weekend", String.valueOf(i));
-//                    jsonBody.put("Destination", dest);
-//                    jsonBody.put("Reason", reasonForRequest.getText().toString());
-//                    jsonBody.put("Start_Date_Time", "2018/12/12");
-//                    jsonBody.put("End_Date_Time", enddate + " " + endtime + ":00");
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//
-//                //json for request
-//                JSONObject jsonBodyRequest = new JSONObject();
-//                try {
-//                    jsonBodyRequest.put("from", "karangupta.199317@gmail.com");
-//                    jsonBodyRequest.put("recepient1", "karangupta.199317@gmail.com");
-//                    jsonBodyRequest.put("recepient2", "haffiza123@gmail.com");
-//                    jsonBodyRequest.put("subject", "You were expecting me");
-//                    jsonBodyRequest.put("message", "this is test mail from rest api");
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                // Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
-//                if (validation()) {
-//                    jsonBody = new JSONObject();
-//                    try {
-//                        jsonBody.put("Emp_QLID", getActivity().getSharedPreferences(null, MODE_PRIVATE).getString("Emp_qlid", "RB250491"));
-//                        jsonBody.put("Shift_ID", "4");
-//                        jsonBody.put("Mgr_QLID", managerQLid.getText().toString());
-//                        jsonBody.put("Weekend", String.valueOf(i));
-//                        jsonBody.put("Destination", dest);
-//                        jsonBody.put("Reason", reasonForRequest.getText().toString());
-//                        jsonBody.put("Start_Date_Time", "2018/12/12");
-//                        jsonBody.put("End_Date_Time", enddate + " " + endtime + ":00");
-//
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//
-//
-//                    //json for request
-//                    jsonBodyRequest = new JSONObject();
-//                    try {
-//                        jsonBodyRequest.put("from", "karangupta.199317@gmail.com");
-//                        jsonBodyRequest.put("recepient1", "karangupta.199317@gmail.com");
-//                        jsonBodyRequest.put("recepient2", "haffiza123@gmail.com");
-//                        jsonBodyRequest.put("subject", "You were expecting me");
-//                        jsonBodyRequest.put("message", "this is test mail from rest api");
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//
-//                    JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST,
-//                            url,
-//                            jsonBody,
-//                            new Response.Listener<JSONObject>() {
-//                                @Override
-//                                public void onResponse(JSONObject response) {
-//
-//                                    Log.i("VOLLEY", "inside onResponse method:UnscheduledRequest");
-//                                    Log.i("VOLLEY", response.toString());
-//
-//                                    try {
-//                                        if (response.getString("status").equalsIgnoreCase("success")) {
-//                                            Toast.makeText(getActivity(), "Your request is in process", Toast.LENGTH_LONG).show();
-//                                        } else {
-//                                            Toast.makeText(getActivity(), "Failed to make request", Toast.LENGTH_LONG).show();
-//                                        }
-//                                    } catch (JSONException e) {
-//                                        e.printStackTrace();
-//                                    }
-//
-//                                }
-//                            },
-//                            new Response.ErrorListener() {
-//                                @Override
-//                                public void onErrorResponse(VolleyError error) {
-//                                    // Do something when error occurred
-//                                    Log.d("VOLLEY", "Something went wrong");
-//                                    error.printStackTrace();
-//                                }
-//                            });
-//
-//
-//                RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
-//
-//                    RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
-//                } else {
-//                    //  Toast.makeText(getActivity(), "Please check your entered information", Toast.LENGTH_LONG).show();
-//                }
-//
-//
-                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Confirmation").setMessage("You are requesting cab for these many days, Do you want to continue")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //TODO set positive Action
+
+                if (validation()) {
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Confirmation").setMessage("You are requesting cab for these many days, Do you want to continue")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //TODO set positive Action
+//                                        Snackbar snackbar = Snackbar.make(rootView, "Validation Works",Snackbar.LENGTH_SHORT);
+//                                        snackbar.show();
 
 
-                            }
-                        }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                       //code to set the Action for the Negitive button
-                        dialog.cancel();
+                                    if (sat.isChecked())
+                                        i = 1;
+                                    if (sun.isChecked())
+                                        i = 2;
+                                    if (sun.isChecked() && sat.isChecked())
+                                        i = 3;
 
-                    }
-                }).setIcon(android.R.drawable.ic_dialog_alert).show();
+                                    Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
+                                    JSONObject jsonBody = new JSONObject();
+                                    if (validation()) {
+                                        jsonBody = new JSONObject();
+                                        try {
+                                            jsonBody.put("Emp_QLID", getActivity().getSharedPreferences(null, MODE_PRIVATE).getString("Emp_qlid", "RB250491"));
+                                            jsonBody.put("Shift_ID", "4");
+                                            jsonBody.put("Mgr_QLID", managerQLid_textField.getText().toString());
+                                            jsonBody.put("Weekend", String.valueOf(i));
+                                            jsonBody.put("Destination", dest);
+                                            jsonBody.put("Reason", reasonForRequest.getText().toString());
+                                            jsonBody.put("Start_Date_Time", "2018/12/12");
+                                            jsonBody.put("End_Date_Time", enddate + " " + endtime + ":00");
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
+                                                new Response.Listener<JSONObject>() {
+                                                    @Override
+                                                    public void onResponse(JSONObject response) {
+
+                                                        Log.i("VOLLEY", "inside onResponse method:UnscheduledRequest");
+                                                        Log.i("VOLLEY", response.toString());
+
+                                                        try {
+                                                            if (response.getString("status").equalsIgnoreCase("success")) {
+                                                                Toast.makeText(getActivity(), "Your request is in process", Toast.LENGTH_LONG).show();
+                                                            } else {
+                                                                Toast.makeText(getActivity(), "Failed to make request", Toast.LENGTH_LONG).show();
+                                                            }
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+
+                                                    }
+                                                }, new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                // Do something when error occurred
+                                                Log.d("VOLLEY", "Something went wrong");
+                                                error.printStackTrace();
+                                            }
+                                        });
 
 
-           }
+                                        RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
+
+                                        RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
+                                    } else {
+                                        //  Toast.makeText(getActivity(), "Please check your entered information", Toast.LENGTH_LONG).show();
+                                    }
+
+
+                                }
+                            }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //code to set the Action for the Negitive button
+                            dialog.cancel();
+
+                        }
+                    }).setIcon(android.R.drawable.ic_dialog_alert).show();
+
+                }
+
+            }
 
         });
         // Toast.makeText(getActivity(), "Works!!!", Toast.LENGTH_SHORT).show();
@@ -418,24 +377,23 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         return true;
     }
 
-    class LocationSpinner implements AdapterView.OnItemSelectedListener{
+    class LocationSpinner implements AdapterView.OnItemSelectedListener {
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            if(position ==1){
-                dest ="O";
+            if (position == 1) {
+                dest = "O";
                 //TODO have to get the Data from DATABASE
                 displayLocationSpinner.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
                 displayLocationSpinner.setVisibility(View.VISIBLE);
                 dropLocation.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
             }
-            if(position==2)
-            {
-               dest="H";
-               //TODO have to get the Data from DATABASE
-               displayLocationSpinner.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
+            if (position == 2) {
+                dest = "H";
+                //TODO have to get the Data from DATABASE
+                displayLocationSpinner.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
                 displayLocationSpinner.setVisibility(View.VISIBLE);
-               dropLocation.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
+                dropLocation.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
             }
 
         }
@@ -446,19 +404,19 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         }
     }
 
-    class ApprovalManagerQlid implements AdapterView.OnItemSelectedListener{
+    class ApprovalManagerQlid implements AdapterView.OnItemSelectedListener {
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 1){
-                    //TODO Getting the Magnager's QLid
+            if (position == 1) {
+                //TODO Getting the Magnager's QLid
 
-                    managerQLid_textField.setText("Mg123456");
-                }
-                if(position ==2){
-                    //TODO Getting the Magnager's QLid
-                    managerQLid_textField.setText("Mg654321");
-                }
+                managerQLid_textField.setText("Mg123456");
+            }
+            if (position == 2) {
+                //TODO Getting the Magnager's QLid
+                managerQLid_textField.setText("Mg654321");
+            }
         }
 
         @Override
