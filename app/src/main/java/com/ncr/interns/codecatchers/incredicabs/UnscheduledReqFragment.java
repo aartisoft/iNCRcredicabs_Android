@@ -4,11 +4,8 @@ package com.ncr.interns.codecatchers.incredicabs;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
@@ -35,6 +32,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,27 +42,32 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 public class UnscheduledReqFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
+
     int mYear, mMonth, mDay, mHour, mMinute;
+    long diffDays, diff;    //diffDays stores the difference between from and to date and is to be used while sending the message to the manager
+    SimpleDateFormat dateFormat;
+    Date from_date, to_date;
+    String dateToCheck, dateFromCheck;
     EditText fromDate, toDate, reasonForRequest, dropLocation, timepicker; //timepickerfrom;
     EditText managerQLid_textField;
     Button submit;
     TextView displayLocationSpinner;
     Spinner spinner_location;
+    String day_st;
     Spinner managerQLid;
     View rootView;
     CheckBox sat, sun;
     String url = "http://192.168.43.209:8080/DemoProject/req/unscheduled";
     int i = 0;
     String locationArray[] = {"Select", "Home", "Office"};
-    String ApproverArray[] = {"Select", "Lvl 1 Manager", "Lvl2 Manager"};
+    String approverArray[] = {"Select", "Lvl 1 Manager", "Lvl2 Manager"};
     NestedScrollView nsv;
 
     public UnscheduledReqFragment() {
         // Required empty public constructor
     }
 
-    Context mContext;
-    String startdate, enddate, starttime, endtime, locations, drop, dest;
+    String startDate, endDate, starttime, endTime, locations, drop, dest;
 
 
     @Override
@@ -85,24 +88,23 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         nsv = rootView.findViewById(R.id.nestedsv);
         sat = rootView.findViewById(R.id.cbsat);
         sun = rootView.findViewById(R.id.cbsun);
-        /**
-         *Code For handling the spinner
+        /*
+         Code For handling the spinner
          */
-
         spinner_location = rootView.findViewById(R.id.spinner_location);
         managerQLid = rootView.findViewById(R.id.text_managerQLID);
         spinner_location.setOnItemSelectedListener(new LocationSpinner());
         managerQLid.setOnItemSelectedListener(new ApprovalManagerQlid());
 
-        /**
-         * Code for creating the Adapter to add the data of location array into Spinner
+        /*
+          Code for creating the Adapter to add the data of location array into Spinner
          */
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, locationArray);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_location.setAdapter(adapter);
 
 
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, ApproverArray);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, approverArray);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         managerQLid.setAdapter(adapter2);
 
@@ -117,18 +119,25 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             @Override
             public void onClick(View v) {
 
-
                 if (validation()) {
+                    diff = to_date.getTime() - from_date.getTime();
+                    diffDays = diff / (24 * 60 * 60 * 1000) + 1;
+                    if ((validation()) && (diffDays > 0)) {
 
+                        diff = to_date.getTime() - from_date.getTime();
+                        diffDays = diff / (24 * 60 * 60 * 1000) + 1;
+                        //if day is 1 then day_st day else days
+                        if (diffDays == 1) {
+                            day_st = "day";
+                        } else {
+                            day_st = "days";
+                        }
+                    }
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Confirmation").setMessage("You are requesting cab for these many days, Do you want to continue")
+                    builder.setTitle("Confirmation").setMessage("You are requesting cab for " + diffDays + " " + day_st + " , Do you want to continue")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    //TODO set positive Action
-//                                        Snackbar snackbar = Snackbar.make(rootView, "Validation Works",Snackbar.LENGTH_SHORT);
-//                                        snackbar.show();
-
 
                                     if (sat.isChecked())
                                         i = 1;
@@ -149,7 +158,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                             jsonBody.put("Destination", dest);
                                             jsonBody.put("Reason", reasonForRequest.getText().toString());
                                             jsonBody.put("Start_Date_Time", "2018/12/12");
-                                            jsonBody.put("End_Date_Time", enddate + " " + endtime + ":00");
+                                            jsonBody.put("End_Date_Time", endDate + " " + endTime + ":00");
 
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -188,7 +197,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
                                         RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
                                     } else {
-                                        //  Toast.makeText(getActivity(), "Please check your entered information", Toast.LENGTH_LONG).show();
+                                          Toast.makeText(getActivity(), "Please check your entered information", Toast.LENGTH_LONG).show();
                                     }
 
 
@@ -202,7 +211,12 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                         }
                     }).setIcon(android.R.drawable.ic_dialog_alert).show();
 
+                } else {
+                    Snackbar snackbar = Snackbar.make(nsv, "Selected Date is invalid", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+
                 }
+
 
             }
 
@@ -215,7 +229,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
         final Calendar dateSelection = Calendar.getInstance();
         // Get Current Date
-        TimePickerDialog timePickerDialog;
+        // TimePickerDialog timePickerDialog;
         DatePickerDialog datePickerDialog;
         mYear = dateSelection.get(Calendar.YEAR);
         mMonth = dateSelection.get(Calendar.MONTH);
@@ -231,9 +245,37 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 //                datePicker.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 //                datePicker.setText();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.US);
+
+
                 String date = simpleDateFormat.format(new Date(year - 1900, monthOfYear, dayOfMonth));
-                datePicker.setText(date);
-                startdate = date;
+
+                //own code starts    status:- working
+                String status = null;
+                Date userselected = new Date();
+                UnscheduledReqFragment.this.dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                try {
+                    userselected = UnscheduledReqFragment.this.dateFormat.parse(date);
+                    Date currentdate = new Date();
+                    if (UnscheduledReqFragment.this.dateFormat.parse(UnscheduledReqFragment.this.dateFormat.format(userselected)).before(UnscheduledReqFragment.this.dateFormat.parse(UnscheduledReqFragment.this.dateFormat.format(currentdate)))) {
+                        status = "Not Valid";
+                    } else {
+                        status = UnscheduledReqFragment.this.dateFormat.format(userselected);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+                //own code ends
+
+                datePicker.setText(status);   //previously:- datePicker.setText(date);
+                try {
+                    from_date = UnscheduledReqFragment.this.dateFormat.parse(status);
+                    dateFromCheck = status;
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                startDate = date;
 
             }
         }, mYear, mMonth, mDay);
@@ -263,8 +305,31 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 //                datePicker.setText();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.US);
                 String date = simpleDateFormat.format(new Date(year - 1900, monthOfYear, dayOfMonth));
-                datePicker.setText(date);
-                enddate = date;
+
+                //own code starts
+                String status = null;
+                Date userselected = new Date();
+                SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd");
+                try {
+                    userselected = dateformat.parse(date);
+                    Date currentdate = new Date();
+                    if (dateformat.parse(dateformat.format(userselected)).before(dateformat.parse(dateformat.format(currentdate)))) {
+                        status = "Not Valid";
+                    } else {
+                        status = dateformat.format(userselected);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                //own code ends
+                datePicker.setText(status);
+                try {
+                    to_date = dateformat.parse(status);
+                    dateToCheck = status;
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                endDate = date;
 
             }
         }, mYear, mMonth, mDay);
@@ -286,10 +351,10 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 if (minute < 10) {
                     timepicker.setText("" + hourOfDay + ":0" + minute);
-                    endtime = "" + hourOfDay + ":0" + minute;
+                    endTime = "" + hourOfDay + ":0" + minute;
                 } else {
                     timepicker.setText("" + hourOfDay + ":" + minute);
-                    endtime = "" + hourOfDay + ":" + minute;
+                    endTime = "" + hourOfDay + ":" + minute;
                 }
 
             }
@@ -317,26 +382,26 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     //method to do validation
     public Boolean validation() {
 
-        if (TextUtils.isEmpty(startdate)) {
+        if (TextUtils.isEmpty(startDate)) {
             Snackbar snackbar = Snackbar.make(nsv, "From Date Can't be empty", Snackbar.LENGTH_LONG);
             snackbar.show();
             // fromDate.setError("Can't be empty");
         } else {
-            if (TextUtils.isEmpty(enddate)) {
+            if (TextUtils.isEmpty(endDate)) {
                 //toDate.setError("Can't be empty");
                 Snackbar snackbar = Snackbar.make(nsv, "To Date Can't be empty", Snackbar.LENGTH_LONG);
                 snackbar.show();
             } else {
-                if (TextUtils.isEmpty(endtime)) {
+                if (TextUtils.isEmpty(endTime)) {
                     //  timepicker.setError("Can't be empty");
                     Snackbar snackbar = Snackbar.make(nsv, "Time Can't be empty", Snackbar.LENGTH_LONG);
                     snackbar.show();
 
-//                } else {
-//                    if (TextUtils.isEmpty(managerQLid.getText().toString())) {
-//                        managerQLid.setError("Can't be empty");
-//                        Snackbar snackbar = Snackbar.make(nsv, "Manager ID Can't be empty", Snackbar.LENGTH_LONG);
-//                        snackbar.show();
+                } else {
+                    if (TextUtils.isEmpty(managerQLid_textField.getText().toString())) {
+                        managerQLid_textField.setError("Can't be empty");
+                        Snackbar snackbar = Snackbar.make(nsv, "Manager ID Can't be empty", Snackbar.LENGTH_LONG);
+                        snackbar.show();
                 } else {
                     if (true/*isValid(managerQLid.getText().toString())*/) {
                         if (TextUtils.isEmpty(reasonForRequest.getText().toString())) {
@@ -354,7 +419,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 }
             }
         }
-        // }
+         }
         return false;
     }
 
