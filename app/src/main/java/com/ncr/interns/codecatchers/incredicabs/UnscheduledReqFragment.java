@@ -59,11 +59,8 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     String day_st;
     JSONObject jsonBody;
     Spinner managerQLid;
-    View rootView;
     public int Counter;
-    CheckBox sat, sun;
     String url = "http://172.20.10.14:8080/DemoProject/re/sample";
-    int i = 0;
     String locationArray[] = {"Select", "Home", "Office"};
     String approverArray[] = {"Select", "Lvl 1 Manager", "Lvl2 Manager"};
     NestedScrollView nsv;
@@ -72,7 +69,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         // Required empty public constructor
     }
 
-    String startDate, endDate, starttime, endTime, locations, drop, dest;
+    String startDate, endDate, endTime, dest;
 
 
     @Override
@@ -104,12 +101,12 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         /*
           Code for creating the Adapter to add the data of location array into Spinner
          */
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, locationArray);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, locationArray);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_location.setAdapter(adapter);
 
 
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, approverArray);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, approverArray);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         managerQLid.setAdapter(adapter2);
 
@@ -264,8 +261,8 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 UnscheduledReqFragment.this.dateFormat = new SimpleDateFormat("yyyy/MM/dd");
                 try {
                     userselected = UnscheduledReqFragment.this.dateFormat.parse(date);
-                    Date currentdate = new Date();
-                    if (UnscheduledReqFragment.this.dateFormat.parse(UnscheduledReqFragment.this.dateFormat.format(userselected)).before(UnscheduledReqFragment.this.dateFormat.parse(UnscheduledReqFragment.this.dateFormat.format(currentdate)))) {
+                    Date currentDate = new Date();
+                    if (UnscheduledReqFragment.this.dateFormat.parse(UnscheduledReqFragment.this.dateFormat.format(userselected)).before(UnscheduledReqFragment.this.dateFormat.parse(UnscheduledReqFragment.this.dateFormat.format(currentDate)))) {
                         status = "Not Valid";
                     } else {
                         status = UnscheduledReqFragment.this.dateFormat.format(userselected);
@@ -289,6 +286,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             }
         }, mYear, mMonth, mDay);
         datePickerDialog.setTitle("");
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
         datePickerDialog.show();
 
     }
@@ -343,6 +341,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             }
         }, mYear, mMonth, mDay);
         datePickerDialog.setTitle("");
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
         datePickerDialog.show();
 
     }
@@ -394,7 +393,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         if (TextUtils.isEmpty(startDate)) {
             Snackbar snackbar = Snackbar.make(nsv, "From Date Can't be empty", Snackbar.LENGTH_LONG);
             snackbar.show();
-            // fromDate.setError("Can't be empty");
+             //fromDate.setError("Can't be empty");
         } else {
             if (TextUtils.isEmpty(endDate)) {
                 //toDate.setError("Can't be empty");
@@ -402,7 +401,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 snackbar.show();
             } else {
                 if (TextUtils.isEmpty(endTime)) {
-                    //  timepicker.setError("Can't be empty");
+                   //   timepicker.setError("Can't be empty");
                     Snackbar snackbar = Snackbar.make(nsv, "Time Can't be empty", Snackbar.LENGTH_LONG);
                     snackbar.show();
 
@@ -456,6 +455,12 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             System.out.println(position);
+            if(position == 0)
+            {
+                displayLocationSpinner.setVisibility(View.GONE);
+                dropLocation.setText("");
+
+            }
             if (position == 1) {
                 dest = "O";
                 //TODO have to get the Data from DATABASE
@@ -484,18 +489,13 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             if (position == 1) {
-                //TODO Getting the Magnager's QLid
                 Counter =1;
-
                 managerQLid_textField.setText("sc250512");
             }
             if (position == 2) {
-                //TODO Getting the Magnager's QLid
                 managerQLid_textField.setText("gs250365");
                 Counter = 2;
-
-
-            }
+        }
         }
 
         @Override
