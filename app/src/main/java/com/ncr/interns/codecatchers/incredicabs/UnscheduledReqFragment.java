@@ -4,6 +4,7 @@ package com.ncr.interns.codecatchers.incredicabs;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -43,6 +44,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class UnscheduledReqFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
 
+    private final static String LOG_TAG = UnscheduledReqFragment.class.getSimpleName();
+
     int mYear, mMonth, mDay, mHour, mMinute;
     long diffDays, diff;    //diffDays stores the difference between from and to date and is to be used while sending the message to the manager
     SimpleDateFormat dateFormat;
@@ -54,10 +57,12 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     TextView displayLocationSpinner;
     Spinner spinner_location;
     String day_st;
+    JSONObject jsonBody;
     Spinner managerQLid;
     View rootView;
+    public int Counter;
     CheckBox sat, sun;
-    String url = "http://192.168.43.209:8080/DemoProject/req/unscheduled";
+    String url = "http://172.20.10.14:8080/DemoProject/re/sample";
     int i = 0;
     String locationArray[] = {"Select", "Home", "Office"};
     String approverArray[] = {"Select", "Lvl 1 Manager", "Lvl2 Manager"};
@@ -86,8 +91,8 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         reasonForRequest = rootView.findViewById(R.id.text_reasonForRequest);
         dropLocation = rootView.findViewById(R.id.text_dropLocation);
         nsv = rootView.findViewById(R.id.nestedsv);
-        sat = rootView.findViewById(R.id.cbsat);
-        sun = rootView.findViewById(R.id.cbsun);
+//        sat = rootView.findViewById(R.id.cbsat);
+//        sun = rootView.findViewById(R.id.cbsun);
         /*
          Code For handling the spinner
          */
@@ -139,22 +144,25 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
-                                    if (sat.isChecked())
-                                        i = 1;
-                                    if (sun.isChecked())
-                                        i = 2;
-                                    if (sun.isChecked() && sat.isChecked())
-                                        i = 3;
+//                                    if (sat.isChecked())
+//                                        i = 1;
+//                                    if (sun.isChecked())
+//                                        i = 2;
+//                                    if (sun.isChecked() && sat.isChecked())
+//                                        i = 3;
+//
+//                                    Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
 
-                                    Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
-                                    JSONObject jsonBody = new JSONObject();
                                     if (validation()) {
                                         jsonBody = new JSONObject();
                                         try {
                                             jsonBody.put("Emp_QLID", getActivity().getSharedPreferences(null, MODE_PRIVATE).getString("Emp_qlid", "RB250491"));
                                             jsonBody.put("Shift_ID", "4");
-                                            jsonBody.put("Mgr_QLID", managerQLid_textField.getText().toString());
-                                            jsonBody.put("Weekend", String.valueOf(i));
+                                            jsonBody.put("Mgr_QLID", "sc250512");
+                                           // jsonBody.put("Weekend", String.valueOf(i));
+                                            jsonBody.put("Counter", Counter);
+                                            jsonBody.put("Level2_mgr","gs250365");
+                                            Log.i(LOG_TAG,"gs250365");
                                             jsonBody.put("Destination", dest);
                                             jsonBody.put("Reason", reasonForRequest.getText().toString());
                                             jsonBody.put("Start_Date_Time", "2018/12/12");
@@ -188,6 +196,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                             public void onErrorResponse(VolleyError error) {
                                                 // Do something when error occurred
                                                 Log.d("VOLLEY", "Something went wrong");
+                                                Toast.makeText(getActivity(), "Oops..Something Went wrong", Toast.LENGTH_SHORT).show();
                                                 error.printStackTrace();
                                             }
                                         });
@@ -197,7 +206,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
                                         RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
                                     } else {
-                                          Toast.makeText(getActivity(), "Please check your entered information", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getActivity(), "Please check your entered information", Toast.LENGTH_LONG).show();
                                     }
 
 
@@ -402,24 +411,24 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                         managerQLid_textField.setError("Can't be empty");
                         Snackbar snackbar = Snackbar.make(nsv, "Manager ID Can't be empty", Snackbar.LENGTH_LONG);
                         snackbar.show();
-                } else {
-                    if (true/*isValid(managerQLid.getText().toString())*/) {
-                        if (TextUtils.isEmpty(reasonForRequest.getText().toString())) {
-                            reasonForRequest.setError("Can't be empty");
-                            Snackbar snackbar = Snackbar.make(nsv, " Reason Can't be empty", Snackbar.LENGTH_LONG);
-                            snackbar.show();
-
-                        } else {
-                            return true;
-                        }
                     } else {
-                        Snackbar snackbar = Snackbar.make(nsv, "ID is not valid", Snackbar.LENGTH_LONG);
-                        snackbar.show();
+                        if (true/*isValid(managerQLid.getText().toString())*/) {
+                            if (TextUtils.isEmpty(reasonForRequest.getText().toString())) {
+                                reasonForRequest.setError("Can't be empty");
+                                Snackbar snackbar = Snackbar.make(nsv, " Reason Can't be empty", Snackbar.LENGTH_LONG);
+                                snackbar.show();
+
+                            } else {
+                                return true;
+                            }
+                        } else {
+                            Snackbar snackbar = Snackbar.make(nsv, "ID is not valid", Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                        }
                     }
                 }
             }
         }
-         }
         return false;
     }
 
@@ -446,6 +455,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            System.out.println(position);
             if (position == 1) {
                 dest = "O";
                 //TODO have to get the Data from DATABASE
@@ -475,12 +485,16 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             if (position == 1) {
                 //TODO Getting the Magnager's QLid
+                Counter =1;
 
-                managerQLid_textField.setText("Mg123456");
+                managerQLid_textField.setText("sc250512");
             }
             if (position == 2) {
                 //TODO Getting the Magnager's QLid
-                managerQLid_textField.setText("Mg654321");
+                managerQLid_textField.setText("gs250365");
+                Counter = 2;
+
+
             }
         }
 
@@ -491,3 +505,4 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     }
 
 }
+

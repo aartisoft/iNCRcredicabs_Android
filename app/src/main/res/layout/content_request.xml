@@ -307,48 +307,48 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="vertical">-->
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:autoSizeTextType="uniform"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:background="#848080"
-                        android:gravity="left"
-                        android:padding="5dp"
-                        android:text="I Want to Avail Cabs on:"
-                        android:textColor="#ffffff"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                    <!--<TextView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:autoSizeTextType="uniform"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_margin="4dp"-->
+                        <!--android:background="#848080"-->
+                        <!--android:gravity="left"-->
+                        <!--android:padding="5dp"-->
+                        <!--android:text="I Want to Avail Cabs on:"-->
+                        <!--android:textColor="#ffffff"-->
+                        <!--android:textSize="18sp"-->
+                        <!--android:textStyle="bold" />-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:orientation="horizontal"-->
+                        <!--android:weightSum="2">-->
 
-                        <CheckBox
-                            android:id="@+id/cbsat"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Saturday"
-                            android:textSize="18sp" />
+                        <!--<CheckBox-->
+                            <!--android:id="@+id/cbsat"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_weight="1"-->
+                            <!--android:text="Saturday"-->
+                            <!--android:textSize="18sp" />-->
 
-                        <CheckBox
-                            android:id="@+id/cbsun"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Sunday"
-                            android:textSize="18sp" />
-                    </LinearLayout>
+                        <!--<CheckBox-->
+                            <!--android:id="@+id/cbsun"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_weight="1"-->
+                            <!--android:text="Sunday"-->
+                            <!--android:textSize="18sp" />-->
+                    <!--</LinearLayout>-->
 
-                </LinearLayout>
+                <!--</LinearLayout>-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
