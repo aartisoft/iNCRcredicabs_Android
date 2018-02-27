@@ -3,6 +3,7 @@ package com.ncr.interns.codecatchers.incredicabs;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -51,13 +53,14 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     SimpleDateFormat dateFormat;
     Date from_date, to_date;
     String dateToCheck, dateFromCheck;
-    EditText fromDate, toDate, reasonForRequest, dropLocation, timepicker; //timepickerfrom;
+    EditText fromDate, toDate, reasonForRequest, dropLocation, timepicker;
     EditText managerQLid_textField;
     Button submit;
     TextView displayLocationSpinner;
     Spinner spinner_location;
     String day_st;
     JSONObject jsonBody;
+    private ProgressDialog progressBar;
     Spinner managerQLid;
     public int Counter;
     String url = "http://172.20.10.14:8080/DemoProject/re/sample";
@@ -88,8 +91,6 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         reasonForRequest = rootView.findViewById(R.id.text_reasonForRequest);
         dropLocation = rootView.findViewById(R.id.text_dropLocation);
         nsv = rootView.findViewById(R.id.nestedsv);
-//        sat = rootView.findViewById(R.id.cbsat);
-//        sun = rootView.findViewById(R.id.cbsun);
         /*
          Code For handling the spinner
          */
@@ -97,8 +98,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         managerQLid = rootView.findViewById(R.id.text_managerQLID);
         spinner_location.setOnItemSelectedListener(new LocationSpinner());
         managerQLid.setOnItemSelectedListener(new ApprovalManagerQlid());
-
-        /*
+      /*
           Code for creating the Adapter to add the data of location array into Spinner
          */
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, locationArray);
@@ -126,6 +126,12 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                     diffDays = diff / (24 * 60 * 60 * 1000) + 1;
                     if ((validation()) && (diffDays > 0)) {
 
+                        //<editor-fold desc="code to set the Progress bar">
+                        progressBar = new ProgressDialog(getActivity(), 0);
+                        progressBar.setTitle("Wait");
+                        progressBar.setMessage("Sending request..");
+                        progressBar.show();
+                        //</editor-fold>
                         diff = to_date.getTime() - from_date.getTime();
                         diffDays = diff / (24 * 60 * 60 * 1000) + 1;
                         //if day is 1 then day_st day else days
@@ -134,95 +140,86 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                         } else {
                             day_st = "days";
                         }
-                    }
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Confirmation").setMessage("You are requesting cab for " + diffDays + " " + day_st + " , Do you want to continue")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("Confirmation").setMessage("You are requesting cab for " + diffDays + " " + day_st + " , Do you want to continue")
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (validation()) {
+                                            jsonBody = new JSONObject();
+                                            try {
+                                                jsonBody.put("Emp_QLID", getActivity().getSharedPreferences(null, MODE_PRIVATE).getString("Emp_qlid", "RB250491"));
+                                                jsonBody.put("Shift_ID", "4");
+                                                jsonBody.put("Mgr_QLID", "sc250512");
+                                                // jsonBody.put("Weekend", String.valueOf(i));
+                                                jsonBody.put("Counter", Counter);
+                                                jsonBody.put("Level2_mgr", "gs250365");
+                                                Log.i(LOG_TAG, "gs250365");
+                                                jsonBody.put("Destination", dest);
+                                                jsonBody.put("Reason", reasonForRequest.getText().toString());
+                                                jsonBody.put("Start_Date_Time", "2018/12/12");
+                                                jsonBody.put("End_Date_Time", endDate + " " + endTime + ":00");
 
-//                                    if (sat.isChecked())
-//                                        i = 1;
-//                                    if (sun.isChecked())
-//                                        i = 2;
-//                                    if (sun.isChecked() && sat.isChecked())
-//                                        i = 3;
-//
-//                                    Toast.makeText(getActivity(), "" + i, Toast.LENGTH_SHORT).show();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
 
-                                    if (validation()) {
-                                        jsonBody = new JSONObject();
-                                        try {
-                                            jsonBody.put("Emp_QLID", getActivity().getSharedPreferences(null, MODE_PRIVATE).getString("Emp_qlid", "RB250491"));
-                                            jsonBody.put("Shift_ID", "4");
-                                            jsonBody.put("Mgr_QLID", "sc250512");
-                                           // jsonBody.put("Weekend", String.valueOf(i));
-                                            jsonBody.put("Counter", Counter);
-                                            jsonBody.put("Level2_mgr","gs250365");
-                                            Log.i(LOG_TAG,"gs250365");
-                                            jsonBody.put("Destination", dest);
-                                            jsonBody.put("Reason", reasonForRequest.getText().toString());
-                                            jsonBody.put("Start_Date_Time", "2018/12/12");
-                                            jsonBody.put("End_Date_Time", endDate + " " + endTime + ":00");
+                                            JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
+                                                    new Response.Listener<JSONObject>() {
+                                                        @Override
+                                                        public void onResponse(JSONObject response) {
 
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                                                            Log.i("VOLLEY", "inside onResponse method:UnscheduledRequest");
+                                                            Log.i("VOLLEY", response.toString());
+
+                                                            try {
+                                                                if (response.getString("status").equalsIgnoreCase("success")) {
+                                                                    //Toast.makeText(getActivity(), "Your request is in process", Toast.LENGTH_LONG).show();
+                                                                } else {
+                                                                    Toast.makeText(getActivity(), "Failed to make request", Toast.LENGTH_LONG).show();
+                                                                }
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                            progressBar.dismiss();
+                                                        }
+                                                    }, new Response.ErrorListener() {
+                                                @Override
+                                                public void onErrorResponse(VolleyError error) {
+
+                                                    progressBar.dismiss();
+                                                    // Do something when error occurred
+                                                    Log.d("VOLLEY", "Something went wrong");
+                                                    Toast.makeText(getActivity(), "Oops..Something Went wrong", Toast.LENGTH_SHORT).show();
+                                                    error.printStackTrace();
+                                                }
+                                            });
+
+
+                                            RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
+
+                                            RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
+                                        } else {
+                                            Toast.makeText(getActivity(), "Please check your entered information", Toast.LENGTH_LONG).show();
                                         }
 
-                                        JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
-                                                new Response.Listener<JSONObject>() {
-                                                    @Override
-                                                    public void onResponse(JSONObject response) {
 
-                                                        Log.i("VOLLEY", "inside onResponse method:UnscheduledRequest");
-                                                        Log.i("VOLLEY", response.toString());
-
-                                                        try {
-                                                            if (response.getString("status").equalsIgnoreCase("success")) {
-                                                                Toast.makeText(getActivity(), "Your request is in process", Toast.LENGTH_LONG).show();
-                                                            } else {
-                                                                Toast.makeText(getActivity(), "Failed to make request", Toast.LENGTH_LONG).show();
-                                                            }
-                                                        } catch (JSONException e) {
-                                                            e.printStackTrace();
-                                                        }
-
-                                                    }
-                                                }, new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError error) {
-                                                // Do something when error occurred
-                                                Log.d("VOLLEY", "Something went wrong");
-                                                Toast.makeText(getActivity(), "Oops..Something Went wrong", Toast.LENGTH_SHORT).show();
-                                                error.printStackTrace();
-                                            }
-                                        });
-
-
-                                        RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
-
-                                        RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
-                                    } else {
-                                        Toast.makeText(getActivity(), "Please check your entered information", Toast.LENGTH_LONG).show();
                                     }
+                                }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //code to set the Action for the Negitive button
+                                dialog.cancel();
 
+                            }
+                        }).setIcon(android.R.drawable.ic_dialog_alert).show();
 
-                                }
-                            }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //code to set the Action for the Negitive button
-                            dialog.cancel();
+                    } else {
+                        Snackbar snackbar = Snackbar.make(nsv, "Selected Date is invalid", Snackbar.LENGTH_LONG);
+                        snackbar.show();
 
-                        }
-                    }).setIcon(android.R.drawable.ic_dialog_alert).show();
-
-                } else {
-                    Snackbar snackbar = Snackbar.make(nsv, "Selected Date is invalid", Snackbar.LENGTH_LONG);
-                    snackbar.show();
-
+                    }
                 }
-
 
             }
 
@@ -286,7 +283,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             }
         }, mYear, mMonth, mDay);
         datePickerDialog.setTitle("");
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
 
     }
@@ -341,7 +338,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             }
         }, mYear, mMonth, mDay);
         datePickerDialog.setTitle("");
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
 
     }
@@ -393,7 +390,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         if (TextUtils.isEmpty(startDate)) {
             Snackbar snackbar = Snackbar.make(nsv, "From Date Can't be empty", Snackbar.LENGTH_LONG);
             snackbar.show();
-             //fromDate.setError("Can't be empty");
+            //fromDate.setError("Can't be empty");
         } else {
             if (TextUtils.isEmpty(endDate)) {
                 //toDate.setError("Can't be empty");
@@ -401,7 +398,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 snackbar.show();
             } else {
                 if (TextUtils.isEmpty(endTime)) {
-                   //   timepicker.setError("Can't be empty");
+                    //   timepicker.setError("Can't be empty");
                     Snackbar snackbar = Snackbar.make(nsv, "Time Can't be empty", Snackbar.LENGTH_LONG);
                     snackbar.show();
 
@@ -455,8 +452,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             System.out.println(position);
-            if(position == 0)
-            {
+            if (position == 0) {
                 displayLocationSpinner.setVisibility(View.GONE);
                 dropLocation.setText("");
 
@@ -489,13 +485,13 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             if (position == 1) {
-                Counter =1;
+                Counter = 1;
                 managerQLid_textField.setText("sc250512");
             }
             if (position == 2) {
                 managerQLid_textField.setText("gs250365");
                 Counter = 2;
-        }
+            }
         }
 
         @Override
