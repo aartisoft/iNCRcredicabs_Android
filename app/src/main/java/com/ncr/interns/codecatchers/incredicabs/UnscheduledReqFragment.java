@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -18,10 +17,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -54,7 +51,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     Date from_date, to_date;
     String dateToCheck, dateFromCheck;
     EditText fromDate, toDate, reasonForRequest, dropLocation, timepicker;
-    EditText managerQLid_textField;
+    TextView managerQLid_textField;
     Button submit;
     TextView displayLocationSpinner;
     Spinner spinner_location;
@@ -82,7 +79,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         final View rootView = inflater.inflate(R.layout.content_request, container, false);
 
         //getting the id's
-        managerQLid_textField = rootView.findViewById(R.id.EditText_managerQLID);
+        managerQLid_textField = rootView.findViewById(R.id.TextView_managerQLID);
         displayLocationSpinner = rootView.findViewById(R.id.display_location_spinner);
         submit = rootView.findViewById(R.id.btn_submit);
         fromDate = rootView.findViewById(R.id.text_fromDate);
@@ -174,7 +171,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
                                                             try {
                                                                 if (response.getString("status").equalsIgnoreCase("success")) {
-                                                                    //Toast.makeText(getActivity(), "Your request is in process", Toast.LENGTH_LONG).show();
+                                                                    Toast.makeText(getActivity(), "Your request is in process", Toast.LENGTH_LONG).show();
                                                                 } else {
                                                                     Toast.makeText(getActivity(), "Failed to make request", Toast.LENGTH_LONG).show();
                                                                 }
@@ -210,6 +207,8 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                             public void onClick(DialogInterface dialog, int which) {
                                 //code to set the Action for the Negitive button
                                 dialog.cancel();
+                                progressBar.dismiss();
+
 
                             }
                         }).setIcon(android.R.drawable.ic_dialog_alert).show();
@@ -292,7 +291,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
         final Calendar dateSelection = Calendar.getInstance();
         // Get Current Date
-        TimePickerDialog timePickerDialog;
+       // TimePickerDialog timePickerDialog;
         DatePickerDialog datePickerDialog;
         mYear = dateSelection.get(Calendar.YEAR);
         mMonth = dateSelection.get(Calendar.MONTH);
@@ -404,7 +403,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
                 } else {
                     if (TextUtils.isEmpty(managerQLid_textField.getText().toString())) {
-                        managerQLid_textField.setError("Can't be empty");
+                      //  managerQLid_textField.setError("Can't be empty");
                         Snackbar snackbar = Snackbar.make(nsv, "Manager ID Can't be empty", Snackbar.LENGTH_LONG);
                         snackbar.show();
                     } else {
@@ -484,12 +483,18 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            if(position==0){
+                managerQLid_textField.setVisibility(View.GONE);}
+
             if (position == 1) {
                 Counter = 1;
                 managerQLid_textField.setText("sc250512");
+                managerQLid_textField.setVisibility(View.VISIBLE);
             }
             if (position == 2) {
                 managerQLid_textField.setText("gs250365");
+                managerQLid_textField.setVisibility(View.VISIBLE);
                 Counter = 2;
             }
         }

@@ -20,7 +20,8 @@
             android:name=".Dashboard"
             android:label="@string/title_activity_dashboard"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MainRequestActivity"></activity>
+        <activity android:name=".MainRequestActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"></activity>
     </application>
 
 </manifest>
