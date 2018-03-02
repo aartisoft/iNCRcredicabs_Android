@@ -1,11 +1,11 @@
 package com.ncr.interns.codecatchers.incredicabs;
-
-import android.support.design.widget.TabLayout;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
+;
 
 public class MainRequestActivity extends AppCompatActivity {
 
@@ -17,19 +17,13 @@ public class MainRequestActivity extends AppCompatActivity {
         ViewPager viewPager = findViewById(R.id.viewPager);
         FragmentRequestAdapter fragmentRequestAdapter = new FragmentRequestAdapter(getSupportFragmentManager());
         viewPager.setAdapter(fragmentRequestAdapter);
+        Toolbar toolbar = findViewById(R.id.my_Toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+       // actionBar.setIcon();
 
 //        TabLayout tabLayout = findViewById(R.id.slider_view);
 //        tabLayout.setupWithViewPager(viewPager);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.request_menu,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return true;
     }
 }
