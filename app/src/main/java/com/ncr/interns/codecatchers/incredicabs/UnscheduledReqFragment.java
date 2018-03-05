@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
@@ -45,31 +46,32 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
     private final static String LOG_TAG = UnscheduledReqFragment.class.getSimpleName();
 
-    int mYear, mMonth, mDay, mHour, mMinute;
+    int mYear, mMonth, mDay, mHour, mMinute , selectpick , selectdrop;
     long diffDays, diff;    //diffDays stores the difference between from and to date and is to be used while sending the message to the manager
     SimpleDateFormat dateFormat;
     Date from_date, to_date;
     String dateToCheck, dateFromCheck;
-    EditText fromDate, toDate, reasonForRequest, dropLocation, timepicker;
-    TextView managerQLid_textField;
+    EditText fromDate, toDate, reasonForRequest, timepicker , otherpickup , otherdropet;
+    TextView managerQLid_textField , dropLocation;
     Button submit;
     TextView displayLocationSpinner;
-    Spinner spinner_location;
+    Spinner spinner_location,spinner_other_drop;
     String day_st;
     JSONObject jsonBody;
     private ProgressDialog progressBar;
     Spinner managerQLid;
     public int Counter;
-    String url = "http://172.20.10.14:8080/DemoProject/re/sample";
-    String locationArray[] = {"Select", "Home", "Office"};
-    String approverArray[] = {"Select", "Lvl 1 Manager", "Lvl2 Manager"};
+    String url = "http://192.168.43.209:8080/DemoProject/re/sample";
+    String locationArray[] = {"Select", "Home", "Office" , "Other"};
+    String locationArraydrop[] = {"Select", "Home", "Office" , "Other"};
+    String approverArray[] = {"Lvl 1 Manager", "Lvl2 Manager"};
     NestedScrollView nsv;
 
     public UnscheduledReqFragment() {
         // Required empty public constructor
     }
 
-    String startDate, endDate, endTime, dest;
+    String startDate, endDate, endTime, dest , sourceadd , dropadd;
 
 
     @Override
@@ -88,6 +90,10 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         reasonForRequest = rootView.findViewById(R.id.text_reasonForRequest);
         dropLocation = rootView.findViewById(R.id.text_dropLocation);
         nsv = rootView.findViewById(R.id.nestedsv);
+        spinner_other_drop=rootView.findViewById(R.id.spinner_other);
+        otherpickup=rootView.findViewById(R.id.tvotherpick);
+        otherdropet=rootView.findViewById(R.id.etotherdrop);
+
         /*
          Code For handling the spinner
          */
@@ -102,6 +108,45 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_location.setAdapter(adapter);
 
+/*
+          Code for creating the Adapter to add the data of location array into Spinner for drop
+         */
+        ArrayAdapter adapterdropother = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, locationArraydrop){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == selectpick && position!=3)
+                {
+                    //Disable the third item of spinner.
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            @Override
+            public View getDropDownView(int position, View convertView,ViewGroup parent) {
+                View spinnerview = super.getDropDownView(position, convertView, parent);
+
+                TextView spinnertextview = (TextView) spinnerview;
+
+                if (position == selectpick &&position != 3){
+
+                    //Set the disable spinner item color fade .
+                    spinnertextview.setTextColor(Color.parseColor("#bcbcbb"));
+                }
+                else{
+
+                    spinnertextview.setTextColor(Color.BLACK);
+
+
+                }
+                return spinnerview;
+            }
+        };
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_other_drop.setAdapter(adapterdropother);
+        spinner_other_drop.setOnItemSelectedListener(new LocationSpinnerotherdrop());
 
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, approverArray);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -117,7 +162,14 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(selectpick==3)
+                {
+                    sourceadd=otherpickup.getText().toString();
+                }
+                if(selectdrop!=3)
+     dropadd=dropLocation.getText().toString();
+                else
+                    dropadd=otherdropet.getText().toString();
                 if (validation()) {
                     diff = to_date.getTime() - from_date.getTime();
                     diffDays = diff / (24 * 60 * 60 * 1000) + 1;
@@ -152,10 +204,12 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                                 jsonBody.put("Counter", Counter);
                                                 jsonBody.put("Level2_mgr", "gs250365");
                                                 Log.i(LOG_TAG, "gs250365");
-                                                jsonBody.put("Destination", dest);
+                                                jsonBody.put("Other_Addr", dest);
                                                 jsonBody.put("Reason", reasonForRequest.getText().toString());
                                                 jsonBody.put("Start_Date_Time", "2018/12/12");
                                                 jsonBody.put("End_Date_Time", endDate + " " + endTime + ":00");
+                                                jsonBody.put("Source", sourceadd);
+                                                jsonBody.put("Destination", dropadd);
 
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -195,7 +249,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
                                             RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
 
-                                            RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
+                                            //RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
                                         } else {
                                             Toast.makeText(getActivity(), "Please check your entered information", Toast.LENGTH_LONG).show();
                                         }
@@ -446,29 +500,98 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         return true;
     }
 
+    class LocationSpinnerotherdrop implements AdapterView.OnItemSelectedListener {
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            System.out.println(position);
+selectdrop=position;
+            if (position == 0) {
+              dropLocation.setVisibility(View.GONE);
+
+            }
+            if (position == 1) {
+                dropLocation.setVisibility(View.VISIBLE);
+                otherdropet.setVisibility(View.GONE);
+                dest = dest+"HOME";
+                //TODO have to get the Data from DATABASE
+//                displayLocationSpinner.setVisibility(View.VISIBLE);
+                //dropLocation.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
+                dropLocation.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
+
+            }
+            if (position == 2) {
+                dest = dest+"OFFICE";
+                dropLocation.setVisibility(View.VISIBLE);
+                otherdropet.setVisibility(View.GONE);
+                dropLocation.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
+                //TODO have to get the Data from DATABASE
+//                displayLocationSpinner.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
+//                displayLocationSpinner.setVisibility(View.VISIBLE);
+               // dropLocation.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
+
+            }
+
+
+            if(position==3)
+            { dest = dest+"OTHERS ";
+                dropLocation.setVisibility(View.GONE);
+                otherdropet.setVisibility(View.VISIBLE);
+            dropLocation.setText("");
+
+
+
+            }
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    }
+
     class LocationSpinner implements AdapterView.OnItemSelectedListener {
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             System.out.println(position);
+            selectpick=position;
+           // dropLocation.setText("");
+
             if (position == 0) {
                 displayLocationSpinner.setVisibility(View.GONE);
                 dropLocation.setText("");
 
             }
             if (position == 1) {
-                dest = "O";
+                dest = "HOME TO ";
                 //TODO have to get the Data from DATABASE
                 displayLocationSpinner.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
                 displayLocationSpinner.setVisibility(View.VISIBLE);
-                dropLocation.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
+                otherpickup.setVisibility(View.GONE);
+                sourceadd="BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon";
+                //dropLocation.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
+
             }
             if (position == 2) {
-                dest = "H";
+                dest = "OFFICE TO ";
                 //TODO have to get the Data from DATABASE
                 displayLocationSpinner.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
                 displayLocationSpinner.setVisibility(View.VISIBLE);
-                dropLocation.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
+                otherpickup.setVisibility(View.GONE);
+                sourceadd="NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon";
+                //dropLocation.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
+            }
+
+
+            if(position==3)
+            {  dest = "OTHERS TO ";
+                displayLocationSpinner.setVisibility(View.GONE);
+                otherpickup.setVisibility(View.VISIBLE);
+                spinner_other_drop.setVisibility(View.VISIBLE);
+                //dropLocation.setVisibility(View.GONE);
+
             }
 
         }
@@ -484,15 +607,15 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-            if(position==0){
-                managerQLid_textField.setVisibility(View.GONE);}
+//            if(position==0){
+//                managerQLid_textField.setVisibility(View.GONE);}
 
-            if (position == 1) {
+            if (position == 0) {
                 Counter = 1;
                 managerQLid_textField.setText("sc250512");
                 managerQLid_textField.setVisibility(View.VISIBLE);
             }
-            if (position == 2) {
+            if (position == 1) {
                 managerQLid_textField.setText("gs250365");
                 managerQLid_textField.setVisibility(View.VISIBLE);
                 Counter = 2;
