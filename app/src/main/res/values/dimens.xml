@@ -10,6 +10,7 @@
 
 
     <dimen name="item_offset">10dp</dimen>
+    <dimen name="horizontal_linear_layout_margin">4dp</dimen>
     <dimen name="detail_backdrop_height">250dp</dimen>
     <dimen name="backdrop_title">30dp</dimen>
     <dimen name="backdrop_subtitle">18dp</dimen>

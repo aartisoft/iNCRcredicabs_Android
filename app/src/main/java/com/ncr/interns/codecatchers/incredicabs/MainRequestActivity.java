@@ -21,7 +21,6 @@ public class MainRequestActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-       // actionBar.setIcon();
 
 //        TabLayout tabLayout = findViewById(R.id.slider_view);
 //        tabLayout.setupWithViewPager(viewPager);

@@ -9,8 +9,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="@dimen/card_margin"
-        android:elevation="3dp"
-        card_view:cardCornerRadius="@dimen/card_album_radius">
+        android:elevation="5dp"
+        card_view:cardCornerRadius="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,9 +37,10 @@
                 android:paddingRight="@dimen/album_title_padding"
                 android:paddingTop="@dimen/album_title_padding"
                 android:textColor="#111111"
-                android:textSize="@dimen/album_title"
+                android:textSize="20dp"
                 android:textStyle="bold"
                 android:text="text"
+                android:textAllCaps="true"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"/>
 

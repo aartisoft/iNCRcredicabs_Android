@@ -7,9 +7,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-/**
- * Created by gs250365 on 2/20/2018.
- */
 
 public class RESTService {
     private static RESTService mInstance;
