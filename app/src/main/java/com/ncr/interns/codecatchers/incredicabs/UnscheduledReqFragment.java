@@ -71,7 +71,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         // Required empty public constructor
     }
 
-    String startDate, endDate, endTime, dest, sourceAdd, dropAdd;
+    String startDate, endDate, startTime, dest, sourceAdd, dropAdd;
 
 
     @Override
@@ -200,8 +200,8 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                                 Log.i(LOG_TAG, "gs250365");
                                                 jsonBody.put("Other_Addr", dest);
                                                 jsonBody.put("Reason", reasonForRequest.getText().toString());
-                                                jsonBody.put("Start_Date_Time", "2018/12/12");
-                                                jsonBody.put("End_Date_Time", endDate + " " + endTime + ":00");
+                                                jsonBody.put("Start_Date_Time", startDate+startTime);
+                                                jsonBody.put("End_Date_Time", endDate );
                                                 jsonBody.put("Source", sourceAdd);
                                                 jsonBody.put("Destination", dropAdd);
 
@@ -402,10 +402,10 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 if (minute < 10) {
                     timePicker.setText("" + hourOfDay + ":0" + minute);
-                    endTime = "" + hourOfDay + ":0" + minute;
+                    startTime = "" + hourOfDay + ":0" + minute;
                 } else {
                     timePicker.setText("" + hourOfDay + ":" + minute);
-                    endTime = "" + hourOfDay + ":" + minute;
+                    startTime = "" + hourOfDay + ":" + minute;
                 }
 
             }
@@ -443,7 +443,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 Snackbar snackbar = Snackbar.make(nsv, "To Date Can't be empty", Snackbar.LENGTH_LONG);
                 snackbar.show();
             } else {
-                if (TextUtils.isEmpty(endTime)) {
+                if (TextUtils.isEmpty(startTime)) {
                     //   timePicker.setError("Can't be empty");
                     Snackbar snackbar = Snackbar.make(nsv, "Time Can't be empty", Snackbar.LENGTH_LONG);
                     snackbar.show();
