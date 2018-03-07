@@ -61,7 +61,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     private ProgressDialog progressBar;
     Spinner managerQLid;
     public int Counter;
-    String url = "http://192.168.43.209:8080/DemoProject/re/sample";
+    String url = "http://192.168.43.209:8080/NCAB/RequestService/sendRequest";
     String locationArray[] = {"Select", "Home", "Office" , "Other"};
     String locationArraydrop[] = {"Select", "Home", "Office" , "Other"};
     String approverArray[] = {"Lvl 1 Manager", "Lvl2 Manager"};
@@ -71,7 +71,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         // Required empty public constructor
     }
 
-    String startDate, endDate, endTime, dest , sourceadd , dropadd;
+    String startDate, endDate, startTime, dest , sourceadd , dropadd;
 
 
     @Override
@@ -206,8 +206,8 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                                 Log.i(LOG_TAG, "gs250365");
                                                 jsonBody.put("Other_Addr", dest);
                                                 jsonBody.put("Reason", reasonForRequest.getText().toString());
-                                                jsonBody.put("Start_Date_Time", "2018/12/12");
-                                                jsonBody.put("End_Date_Time", endDate + " " + endTime + ":00");
+                                                jsonBody.put("Start_Date_Time", startDate+" " + startTime + ":00");
+                                                jsonBody.put("End_Date_Time", endDate );
                                                 jsonBody.put("Source", sourceadd);
                                                 jsonBody.put("Destination", dropadd);
 
@@ -409,10 +409,10 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 if (minute < 10) {
                     timepicker.setText("" + hourOfDay + ":0" + minute);
-                    endTime = "" + hourOfDay + ":0" + minute;
+                    startTime = "" + hourOfDay + ":0" + minute;
                 } else {
                     timepicker.setText("" + hourOfDay + ":" + minute);
-                    endTime = "" + hourOfDay + ":" + minute;
+                    startTime = "" + hourOfDay + ":" + minute;
                 }
 
             }
@@ -450,7 +450,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 Snackbar snackbar = Snackbar.make(nsv, "To Date Can't be empty", Snackbar.LENGTH_LONG);
                 snackbar.show();
             } else {
-                if (TextUtils.isEmpty(endTime)) {
+                if (TextUtils.isEmpty(startTime)) {
                     //   timepicker.setError("Can't be empty");
                     Snackbar snackbar = Snackbar.make(nsv, "Time Can't be empty", Snackbar.LENGTH_LONG);
                     snackbar.show();
