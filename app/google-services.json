@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "379285923962",
+    "firebase_url": "https://incredicabs-609a3.firebaseio.com",
+    "project_id": "incredicabs-609a3",
+    "storage_bucket": "incredicabs-609a3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:379285923962:android:b9367403ab61e005",
+        "android_client_info": {
+          "package_name": "com.ncr.interns.codecatchers.incredicabs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "379285923962-1njkskq6hrs1vnjut6jed5ouid356umi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_arLhJeu08kSuJb_-8dRePRNhJwLV3mo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
