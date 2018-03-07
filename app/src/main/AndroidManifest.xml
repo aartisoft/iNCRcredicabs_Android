@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ncr.interns.codecatchers.incredicabs">
 <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,6 +26,32 @@
             android:label="@string/title_activity_unscheduled_request"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"></activity>
+
+        <service
+            android:name=".notification.MyFirebaseMessagingService"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service android:name=".notification.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <receiver android:name=".notification.Approve">
+            <intent-filter>
+                <action android:name="Approve"></action>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".notification.Reject">
+            <intent-filter>
+                <action android:name="Reject"></action>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

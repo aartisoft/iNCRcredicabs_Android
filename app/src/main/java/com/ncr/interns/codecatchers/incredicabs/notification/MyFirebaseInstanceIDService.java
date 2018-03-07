@@ -1,4 +1,4 @@
-package com.example.push.notifications;
+package com.ncr.interns.codecatchers.incredicabs.notification;
 
 /**
  * Created by pg250235 on 2/25/2018.
@@ -7,6 +7,7 @@ package com.example.push.notifications;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 

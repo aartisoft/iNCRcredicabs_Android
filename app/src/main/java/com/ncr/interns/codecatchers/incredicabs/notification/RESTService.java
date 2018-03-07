@@ -1,4 +1,4 @@
-package com.example.push.notifications;
+package com.ncr.interns.codecatchers.incredicabs.notification;
 
 import android.content.Context;
 

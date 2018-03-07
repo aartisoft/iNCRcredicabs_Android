@@ -1,4 +1,4 @@
-package com.example.push.notifications;
+package com.ncr.interns.codecatchers.incredicabs.notification;
 
 /**
  * Created by pg250235 on 2/25/2018.
@@ -16,22 +16,20 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 
-
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.ncr.interns.codecatchers.incredicabs.R;
 
 import java.util.Random;
 
-import com.example.push.R;
-
-public class MyFirebaseMessagingService extends FirebaseMessagingService  {
+public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String NOTIFICATION_ID_EXTRA = "notificationId";
     private static final String IMAGE_URL_EXTRA = "imageUrl";
     private static final String ADMIN_CHANNEL_ID ="admin_channel";
     private NotificationManager notificationManager;
     public static final String ACTION1 = "Approve";
-
+    public String reqsubstring;
     public static final String ACTION2 = "Reject";
 
     @Override public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -60,7 +58,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService  {
     notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
     //Setting up Notification channels for android O and above
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         setupChannels();
     }
     int notificationId = new Random().nextInt(60000);
@@ -69,7 +67,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService  {
          //String[] msgarray= msg.split("\n");
            int ind1= msg.indexOf(":");
            int ind2 = msg.indexOf("\n");
-         String reqsubstring = msg.substring(++ind1,ind2);
+         reqsubstring = msg.substring(++ind1,ind2);
          //int reqid= Integer.parseInt(reqsubstring);
     Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, ADMIN_CHANNEL_ID)

@@ -1,4 +1,4 @@
-package com.example.push.notifications;
+package com.ncr.interns.codecatchers.incredicabs.notification;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,13 +19,16 @@ import org.json.JSONObject;
  */
 
 public class Reject extends BroadcastReceiver {
-
+    MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService();
+    String reqId;
     String url = "http://192.168.43.213:8080/DemoProject/login/doLogin";
     @Override
     public void onReceive(Context context, Intent intent) {
+        reqId = myFirebaseMessagingService.reqsubstring;
+        Toast.makeText(context, "Rejected", Toast.LENGTH_SHORT).show();
         JSONObject jsonBodyRequest = new JSONObject();
         try {
-            jsonBodyRequest.put("request_id", "4");
+            jsonBodyRequest.put("request_id", reqId);
             jsonBodyRequest.put("Approval","Rejected");
 
         } catch (JSONException e) {

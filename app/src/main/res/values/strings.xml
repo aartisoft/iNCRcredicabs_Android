@@ -16,4 +16,6 @@
     <string name="ReachingTime">Reaching Time</string>
     <string name="PickupLocation">Pickup Area</string>
     <string name="DropLocation">Drop Area</string>
+    <string name="notifications_admin_channel_name">Global channel</string>
+    <string name="notifications_admin_channel_description">Notifications sent from the app admin</string>
 </resources>
