@@ -27,9 +27,9 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.MyVi
 
         public MyViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
-            cardViewDashboard=(CardView)view.findViewById(R.id.card_view_dashboard);
+            title =  view.findViewById(R.id.title);
+            thumbnail =  view.findViewById(R.id.thumbnail);
+            cardViewDashboard= view.findViewById(R.id.card_view_dashboard);
 
         }
     }
@@ -54,8 +54,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.MyVi
         holder.title.setText(dashboardEntry.getName());
         holder.thumbnail.setImageResource(dashboardEntry.getThumbnail());
 
-        // loading DashboardEntry cover using Glide library
-        //Glide.with(mContext).load(dashboardEntry.getThumbnail()).into(holder.thumbnail);
+
         cardViewDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
