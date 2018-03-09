@@ -100,38 +100,7 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/horizontal_linear_layout_margin"
-                    android:orientation="horizontal"
-                    android:weightSum="10">
 
-                    <TextView
-                        android:id="@+id/textView_selectTime"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_margin="2dp"
-                        android:layout_weight="4"
-                        android:padding="7dp"
-                        android:text="@string/ReachingTime"
-                        android:textColor="#000000"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/time_picker"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="2dp"
-                        android:layout_weight="6"
-                        android:background="@drawable/background_edittext"
-                        android:drawableEnd="@drawable/stopwatch"
-                        android:focusable="false"
-                        android:padding="@dimen/edittxt_padding" />
-
-
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -182,15 +151,47 @@
                         android:visibility="gone" />
 
                     <EditText
-                        android:id="@+id/tvotherpick"
+                        android:id="@+id/toOtherPickupLocation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
                         android:background="@drawable/background_edittext"
                         android:padding="@dimen/edittxt_padding"
                         android:visibility="gone" />
-                </LinearLayout>
+                </LinearLayout><!-- COde for pickup ARea -->
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/horizontal_linear_layout_margin"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <TextView
+                        android:id="@+id/textView_selectTime"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="2dp"
+                        android:layout_weight="4"
+                        android:padding="7dp"
+                        android:text="@string/PickTime"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/time_picker"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_weight="6"
+                        android:background="@drawable/background_edittext"
+                        android:drawableEnd="@drawable/stopwatch"
+                        android:focusable="false"
+                        android:padding="@dimen/edittxt_padding" />
+
+
+                </LinearLayout><!-- code for Pickup Time -->
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -239,7 +240,7 @@
                         android:visibility="gone" />
 
                     <EditText
-                        android:id="@+id/etotherdrop"
+                        android:id="@+id/otherDropLocation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
@@ -269,7 +270,7 @@
                             android:layout_height="match_parent"
                             android:layout_margin="2dp"
                             android:layout_weight="4"
-                            android:padding="5dp"
+                            android:padding="7dp"
                             android:text="Approver"
                             android:textColor="#000000"
                             android:textSize="18sp"

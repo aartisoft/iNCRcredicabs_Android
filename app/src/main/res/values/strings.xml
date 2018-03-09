@@ -13,7 +13,7 @@
     <string name="FromDate">From date</string>
     <string name="ToDate">To Date</string>
     <string name="help_and_support">Help and Support</string>
-    <string name="ReachingTime">Reaching Time</string>
+    <string name="PickTime">Pick Time</string>
     <string name="PickupLocation">Pickup Area</string>
     <string name="DropLocation">Drop Area</string>
     <string name="notifications_admin_channel_name">Global channel</string>
