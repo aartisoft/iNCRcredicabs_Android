@@ -20,22 +20,56 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.MyVi
 
     private Context mContext;
     private List<DashboardEntry> DashboardEntryList;
-    CardView cardViewDashboard;
+    private CardView cardViewDashboard;
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
-        public ImageView thumbnail;
+        ImageView thumbnail;
 
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
             title =  view.findViewById(R.id.title);
             thumbnail =  view.findViewById(R.id.thumbnail);
             cardViewDashboard= view.findViewById(R.id.card_view_dashboard);
 
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position ==0)
+                    {
+                        // TODO: 3/12/2018 Request Team4
+                        Intent intent = new Intent(mContext, MainRequestActivity.class);
+                        mContext.startActivity(intent);
+                    }
+                    if(position ==1)
+                    {
+                        // TODO: 3/12/2018 Team 1 SOS 
+                    }
+                    if(position ==2)
+                    {
+                        // TODO: 3/12/2018 Team 3 FeedBAck 
+                    }
+                    if(position ==3)
+                    {
+                        // TODO: 3/12/2018 Team 1 CHeck-in
+                    }
+                    if(position ==4)
+                    {
+                        // TODO: 3/12/2018 Team 1 Check-out
+                    }
+                    if(position ==5)
+                    {
+                        // TODO: 3/12/2018 Roster team  
+                    }
+
+                }
+            });
+
         }
     }
 
 
-    public DashboardAdapter(Context mContext, List<DashboardEntry> DashboardEntryList) {
+     DashboardAdapter(Context mContext, List<DashboardEntry> DashboardEntryList) {
         this.mContext = mContext;
         this.DashboardEntryList = DashboardEntryList;
     }
@@ -55,28 +89,27 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.MyVi
         holder.thumbnail.setImageResource(dashboardEntry.getThumbnail());
 
 
-        cardViewDashboard.setOnClickListener(new View.OnClickListener() {
+     /*   cardViewDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(holder.title.getText()=="REQUEST")
-                {
+                if(holder.title.getText()=="REQUEST"){
                     Intent intent = new Intent(mContext, MainRequestActivity.class);
                     mContext.startActivity(intent);
                 }else{
                 Toast.makeText(mContext, holder.title.getText(), Toast.LENGTH_SHORT).show();}
             }
-        });
-        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(holder.title.getText()=="REQUEST")
-                {
-                    Intent intent = new Intent(mContext, MainRequestActivity.class);
-                    mContext.startActivity(intent);
-                }
-                Toast.makeText(mContext, holder.title.getText(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        });*/
+//        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(holder.title.getText()=="REQUEST")
+//                {
+//                    Intent intent = new Intent(mContext, MainRequestActivity.class);
+//                    mContext.startActivity(intent);
+//                }
+//                Toast.makeText(mContext, holder.title.getText(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
 
 

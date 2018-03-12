@@ -2,6 +2,15 @@
     <string name="app_name">IncrediCABS</string>
     <string name="title_activity_dashboard">Dashboard</string>
 
+    <!-- String arrays-->
+    <string-array name="pickupLocationArray">
+        <item>Select</item>
+        <item>Home</item>
+        <item>Office</item>
+        <item>Other</item>
+
+    </string-array>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 

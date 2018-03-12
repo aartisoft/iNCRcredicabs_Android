@@ -48,29 +48,26 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     long diffDays, diff;    //diffDays stores the difference between from and to date and is to be used while sending the message to the manager
     SimpleDateFormat dateFormat;
     Date from_date, to_date;
-    String dateToCheck, dateFromCheck;
-    EditText fromDate, toDate, reasonForRequest, timePicker, otherPickUp, otherDrop;
-    TextView managerQLid_textField, dropLocation,textView_selectTime;
+    String dateToCheck, dateFromCheck,day_st;
+    EditText fromDate, toDate, reasonForRequest, timePicker, editText_otherPickUp, editText_otherDrop;
+    TextView managerQLid_textField, displayDropLocation_textView, textView_selectTime,displayPickupLocation_textView;
+    NestedScrollView nsv;
+    String startDate, endDate, startTime, destination_database_entry, sourceAddress, dropAddress;
     Button submit;
-    TextView displayLocationSpinner;
-    Spinner spinner_location, spinner_other_drop;
-    String day_st;
+    Spinner spinner_location, spinner_dropLocation,managerQLid;
     JSONObject jsonBody;
     private ProgressDialog progressBar;
-    Spinner managerQLid;
     public int Counter;
+
     String url = "http://192.168.43.108:8522/DemoProject/re/sample";
     String pickupLocationArray[] = {"Select", "Home", "Office", "Other"}; //String Array : make in reusable
     String dropLocationArray[] = {"Select", "Home", "Office", "Other"}; //String Array
     String approverManagerArray[] = {"Lvl 1 Manager", "Lvl2 Manager"}; //String Array
-    NestedScrollView nsv;
+
 
     public UnscheduledReqFragment() {
         // Required empty public constructor
     }
-
-    String startDate, endDate, startTime, destination_database_entry, sourceAddress, dropAddress;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,18 +77,18 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
         //getting the id's
         managerQLid_textField = rootView.findViewById(R.id.TextView_managerQLID);
-        displayLocationSpinner = rootView.findViewById(R.id.display_location_spinner);
+        displayPickupLocation_textView = rootView.findViewById(R.id.display_location_spinner);
         submit = rootView.findViewById(R.id.btn_submit);
         fromDate = rootView.findViewById(R.id.text_fromDate);
         toDate = rootView.findViewById(R.id.text_ToDate);
         timePicker = rootView.findViewById(R.id.time_picker);
         reasonForRequest = rootView.findViewById(R.id.text_reasonForRequest);
-        dropLocation = rootView.findViewById(R.id.text_dropLocation);
+        displayDropLocation_textView = rootView.findViewById(R.id.text_dropLocation);
         nsv = rootView.findViewById(R.id.nestedsv);
         textView_selectTime = rootView.findViewById(R.id.textView_selectTime);
-        spinner_other_drop = rootView.findViewById(R.id.spinner_other);
-        otherPickUp = rootView.findViewById(R.id.toOtherPickupLocation);
-        otherDrop = rootView.findViewById(R.id.otherDropLocation);
+        spinner_dropLocation = rootView.findViewById(R.id.spinner_other);
+        editText_otherPickUp = rootView.findViewById(R.id.toOtherPickupLocation);
+        editText_otherDrop = rootView.findViewById(R.id.otherDropLocation);
         /*
          Code For handling the spinner
          */
@@ -102,7 +99,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
       /*
           Code for creating the Adapter to add the data of location array into Spinner
          */
-        ArrayAdapter<String> pickupSpinnerAdapter = new ArrayAdapter<>(getActivity(),R.layout.custom_spinner, pickupLocationArray);
+        ArrayAdapter<String> pickupSpinnerAdapter = new ArrayAdapter<>(getActivity(), R.layout.custom_spinner, pickupLocationArray);
 
         pickupSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_location.setAdapter(pickupSpinnerAdapter);
@@ -135,8 +132,8 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         };
         pickupSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_other_drop.setAdapter(dropSpinnerAdapter);
-        spinner_other_drop.setOnItemSelectedListener(new LocationSpinnerOtherDrop());
+        spinner_dropLocation.setAdapter(dropSpinnerAdapter);
+        spinner_dropLocation.setOnItemSelectedListener(new LocationSpinnerOtherDrop());
 
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getActivity(), R.layout.custom_spinner, approverManagerArray);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -154,12 +151,16 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             public void onClick(View v) {
                 //Submit Button Logic Start
                 if (selectPick == 3) {
-                    sourceAddress = otherPickUp.getText().toString();
-                }
-                if (selectDrop != 3)
-                    dropAddress = dropLocation.getText().toString();
+                    displayDropLocation_textView.setText("");
+                    sourceAddress = editText_otherPickUp.getText().toString();
+                } else
+                    sourceAddress = displayPickupLocation_textView.getText().toString();
+
+                if (selectDrop == 3)
+                    dropAddress = editText_otherDrop.getText().toString();
                 else
-                    dropAddress = otherDrop.getText().toString();
+                    dropAddress = displayDropLocation_textView.getText().toString();
+
 
                 if (validation()) {
                     diff = to_date.getTime() - from_date.getTime();
@@ -190,7 +191,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                         if (validation()) {
                                             jsonBody = new JSONObject();
                                             try {
-                                                jsonBody.put("Emp_QLID","KG250190");
+                                                jsonBody.put("Emp_QLID", "KG250190");
                                                 jsonBody.put("Shift_ID", "4");
                                                 jsonBody.put("Mgr_QLID", "sc250512");
                                                 jsonBody.put("Counter", Counter);
@@ -199,8 +200,8 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                                 jsonBody.put("Level2_mgr", "gs250365");
                                                 jsonBody.put("Other_Addr", destination_database_entry);
                                                 jsonBody.put("Reason", reasonForRequest.getText().toString());
-                                                jsonBody.put("Start_Date_Time", startDate+startTime);
-                                                jsonBody.put("End_Date_Time", endDate );
+                                                jsonBody.put("Start_Date_Time", startDate + startTime);
+                                                jsonBody.put("End_Date_Time", endDate);
 
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -476,46 +477,43 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     public Boolean validation() {
 
 
-            if (TextUtils.isEmpty(startDate)) {
-                Snackbar snackbar = Snackbar.make(nsv, "From Date Can't be empty", Snackbar.LENGTH_LONG);
+        if (TextUtils.isEmpty(startDate)) {
+            Snackbar snackbar = Snackbar.make(nsv, "From Date Can't be empty", Snackbar.LENGTH_LONG);
+            snackbar.show();
+
+        } else {
+            if (TextUtils.isEmpty(endDate)) {
+                Snackbar snackbar = Snackbar.make(nsv, "To Date Can't be empty", Snackbar.LENGTH_LONG);
                 snackbar.show();
-                //fromDate.setError("Can't be empty");
             } else {
-                if (TextUtils.isEmpty(endDate)) {
-                    //toDate.setError("Can't be empty");
-                    Snackbar snackbar = Snackbar.make(nsv, "To Date Can't be empty", Snackbar.LENGTH_LONG);
+                /*if (TextUtils.isEmpty(startTime)) {
+                    Snackbar snackbar = Snackbar.make(nsv, "Time Can't be empty", Snackbar.LENGTH_LONG);
+                    snackbar.show();*/
+                if (TextUtils.isEmpty(sourceAddress)) {
+                    Snackbar snackbar = Snackbar.make(nsv, "Enter or select Valid Source Address", Snackbar.LENGTH_LONG);
                     snackbar.show();
+
                 } else {
+                    // TODO: 3/9/2018 Solve the bug associated with the Source and destination_database_entry Location
                     if (TextUtils.isEmpty(startTime)) {
-                        //   timePicker.setError("Can't be empty");
                         Snackbar snackbar = Snackbar.make(nsv, "Time Can't be empty", Snackbar.LENGTH_LONG);
                         snackbar.show();
-
                     } else {
-                        if (TextUtils.isEmpty(managerQLid_textField.getText().toString())) {
-                            //  managerQLid_textField.setError("Can't be empty");
-                            Snackbar snackbar = Snackbar.make(nsv, "Manager ID Can't be empty", Snackbar.LENGTH_LONG);
+                        if (TextUtils.isEmpty(dropAddress)) {
+                            Snackbar snackbar = Snackbar.make(nsv, "Enter or select Valid Destination Address", Snackbar.LENGTH_LONG);
+                            snackbar.show();
+
+                        } else if (TextUtils.isEmpty(reasonForRequest.getText().toString())) {
+                            reasonForRequest.setError("Can't be empty");
+                            Snackbar snackbar = Snackbar.make(nsv, " Reason Can't be empty", Snackbar.LENGTH_LONG);
                             snackbar.show();
                         } else {
-                            // TODO: 3/9/2018 Solve the bug associated with the Source and destination_database_entry Location
-                            if (sourceAddress != null && !sourceAddress.isEmpty()){
-                                Snackbar snackbar = Snackbar.make(nsv,"Enter or Select a Valid Source Address",Snackbar.LENGTH_LONG);
-                                snackbar.show();
-
-
-                            }
-                            else{
-                                if (dropAddress !=null && !dropAddress.isEmpty()){
-                                    Snackbar snackbar = Snackbar.make(nsv,"Enter or Select a Valid Destination Address",Snackbar.LENGTH_LONG);
-                                    snackbar.show();
-                                }
-                            }
+                            return true;
                         }
                     }
                 }
             }
-
-
+        }
         return false;
     }
 
@@ -528,40 +526,42 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             selectPick = position;
 
             if (position == 0) {
-                displayLocationSpinner.setVisibility(View.GONE);
-                dropLocation.setText("");
+                displayDropLocation_textView.setText("");
+                displayPickupLocation_textView.setVisibility(View.GONE);
             }
             if (position == 1) {
                 destination_database_entry = "HOME TO ";
                 //TODO have to get the Data from DATABASE
-                displayLocationSpinner.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
-                displayLocationSpinner.setVisibility(View.VISIBLE);
+                displayPickupLocation_textView.setText("");
+                displayPickupLocation_textView.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
+                displayPickupLocation_textView.setVisibility(View.VISIBLE);
                 textView_selectTime.setText("Drop Time");
-                otherPickUp.setVisibility(View.GONE);
-                sourceAddress = "BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon";
-                //dropLocation.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
+                editText_otherPickUp.setVisibility(View.GONE);
+                //sourceAddress = "BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon";
+                //displayDropLocation_textView.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
 
             }
             if (position == 2) {
                 destination_database_entry = "OFFICE TO ";
                 //TODO have to get the Data from DATABASE
-                displayLocationSpinner.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
-                displayLocationSpinner.setVisibility(View.VISIBLE);
-                otherPickUp.setVisibility(View.GONE);
+                displayPickupLocation_textView.setText("");
+                displayPickupLocation_textView.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
+                displayPickupLocation_textView.setVisibility(View.VISIBLE);
+                editText_otherPickUp.setVisibility(View.GONE);
                 textView_selectTime.setText("Pickup Time");
-                sourceAddress = "NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon";
-                //dropLocation.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
+                //sourceAddress = "NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon";
+                //displayDropLocation_textView.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
             }
 
 
             if (position == 3) {
                 destination_database_entry = "OTHERS TO ";
                 textView_selectTime.setText("Pickup Time");
-                displayLocationSpinner.setVisibility(View.GONE);
-                otherPickUp.setVisibility(View.VISIBLE);
-                spinner_other_drop.setVisibility(View.VISIBLE);
-                //dropLocation.setVisibility(View.GONE);
-
+                displayPickupLocation_textView.setText("");
+                displayPickupLocation_textView.setVisibility(View.GONE);
+                editText_otherPickUp.setVisibility(View.VISIBLE);
+                spinner_dropLocation.setVisibility(View.VISIBLE);
+                editText_otherPickUp.getText();
             }
 
         }
@@ -581,35 +581,34 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             System.out.println(position);
             selectDrop = position;
             if (position == 0) {
-                dropLocation.setVisibility(View.GONE);
+                displayDropLocation_textView.setText("");
+                displayDropLocation_textView.setVisibility(View.GONE);
 
             }
             if (position == 1) {
-                dropLocation.setVisibility(View.VISIBLE);
-                otherDrop.setVisibility(View.GONE);
-                //Pickup Area is HOME
+                displayDropLocation_textView.setVisibility(View.VISIBLE);
+                editText_otherDrop.setVisibility(View.GONE);
                 destination_database_entry = destination_database_entry + "HOME";
                 //TODO have to get the Data from DATABASE
-                dropLocation.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
+                displayDropLocation_textView.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
 
             }
             if (position == 2) {
                 destination_database_entry = destination_database_entry + "OFFICE";
-                dropLocation.setVisibility(View.VISIBLE);
-                otherDrop.setVisibility(View.GONE);
-                //textView_selectTime.setText("Reaching Time");
-                dropLocation.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
+                displayDropLocation_textView.setVisibility(View.VISIBLE);
+                editText_otherDrop.setVisibility(View.GONE);
+                displayDropLocation_textView.setText("");
+                displayDropLocation_textView.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
                 //TODO have to get the Data from DATABASE
             }
 
 
             if (position == 3) {
                 destination_database_entry = destination_database_entry + "OTHERS ";
-                dropLocation.setVisibility(View.GONE);
-                otherDrop.setVisibility(View.VISIBLE);
-                dropLocation.setText("");
-
-
+                displayDropLocation_textView.setVisibility(View.GONE);
+                displayDropLocation_textView.setText("");
+                editText_otherDrop.setVisibility(View.VISIBLE);
+                editText_otherDrop.getText();
             }
 
         }
@@ -620,7 +619,6 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         }
     }
     //</editor-fold>
-
 
 
     class ApprovalManagerQlid implements AdapterView.OnItemSelectedListener {
