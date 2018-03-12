@@ -25,7 +25,7 @@ public class Approve extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        reqId = myFirebaseMessagingService.reqsubstring;
+        reqId = myFirebaseMessagingService.reqSubString;
         Toast.makeText(context, "Approve", Toast.LENGTH_SHORT).show();
 
         JSONObject jsonBodyRequest = new JSONObject();

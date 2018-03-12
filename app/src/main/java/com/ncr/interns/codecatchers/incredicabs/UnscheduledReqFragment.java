@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -48,16 +50,17 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     long diffDays, diff;    //diffDays stores the difference between from and to date and is to be used while sending the message to the manager
     SimpleDateFormat dateFormat;
     Date from_date, to_date;
-    String dateToCheck, dateFromCheck,day_st;
+    String dateToCheck, dateFromCheck, day_st;
     EditText fromDate, toDate, reasonForRequest, timePicker, editText_otherPickUp, editText_otherDrop;
-    TextView managerQLid_textField, displayDropLocation_textView, textView_selectTime,displayPickupLocation_textView;
+    TextView managerQLid_textField, displayDropLocation_textView, textView_selectTime, displayPickupLocation_textView;
     NestedScrollView nsv;
     String startDate, endDate, startTime, destination_database_entry, sourceAddress, dropAddress;
     Button submit;
-    Spinner spinner_location, spinner_dropLocation,managerQLid;
+    Spinner spinner_location, spinner_dropLocation, managerQLid;
     JSONObject jsonBody;
     private ProgressDialog progressBar;
     public int Counter;
+    Context context = getContext();
 
     String url = "http://192.168.43.108:8522/DemoProject/re/sample";
     String pickupLocationArray[] = {"Select", "Home", "Office", "Other"}; //String Array : make in reusable
@@ -207,37 +210,38 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                                 e.printStackTrace();
                                             }
 
-                                            JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
-                                                    new Response.Listener<JSONObject>() {
-                                                        @Override
-                                                        public void onResponse(JSONObject response) {
+                                            JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
+                                                @Override
+                                                public void onResponse(JSONObject response) {
+                                                    Log.i("VOLLEY", "inside onResponse method:UnscheduledRequest");
+                                                    Log.i("VOLLEY", response.toString());
 
-                                                            Log.i("VOLLEY", "inside onResponse method:UnscheduledRequest");
-                                                            Log.i("VOLLEY", response.toString());
-
-                                                            try {
-                                                                if (response.getString("status").equalsIgnoreCase("success")) {
-                                                                    Toast.makeText(getActivity(), "Your request is in process", Toast.LENGTH_LONG).show();
-                                                                } else {
-                                                                    Toast.makeText(getActivity(), "Failed to make request", Toast.LENGTH_LONG).show();
-                                                                }
-                                                            } catch (JSONException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            progressBar.dismiss();
+                                                    try {
+                                                        if (response.getString("status").equalsIgnoreCase("success")) {
+                                                            Toast.makeText(getActivity(), "Your request is in process", Toast.LENGTH_LONG).show();
+                                                        } else {
+                                                            Toast.makeText(getActivity(), "Failed to make request", Toast.LENGTH_LONG).show();
                                                         }
-                                                    }, new Response.ErrorListener() {
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    progressBar.dismiss();
+                                                }
+                                            }, new Response.ErrorListener() {
                                                 @Override
                                                 public void onErrorResponse(VolleyError error) {
-
                                                     progressBar.dismiss();
                                                     // Do something when error occurred
                                                     Log.d("VOLLEY", "Something went wrong");
-                                                    Toast.makeText(getActivity(), "Oops..Something Went wrong", Toast.LENGTH_SHORT).show();
+                                                  //  Toast.makeText(getActivity(), "Oops..Something Went wrong", Toast.LENGTH_SHORT).show();
+                                                    Snackbar snackbar = Snackbar.make(nsv,"Oops Something Went Wrong",Snackbar.LENGTH_LONG);
+                                                    snackbar.show();
                                                     error.printStackTrace();
                                                 }
                                             });
-
+                                            jsonObjRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
+                                                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                                                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
                                             RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
 
@@ -537,8 +541,6 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 displayPickupLocation_textView.setVisibility(View.VISIBLE);
                 textView_selectTime.setText("Drop Time");
                 editText_otherPickUp.setVisibility(View.GONE);
-                //sourceAddress = "BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon";
-                //displayDropLocation_textView.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
 
             }
             if (position == 2) {
@@ -549,9 +551,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 displayPickupLocation_textView.setVisibility(View.VISIBLE);
                 editText_otherPickUp.setVisibility(View.GONE);
                 textView_selectTime.setText("Pickup Time");
-                //sourceAddress = "NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon";
-                //displayDropLocation_textView.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
-            }
+                }
 
 
             if (position == 3) {

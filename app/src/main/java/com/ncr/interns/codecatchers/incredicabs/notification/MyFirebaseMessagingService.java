@@ -29,7 +29,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String ADMIN_CHANNEL_ID ="admin_channel";
     private NotificationManager notificationManager;
     public static final String ACTION1 = "Approve";
-    public String reqsubstring;
+    public String reqSubString;
     public static final String ACTION2 = "Reject";
 
     @Override public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -67,8 +67,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
          //String[] msgarray= msg.split("\n");
            int ind1= msg.indexOf(":");
            int ind2 = msg.indexOf("\n");
-         reqsubstring = msg.substring(++ind1,ind2);
-         //int reqid= Integer.parseInt(reqsubstring);
+         reqSubString = msg.substring(++ind1,ind2);
+         //int reqid= Integer.parseInt(reqSubString);
     Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, ADMIN_CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher_round)  //a resource for your custom small icon

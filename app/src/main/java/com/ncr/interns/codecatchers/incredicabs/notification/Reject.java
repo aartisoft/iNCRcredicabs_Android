@@ -24,7 +24,7 @@ public class Reject extends BroadcastReceiver {
     String url = "http://192.168.43.213:8080/DemoProject/login/doLogin";
     @Override
     public void onReceive(Context context, Intent intent) {
-        reqId = myFirebaseMessagingService.reqsubstring;
+        reqId = myFirebaseMessagingService.reqSubString;
         Toast.makeText(context, "Rejected", Toast.LENGTH_SHORT).show();
         JSONObject jsonBodyRequest = new JSONObject();
         try {
