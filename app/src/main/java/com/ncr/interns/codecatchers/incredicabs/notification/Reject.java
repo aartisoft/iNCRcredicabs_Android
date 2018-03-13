@@ -3,6 +3,7 @@ package com.ncr.interns.codecatchers.incredicabs.notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,10 +22,15 @@ import org.json.JSONObject;
 public class Reject extends BroadcastReceiver {
     MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService();
     String reqId;
+    SharedPreferences sharedPreferences;
+    private static final String MY_PREFERENCES = "MyPrefs";
     String url = "http://192.168.43.213:8080/DemoProject/login/doLogin";
     @Override
     public void onReceive(Context context, Intent intent) {
-        reqId = myFirebaseMessagingService.reqSubString;
+
+        sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
+        reqId = sharedPreferences.getString("reqId",null);
+
         Toast.makeText(context, "Rejected", Toast.LENGTH_SHORT).show();
         JSONObject jsonBodyRequest = new JSONObject();
         try {

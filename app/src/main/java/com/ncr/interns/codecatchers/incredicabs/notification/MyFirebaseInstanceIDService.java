@@ -15,6 +15,7 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 public class MyFirebaseInstanceIDService  extends FirebaseInstanceIdService {
     public static final String FIREBASE_TOKEN = "Firebase token";
     private static final String TAG = "MyFirebaseIDService";
+    private static final String MY_PREFERENCES = "MyPrefs";
 
     @Override
     public void onTokenRefresh() {
@@ -26,8 +27,8 @@ public class MyFirebaseInstanceIDService  extends FirebaseInstanceIdService {
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
         //<editor-fold desc="Replace this code with The Code to enter the Token into Database">
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        preferences.edit().putString(FIREBASE_TOKEN, refreshedToken).apply();
+        SharedPreferences sharedPreferences = getSharedPreferences(MY_PREFERENCES,MODE_PRIVATE);
+        sharedPreferences.edit().putString(FIREBASE_TOKEN, refreshedToken).apply();
         //</editor-fold>
     }
 

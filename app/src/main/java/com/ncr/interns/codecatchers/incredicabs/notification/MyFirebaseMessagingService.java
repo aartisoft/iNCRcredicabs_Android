@@ -9,16 +9,19 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.ncr.interns.codecatchers.incredicabs.R;
+import com.ncr.interns.codecatchers.incredicabs.*;
 
 import java.util.Random;
 
@@ -27,9 +30,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String NOTIFICATION_ID_EXTRA = "notificationId";
     private static final String IMAGE_URL_EXTRA = "imageUrl";
     private static final String ADMIN_CHANNEL_ID ="admin_channel";
+    private static final String TAG = "MyFirebaseInstanceClass";
     private NotificationManager notificationManager;
     public static final String ACTION1 = "Approve";
     public String reqSubString;
+    private static final String MY_PREFERENCES = "MyPrefs";
     public static final String ACTION2 = "Reject";
 
     @Override public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -68,6 +73,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
            int ind1= msg.indexOf(":");
            int ind2 = msg.indexOf("\n");
          reqSubString = msg.substring(++ind1,ind2);
+
+        Log.d(TAG, "onMessageReceived: request ID "+reqSubString);
+
+        //<editor-fold desc="Putting reqId in shared Preferences">
+        SharedPreferences sharedPreferences = getSharedPreferences(MY_PREFERENCES,MODE_PRIVATE);
+        sharedPreferences.edit().putString("reqId",reqSubString).commit();
+        //</editor-fold>
+
          //int reqid= Integer.parseInt(reqSubString);
     Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, ADMIN_CHANNEL_ID)

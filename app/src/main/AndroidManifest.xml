@@ -25,12 +25,13 @@
             android:label="@string/title_activity_dashboard"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MainRequestActivity"
+        <activity
+            android:name=".MainRequestActivity"
             android:parentActivityName=".Dashboard"
             android:label="@string/title_activity_unscheduled_request"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
         <service
             android:name=".notification.MyFirebaseMessagingService"

@@ -165,6 +165,13 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                     dropAddress = displayDropLocation_textView.getText().toString();
 
 
+                if (spinner_location.getSelectedItem().toString() == "Select"
+                        || spinner_dropLocation.getSelectedItem().toString() == "Select"){
+                    Snackbar snackbar = Snackbar.make(nsv,"Select Valid Location",Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    return;
+                }
+
                 if (validation()) {
                     diff = to_date.getTime() - from_date.getTime();
                     diffDays = diff / (24 * 60 * 60 * 1000) + 1;
