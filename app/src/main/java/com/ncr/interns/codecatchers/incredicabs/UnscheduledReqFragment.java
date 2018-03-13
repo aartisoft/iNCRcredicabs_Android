@@ -407,13 +407,24 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                if (minute < 10) {
-                    timepicker.setText("" + hourOfDay + ":0" + minute);
-                    startTime = "" + hourOfDay + ":0" + minute;
-                } else {
+                //<editor-fold desc="rahul- if number of hours are less than 10 it will now work">
+                if (minute < 10 ) {
+                     if(hourOfDay<10)
+                     {  timepicker.setText("0" + hourOfDay + ":0" + minute);
+                    startTime = "0" + hourOfDay + ":0" + minute;}else{timepicker.setText("" + hourOfDay + ":0" + minute);
+                         startTime = "" + hourOfDay + ":0" + minute;
+
+                     }
+                } else {  if(hourOfDay<10){
+                    timepicker.setText("0" + hourOfDay + ":" + minute);
+                    startTime = "0" + hourOfDay + ":" + minute;
+                }else{
                     timepicker.setText("" + hourOfDay + ":" + minute);
                     startTime = "" + hourOfDay + ":" + minute;
                 }
+
+                }
+                //</editor-fold>
 
             }
         }, mHour, mMinute, false);
