@@ -1,16 +1,9 @@
 package com.ncr.interns.codecatchers.incredicabs;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,38 +12,71 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
+import com.ncr.interns.codecatchers.incredicabs.Adapter.*;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeCabMatesDetails;
+
 import java.util.ArrayList;
-import java.util.List;
 
 public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private RecyclerView recyclerView;
-    private DashboardAdapter adapter;
-    private List<DashboardEntry> dashboardList;
+    RecyclerView mRecyclerView;
+    ArrayList<EmployeeCabMatesDetails> mList;
+    Button checkIn,checkOut,Complaints,request;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        prepareCabmatesDetails();
+
+        checkIn = findViewById(R.id.button_checkIn);
+        checkOut = findViewById(R.id.button_checkOut);
+        Complaints = findViewById(R.id.button_complaint);
+        request = findViewById(R.id.button_request);
+
+        mRecyclerView = findViewById(R.id.recyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        CabMatesAdapter adapter = new CabMatesAdapter(mList);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        mRecyclerView.setAdapter(adapter);
+
+        checkIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 3/15/2018 CHeckIn Intent
+            }
+        });
+
+        checkOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 3/15/2018  CheckOut Intent
+            }
+        });
+
+        Complaints.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 3/15/2018 Feedback Activity Intent
+            }
+        });
+
+        request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Dashboard.this,MainRequestActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
 
-        recyclerView = findViewById(R.id.recycler_view);
-
-        dashboardList = new ArrayList<>();
-        adapter = new DashboardAdapter(this, dashboardList);
-
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(mLayoutManager);
-      //  recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-
-        prepareDashboard();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -60,12 +86,11 @@ public class Dashboard extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
     public void onBackPressed() {
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -83,19 +108,13 @@ public class Dashboard extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-    //accha s
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -121,44 +140,18 @@ public class Dashboard extends AppCompatActivity
         return true;
     }
 
-    public void reqUscheduledCab(View view) {
-        Intent intent = new Intent(Dashboard.this, MainRequestActivity.class);
-        startActivity(intent);
+    public void prepareCabmatesDetails()
+    {
+        mList = new ArrayList<>();
+        mList.add(new EmployeeCabMatesDetails("Pulkit Gupta","Saraswati Kunj, Golf Cource road, Sector 53","8:00AM",
+                "987654321"));
+        mList.add(new EmployeeCabMatesDetails("Gaurav Sati","NCR Corporation Vipul Plaza","8:10AM",
+                "987654321"));
+        mList.add(new EmployeeCabMatesDetails("Sonia Chawla","NCR Corporation Vipul Plaza","8:40AM",
+                "987654321"));
+        mList.add(new EmployeeCabMatesDetails("Neeraj joshi","NCR Corporation Vipul Plaza","9:00AM",
+                "987654321"));
     }
 
-    /**
-     * Adding few albums for testing
-     */
-    private void prepareDashboard() {
-        int[] dashboard_icons = new int[]{
-                R.drawable.ic_action_booking,
-                R.drawable.ic_action_check_in,
-                R.drawable.ic_action_name,
-                R.drawable.ic_action_profile,
-                R.drawable.ic_menu_gallery,
-                R.drawable.ic_menu_camera
-        };
-
-        DashboardEntry a = new DashboardEntry("REQUEST", dashboard_icons[0]);
-        dashboardList.add(a);
-
-        a = new DashboardEntry("SOS",  dashboard_icons[1]);
-        dashboardList.add(a);
-
-        a = new DashboardEntry("FEEDBACK", dashboard_icons[2]);
-        dashboardList.add(a);
-
-        a = new DashboardEntry("CHECK-IN",  dashboard_icons[3]);
-        dashboardList.add(a);
-
-        a = new DashboardEntry("CHECK-OUT",  dashboard_icons[4]);
-        dashboardList.add(a);
-
-        a = new DashboardEntry("ROSTER",  dashboard_icons[5]);
-        dashboardList.add(a);
-
-
-        adapter.notifyDataSetChanged();
-    }
 
 }

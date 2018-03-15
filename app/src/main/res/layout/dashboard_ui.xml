@@ -1,21 +1,183 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#d8ffc6"
-
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Dashboard"
+    android:orientation="vertical"
+    android:weightSum="10"
     tools:showIn="@layout/app_bar_dashboard">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:scrollbars="vertical"
-        android:layout_marginTop="20dp"/>
 
-</RelativeLayout>
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:layout_weight="4"
+        android:backgroundTint="#ffffff"
+        android:elevation="8dp"
+        app:cardCornerRadius="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:orientation="vertical"
+            android:padding="4dp"
+            android:weightSum="3">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:orientation="vertical"
+                    android:weightSum="3">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="4dp"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:text="Your Current Shift is 10AM - 7PM"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Shift starts in 1 HOUR"
+                        android:textSize="18sp"
+                        android:textStyle="italic" />
+
+
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:textSize="30sp"
+                    android:textColor="#ffffff"
+                    android:background="@drawable/sos_button_round"
+                    android:text="sos" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/button_checkIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_dashboard"
+                    android:elevation="5dp"
+                    android:text="CHECK IN" />
+
+                <Button
+                    android:id="@+id/button_checkOut"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_dashboard"
+                    android:elevation="5dp"
+                    android:text="CHECK OUT" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:cardCornerRadius="8dp"
+        android:elevation="6dp"
+        android:layout_margin="4dp"
+        android:layout_weight="4.5">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+
+    </android.support.v7.widget.CardView>
+
+
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:backgroundTint="#757575">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/button_complaint"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_bottom_sheet"
+                android:gravity="center"
+                android:text="Complaints"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+
+            <Button
+                android:id="@+id/button_request"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_bottom_sheet"
+                android:gravity="center"
+                android:text="Unscheduled Cab Request"
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>
