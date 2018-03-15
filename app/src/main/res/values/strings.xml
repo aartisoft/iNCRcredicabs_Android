@@ -8,7 +8,17 @@
         <item>Home</item>
         <item>Office</item>
         <item>Other</item>
+    </string-array>
+    <string-array name="dropLocationArray">
+        <item>Select</item>
+        <item>Home</item>
+        <item>Office</item>
+        <item>Other</item>
+    </string-array>
 
+    <string-array name="approverManagerArray">
+        <item>Lvl 1 Manager</item>
+        <item>Lvl 2 Manager</item>
     </string-array>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

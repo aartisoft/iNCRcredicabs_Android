@@ -16,8 +16,7 @@ public class NcabSQLiteHelper extends SQLiteOpenHelper {
     Context ctx;
     SQLiteDatabase sqLiteDatabase;
     private static final String TAG = "NcabSQLiteHelper";
-
-    private static final String CREATE_EMPLOYEE_TABLE_QUERY = "CREATE TABLE "+EmployeeContract.DB_TABLE+
+    final String CREATE_EMPLOYEE_TABLE_QUERY = "CREATE TABLE "+EmployeeContract.DB_TABLE+
             " ("+EmployeeContract._ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
                  EmployeeContract.COLUMN_EMP_QLID+" TEXT NOT NULL,"+
                  EmployeeContract.COLUMN_FIRST_NAME+" TEXT NOT NULL,"+
@@ -35,13 +34,14 @@ public class NcabSQLiteHelper extends SQLiteOpenHelper {
 
     public NcabSQLiteHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+        this.ctx = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         //Create Employee Table in SQlite Database
         db.execSQL(CREATE_EMPLOYEE_TABLE_QUERY);
-        Log.d(TAG, "onCreate: Table Created ");
+        Log.i(TAG, "onCreate: Table Created ");
     }
 
     @Override
