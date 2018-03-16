@@ -27,7 +27,7 @@ public class Approve extends BroadcastReceiver {
     public String reqId;
     private static final String TAG = "Approve.java";
     private static final String MY_PREFERENCES = "MyPrefs";
-    String url = "http://192.168.43.213:8080/NCAB/VendorService/approval";
+    String url = "http://192.168.43.213:8080/NCAB/AndroidService/approval";
     SharedPreferences sharedPreferences;
     @Override
     public void onReceive(Context context, Intent intent) {

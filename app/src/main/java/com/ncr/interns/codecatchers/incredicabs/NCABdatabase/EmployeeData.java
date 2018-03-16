@@ -13,7 +13,9 @@ public class EmployeeData {
     String EmployeeMiddleName;
     String EmployeeLastName;
     String Level1ManagerQlid;
-    String Leve21ManagerQlid;
+    String Level2ManagerQlid;
+    String Level1ManagerName;
+    String Level2ManagerName;
     String HomeAddress;
     String OfficeAddress;
     String contactNumber;
@@ -21,18 +23,30 @@ public class EmployeeData {
     String emergencyContactNumber;
     int role;
 
+    public String getLevel1ManagerName() {
+        return Level1ManagerName;
+    }
+
+    public String getLevel2ManagerName() {
+        return Level2ManagerName;
+    }
+
     public EmployeeData(String employeeQlID, String employeeFirstName,
                         String employeeMiddleName, String employeeLastName,
-                        String level1ManagerQlid, String leve21ManagerQlid,
+                        String level1ManagerQlid, String leve21ManagerQlid, String level2ManagerName,
+                        String level1ManagerName,
                         String homeAddress, String officeAddress, String contactNumber,
                         String refreshedToken, String emergencyContactumber, int role) {
         EmployeeQlID = employeeQlID;
         EmployeeFirstName = employeeFirstName;
         EmployeeMiddleName = employeeMiddleName;
         EmployeeLastName = employeeLastName;
+
         Level1ManagerQlid = level1ManagerQlid;
-        Leve21ManagerQlid = leve21ManagerQlid;
+        Level2ManagerQlid = leve21ManagerQlid;
         HomeAddress = homeAddress;
+        Level1ManagerName = level1ManagerName;
+        Level2ManagerName = level2ManagerName;
         OfficeAddress = officeAddress;
         this.contactNumber = contactNumber;
         this.refreshedToken = refreshedToken;
@@ -80,12 +94,12 @@ public class EmployeeData {
         Level1ManagerQlid = level1ManagerQlid;
     }
 
-    public String getLeve21ManagerQlid() {
-        return Leve21ManagerQlid;
+    public String getLevel2ManagerQlid() {
+        return Level2ManagerQlid;
     }
 
-    public void setLeve21ManagerQlid(String leve21ManagerQlid) {
-        Leve21ManagerQlid = leve21ManagerQlid;
+    public void setLevel2ManagerQlid(String level2ManagerQlid) {
+        Level2ManagerQlid = level2ManagerQlid;
     }
 
     public String getHomeAddress() {

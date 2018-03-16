@@ -2,8 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/log_out"
-        app:showAsAction="never" />
+        android:id="@+id/call_transport"
+        android:title="Call Transport Authority"
+        app:showAsAction="always"
+        android:icon="@drawable/abu_hanif_transport"
+        android:tooltipText="Call Transport Authority"/>
 </menu>

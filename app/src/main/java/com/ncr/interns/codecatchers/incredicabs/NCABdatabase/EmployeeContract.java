@@ -13,7 +13,9 @@ public class EmployeeContract implements BaseColumns {
     public static final String COLUMN_MIDDLE_NAME = "EmployeeMiddleName";
     public static final String COLUMN_LAST_NAME = "EmployeeLastName";
     public static final String COLUMN_LEVEL_1_MANAGER = "Level1ManagerQlid";
-    public static final String COLUMN_LEVEL_2_MANAGER = "Leve21ManagerQlid";
+    public static final String COLUMN_LEVEL_2_MANAGER = "Level2ManagerQlid";
+    public static final String COLUMN_LEVEL_1_MANAGER_NAME = "Level1ManagerName";
+    public static final String COLUMN_LEVEL_2_MANAGER_NAME = "Level2ManagerName";
     public static final String COLUMN_HOME_ADDRESS = "HomeAddress";
     public static final String COLUMN_OFFICE_ADDRESS = "OfficeAddress";
     public static final String COLUMN_CONTACT_NUMBER = "contactNumber";

@@ -10,6 +10,8 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeContract;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeData;
 
 
 public class MyFirebaseInstanceIDService  extends FirebaseInstanceIdService {
@@ -29,6 +31,7 @@ public class MyFirebaseInstanceIDService  extends FirebaseInstanceIdService {
         //<editor-fold desc="Replace this code with The Code to enter the Token into Database">
         SharedPreferences sharedPreferences = getSharedPreferences(MY_PREFERENCES,MODE_PRIVATE);
         sharedPreferences.edit().putString(FIREBASE_TOKEN, refreshedToken).apply();
+
         //</editor-fold>
     }
 

@@ -3,21 +3,9 @@ package com.ncr.interns.codecatchers.incredicabs;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import static com.android.volley.Request.Method.HEAD;
 
 public class Login extends AppCompatActivity {
 
@@ -31,8 +19,8 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        user =  findViewById(R.id.editText);
-        pass =  findViewById(R.id.editText2);
+        user =  findViewById(R.id.editText_Qlid);
+        pass =  findViewById(R.id.editText_password);
 
         login = findViewById(R.id.button);
         login.setOnClickListener(new View.OnClickListener() {
