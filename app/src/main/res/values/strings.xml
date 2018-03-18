@@ -37,4 +37,8 @@
     <string name="DropLocation">Drop Area</string>
     <string name="notifications_admin_channel_name">Global channel</string>
     <string name="notifications_admin_channel_description">Notifications sent from the app admin</string>
+    <string name="complaints">Complaints</string>
+    <string name="request_cab">Request Cab</string>
+    <string name="check_in">CHECK IN</string>
+    <string name="check_out">CHECK OUT</string>
 </resources>

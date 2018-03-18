@@ -8,20 +8,20 @@ public class EmployeeData {
 
     //Model class for employee Data
 
-    String EmployeeQlID;
-    String EmployeeFirstName;
-    String EmployeeMiddleName;
-    String EmployeeLastName;
-    String Level1ManagerQlid;
-    String Level2ManagerQlid;
-    String Level1ManagerName;
-    String Level2ManagerName;
-    String HomeAddress;
-    String OfficeAddress;
-    String contactNumber;
-    String refreshedToken;
-    String emergencyContactNumber;
-    int role;
+    private String EmployeeQlID;
+    private String EmployeeFirstName;
+    private String EmployeeMiddleName;
+    private String EmployeeLastName;
+    private String Level1ManagerQlid;
+    private String Level2ManagerQlid;
+    private String Level1ManagerName;
+    private String Level2ManagerName;
+    private String HomeAddress;
+    private String OfficeAddress;
+    private String contactNumber;
+    private String refreshedToken;
+    private String emergencyContactNumber;
+    private int role;
 
     public String getLevel1ManagerName() {
         return Level1ManagerName;

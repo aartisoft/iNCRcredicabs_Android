@@ -34,6 +34,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeContract;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeData;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
 
 import org.json.JSONException;
@@ -69,29 +70,38 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     Context ctx;
     NcabSQLiteHelper ncabSQLiteHelper;
     String url = "http://192.168.43.108:8522/NCAB/RequestService/sendRequest";
-    // String pickupLocationArray[] = getResources().getStringArray(R.array.pickupLocationArray);
+
     String pickupLocationArray[] = {"Select", "Home", "Office", "Other"}; //String Array : make in reusable
-    // String dropLocationArray[] = getResources().getStringArray(R.array.dropLocationArray);
     String dropLocationArray[] = {"Select", "Home", "Office", "Other"}; //String Array
     String approverManagerArray[] = {"Lvl 1 Manager", "Lvl 2 Manager"}; //String Array
-    //String approverManagerArray[] = getResources().getStringArray(R.array.approverManagerArray);
+
+    //<editor-fold desc="Data For Request">
+    String Employee_Qlid;
+    String Employee_Name;
+    String Employee_Manager_1_Qlid;
+    String Employee_Manager_2_Qlid;
+    String Employee_Manager_1_Name;
+    String Employee_Manager_2_Name;
+    String Employee_HomeAddress;
+    String Employee_OfficeAddress;
+    String Employee_Contact_number;
+    //</editor-fold>
+
 
     public UnscheduledReqFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.content_request, container, false);
+
         getComponentsId();
 
         ctx = getActivity();
-
         ncabSQLiteHelper = new NcabSQLiteHelper(ctx);
-        mSqLiteDatabase = ncabSQLiteHelper.getWritableDatabase();
-
+        mSqLiteDatabase = ncabSQLiteHelper.getReadableDatabase();
+        getData();
         ArrayAdapter<String> pickupSpinnerAdapter = new ArrayAdapter<>(getActivity(), R.layout.custom_spinner, pickupLocationArray);
 
         pickupSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -382,7 +392,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 destination_database_entry = "HOME TO ";
                 //TODO have to get the Data from DATABASE
                 displayPickupLocation_textView.setText("");
-                displayPickupLocation_textView.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
+                displayPickupLocation_textView.setText(Employee_HomeAddress);
                 displayPickupLocation_textView.setVisibility(View.VISIBLE);
                 textView_selectTime.setText("Drop Time");
                 editText_otherPickUp.setVisibility(View.GONE);
@@ -392,7 +402,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 destination_database_entry = "OFFICE TO ";
                 //TODO have to get the Data from DATABASE
                 displayPickupLocation_textView.setText("");
-                displayPickupLocation_textView.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
+                displayPickupLocation_textView.setText(Employee_OfficeAddress);
                 displayPickupLocation_textView.setVisibility(View.VISIBLE);
                 editText_otherPickUp.setVisibility(View.GONE);
                 textView_selectTime.setText("Pickup Time");
@@ -435,7 +445,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 editText_otherDrop.setVisibility(View.GONE);
                 destination_database_entry = destination_database_entry + "HOME";
                 //TODO have to get the Data from DATABASE
-                displayDropLocation_textView.setText("BL No:-86,Saraswati Kunj,Golf Course Road,Sector 53,Gurgaon");
+                displayDropLocation_textView.setText(Employee_HomeAddress);
 
             }
             if (position == 2) {
@@ -443,7 +453,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 displayDropLocation_textView.setVisibility(View.VISIBLE);
                 editText_otherDrop.setVisibility(View.GONE);
                 displayDropLocation_textView.setText("");
-                displayDropLocation_textView.setText("NCR Corporation, Vipul Plaza,Suncity,Sector 54,Gurgaon");
+                displayDropLocation_textView.setText(Employee_OfficeAddress);
                 //TODO have to get the Data from DATABASE
             }
 
@@ -474,13 +484,13 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 //            if(position==0){
 //                managerQLid_textField.setVisibility(View.GONE);}
 
-            if (position == 0) {
+            if (position  == 0) {
                 Counter = 1;
-                managerQLid_textField.setText("sc250512");
+                managerQLid_textField.setText(Employee_Manager_1_Name+"  Qlid: "+Employee_Manager_1_Qlid);
                 managerQLid_textField.setVisibility(View.VISIBLE);
             }
             if (position == 1) {
-                managerQLid_textField.setText("gs250365");
+                managerQLid_textField.setText(Employee_Manager_2_Name+"  Qlid: "+Employee_Manager_2_Qlid);
                 managerQLid_textField.setVisibility(View.VISIBLE);
                 Counter = 2;
             }
@@ -544,13 +554,13 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                             if (validation()) {
                                 jsonBody = new JSONObject();
                                 try {
-                                    jsonBody.put("Emp_QLID", "KG250190");
+                                    jsonBody.put("Emp_QLID", Employee_Qlid);
                                     jsonBody.put("Shift_ID", "4");
-                                    jsonBody.put("Mgr_QLID", "sc250512");
+                                    jsonBody.put("Mgr_QLID", Employee_Manager_1_Qlid);
                                     jsonBody.put("Counter", Counter);
                                     jsonBody.put("Source", sourceAddress);
                                     jsonBody.put("Destination", dropAddress);
-                                    jsonBody.put("Level2_mgr", "gs250365");
+                                    jsonBody.put("Level2_mgr", Employee_Manager_2_Qlid);
                                     jsonBody.put("Other_Addr", destination_database_entry);
                                     jsonBody.put("Reason", reasonForRequest.getText().toString());
                                     jsonBody.put("Start_Date_Time", startDate + startTime);
@@ -584,7 +594,13 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                         // Do something when error occurred
                                         Log.d("VOLLEY", "Something went wrong");
                                         //  Toast.makeText(getActivity(), "Oops..Something Went wrong", Toast.LENGTH_SHORT).show();
-                                        Snackbar snackbar = Snackbar.make(nsv, "Oops Something Went Wrong", Snackbar.LENGTH_LONG);
+                                        Snackbar snackbar = Snackbar.make(nsv, "Oops Something Went Wrong Failed To submit Request", Snackbar.LENGTH_LONG);
+                                        snackbar.setAction("Retry", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                sendRequest();
+                                            }
+                                        });
                                         snackbar.show();
                                         error.printStackTrace();
                                     }
@@ -619,14 +635,24 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         }
     }
 
-    //<editor-fold desc="Yet to implement this Function">
-    /*public void getData(){
-       mSqLiteDatabase =  ncabSQLiteHelper.getReadableDatabase();
-      Cursor c =  mSqLiteDatabase.rawQuery("SELECT * FROM "+ EmployeeContract.DB_TABLE +";",null);
-      while (c.moveToNext()){
 
-      }
-    }*/
-    //</editor-fold>
-}
+    public void getData(){
+       mSqLiteDatabase =  ncabSQLiteHelper.getReadableDatabase();
+        Cursor c =  mSqLiteDatabase.rawQuery("SELECT * FROM "+ EmployeeContract.DB_TABLE,null);
+        while (c.moveToNext()){
+            Employee_Qlid = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_EMP_QLID));
+            Employee_Name = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_FIRST_NAME))
+                            +c.getString(c.getColumnIndex(EmployeeContract.COLUMN_LAST_NAME));
+            Employee_Contact_number = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_CONTACT_NUMBER));
+            Employee_HomeAddress = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_HOME_ADDRESS));
+            Employee_OfficeAddress = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_OFFICE_ADDRESS));
+            Employee_Manager_1_Qlid = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_LEVEL_1_MANAGER));
+            Employee_Manager_2_Qlid = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_LEVEL_2_MANAGER));
+            Employee_Manager_1_Name = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_LEVEL_1_MANAGER_NAME));
+            Employee_Manager_2_Name = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_LEVEL_2_MANAGER_NAME));
+        }
+        c.close();
+
+    }
+  }
 
