@@ -3,6 +3,7 @@ package com.ncr.interns.codecatchers.incredicabs;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.ncr.interns.codecatchers.incredicabs.Adapter.CabMatesAdapter;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeCabMatesDetails;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeData;
@@ -43,10 +46,15 @@ public class Login extends AppCompatActivity {
     String contactNumber;
     String refreshedToken;
     String emergencyContactNumber;
+    private static final String MY_PREFERENCES = "MyPrefs_login";
     int role;
+    JSONObject jsonBodyRequest;
     NcabSQLiteHelper ncabSQLiteHelper;
     SQLiteDatabase mSqLiteDatabase;
-    private static final String TAG = "LOGIN_ACTIVITY";
+    Context context = this;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    private static final String TAG = Login.class.getSimpleName();
 
     String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/EmployeeService/login-android";
 
@@ -55,6 +63,7 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         user = findViewById(R.id.editText_Qlid);
         pass = findViewById(R.id.editText_password);
 
@@ -69,7 +78,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //json for request
-                JSONObject jsonBodyRequest = new JSONObject();
+               jsonBodyRequest = new JSONObject();
                 try {
                     jsonBodyRequest.put("qlid", user.getText().toString());
                     jsonBodyRequest.put("password", pass.getText().toString());
@@ -77,41 +86,21 @@ public class Login extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST,
-                        url,
-                        jsonBodyRequest,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
 
-                                Log.i("VOLLEY", "inside onResponse method: Login");
-                                Log.i("VOLLEY", response.toString());
+                sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
+                String shared_pref_userName = sharedPreferences.getString("user_qlid","");
+                if(shared_pref_userName.isEmpty()){
+                    login(jsonBodyRequest); //fuction with the code to Hit the Login API
 
-                                try {
-                                    if (response.getString("success").equalsIgnoreCase("true")) {
-                                        Intent intent = new Intent(Login.this, Dashboard.class);
-                                        parseJSON(response);
-                                        startActivity(intent);
-                                        Toast.makeText(Login.this, "Welcome "+EmployeeFirstName, Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(Login.this, "Invalid Credentials", Toast.LENGTH_LONG).show();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                } else{
+                    Intent intent = new Intent(Login.this,Dashboard.class);
+                    startActivity(intent);
+                    finish();
 
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                // Do something when error occurred
-                                Log.d("VOLLEY", "Something went wrong");
-                                error.printStackTrace();
-                            }
-                        });
+                }
 
-                RESTService.getInstance(Login.this).addToRequestQueue(jsonObjRequest);
+
+
 
             }
 
@@ -149,11 +138,12 @@ public class Login extends AppCompatActivity {
             values.put(EmployeeContract.COLUMN_EMERGENCY_CONTACT_NUMBER,emergencyContactNumber);
             values.put(EmployeeContract.COLUMN_EMP_ROLE,role);
             mSqLiteDatabase.insert(EmployeeContract.DB_TABLE,null,values);
+            Log.d(TAG, "parseJSON: Data Inserted to Employee Table");
             //</editor-fold>
 
 
             //<editor-fold desc="Yet to Implement">
-            /*JSONArray cabMates = response.getJSONArray("rosterInfo");
+            JSONArray cabMates = response.getJSONArray("rosterInfo");
             for (int i = 0;i<cabMates.length();i++){
 
                 JSONObject cabmateX = cabMates.getJSONObject(i);
@@ -161,21 +151,16 @@ public class Login extends AppCompatActivity {
                 String CabMate_name = cabmateX.getString("f_name")+" "+cabmateX.getString("l_name");
                 String CabMate_contactNumber = cabmateX.getString("e_mob");
                 String CabMate_address = cabmateX.getString("p_a");
-
-                EmployeeCabMatesDetails matesDetails = new EmployeeCabMatesDetails(CabMate_name,
-                        CabMate_address,"",CabMate_contactNumber,CabMate_Qlid);
+                ContentValues cabmateValues = new ContentValues();
+                cabmateValues.put(CabMatesContract.COLUMN_CABMATE_QLID,CabMate_Qlid);
+                cabmateValues.put(CabMatesContract.COLUMN_CABMATE_NAME,CabMate_name);
+                cabmateValues.put(CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER,CabMate_contactNumber);
+                cabmateValues.put(CabMatesContract.COLUMN_CABMATE_ADDRESS,CabMate_address);
+                mSqLiteDatabase.insert(CabMatesContract.DB_TABLE,null,cabmateValues);
+                Log.d(TAG, "parseJSON: Data Inserted to Cabmate Table row :-_"+i+"\n");
 
             }
-*/
             //</editor-fold>
-
-            /*EmployeeData employeeData = new EmployeeData(EmployeeQlID,EmployeeFirstName,
-                    "",EmployeeLastName,Level1ManagerQlid,Level2ManagerQlid,
-                    Level2ManagerName,Level1ManagerName,HomeAddress,
-                    "NCR Corporation, 5th Floor, Vipul Plaza, Suncity, Sector 54,Gurgoan",
-                    contactNumber,
-                    "",emergencyContactNumber,role);*/
-
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -184,9 +169,63 @@ public class Login extends AppCompatActivity {
 
     }
 
-    public Cursor getEmployeeDetails(){
+    public void login(JSONObject jsonBodyRequest){
+        // TODO: 3/18/2018 Yet to implement
+        JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBodyRequest,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
 
-        Cursor cursor = mSqLiteDatabase.rawQuery("SELECT * FROM "+EmployeeContract.DB_TABLE,null);
-        return cursor;
+                        Log.i("VOLLEY", "inside onResponse method: Login");
+                        Log.i("VOLLEY", response.toString());
+
+                        try {
+                            if (response.getString("success").equalsIgnoreCase("true")) {
+                                Intent intent = new Intent(Login.this, Dashboard.class);
+                                parseJSON(response);
+
+                                //<editor-fold desc="Saving the User Credentials in Shared Preferences">
+                                sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
+                                 editor = sharedPreferences.edit();
+                                editor.putString("user_qlid",user.getText().toString());
+                                editor.putString("user_password",pass.getText().toString());
+                                editor.apply();
+                                //</editor-fold>
+
+                                startActivity(intent);
+                                Toast.makeText(Login.this, "Welcome "+EmployeeFirstName, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(Login.this, "Invalid Credentials", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Do something when error occurred
+                        Log.d("VOLLEY", "Something went wrong");
+                        error.printStackTrace();
+                    }
+                });
+
+        RESTService.getInstance(Login.this).addToRequestQueue(jsonObjRequest);
+
+    }
+
+    @Override
+    protected void onPause() {
+        finish();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        ncabSQLiteHelper.close();
+        super.onDestroy();
+
     }
 }

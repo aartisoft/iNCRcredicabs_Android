@@ -64,8 +64,8 @@
         android:background="@drawable/login_text_fields"
         android:drawableLeft="@drawable/ic_account_circle_white_24px"
         android:ems="10"
-        android:gravity="center"
-        android:hint="Quicklook ID"
+        android:gravity="center_vertical"
+        android:hint="  Quicklook ID"
         android:inputType="textPersonName"
         android:paddingLeft="5dp" />
 
@@ -79,8 +79,8 @@
         android:background="@drawable/login_text_fields"
         android:drawableLeft="@drawable/ic_lock_outline_white_24px"
         android:ems="10"
-        android:gravity="center"
-        android:hint="Password"
+        android:gravity="center_vertical"
+        android:hint="  Password"
         android:inputType="textPassword"
         android:paddingLeft="5dp" />
 

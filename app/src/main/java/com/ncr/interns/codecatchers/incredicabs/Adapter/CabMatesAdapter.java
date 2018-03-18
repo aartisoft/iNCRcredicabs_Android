@@ -4,12 +4,16 @@ package com.ncr.interns.codecatchers.incredicabs.Adapter;
  * Created by gs250365 on 3/15/2018.
  */
 
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeCabMatesDetails;
 import com.ncr.interns.codecatchers.incredicabs.R;
 
@@ -21,14 +25,17 @@ import java.util.ArrayList;
 
 public class CabMatesAdapter extends Adapter<CabMatesAdapter.cabMatesViewHolder> {
 
-    ArrayList<EmployeeCabMatesDetails> matesList  = new ArrayList<>();
-    public CabMatesAdapter(ArrayList<EmployeeCabMatesDetails> list) {
-        matesList = list;
+    //ArrayList<EmployeeCabMatesDetails> matesList  = new ArrayList<>();
+    Cursor cursor;
+
+    public CabMatesAdapter(Cursor c) {
+        cursor = c;
     }
 
     public static class cabMatesViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name,address,pickupTime,contactNumber;
+        TextView name, address, pickupTime;
+        ImageView contactNumber;
 
 
         public cabMatesViewHolder(View itemView) {
@@ -36,30 +43,37 @@ public class CabMatesAdapter extends Adapter<CabMatesAdapter.cabMatesViewHolder>
             name = itemView.findViewById(R.id.employeeName);
             address = itemView.findViewById(R.id.Emp_pickupAddress);
             pickupTime = itemView.findViewById(R.id.emp_pickupTime);
+            contactNumber = itemView.findViewById(R.id.button_call_cabMate);
+
 
         }
     }
 
     @Override
     public CabMatesAdapter.cabMatesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View rootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cabmates,parent,false);
+        View rootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cabmates, parent, false);
         return new cabMatesViewHolder(rootView);
     }
 
     @Override
     public void onBindViewHolder(CabMatesAdapter.cabMatesViewHolder holder, int position) {
-        EmployeeCabMatesDetails currentItem = matesList.get(position);
-        holder.name.setText(currentItem.getCabMate_name());
-        holder.address.setText(currentItem.getCabMate_address());
-        holder.pickupTime.setText(currentItem.getCabMate_pickupTime());
 
-
+        if (!cursor.moveToPosition(position)) {
+            return;
+        }
+        String emp_name = cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_NAME));
+        String emp_address = cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_ADDRESS));
+        // String emp_contact_number=cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER));
+        holder.name.setText(emp_name);
+        holder.address.setText(emp_address);
 
     }
 
     @Override
     public int getItemCount() {
-        return matesList.size();
+        return cursor.getCount();
     }
+
+
 }
 

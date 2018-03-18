@@ -339,7 +339,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     }
 
     public Boolean validation() {
-            if (TextUtils.isEmpty(startDate)) {
+        if (TextUtils.isEmpty(startDate)) {
             Snackbar snackbar = Snackbar.make(nsv, "From Date Can't be empty", Snackbar.LENGTH_LONG);
             snackbar.show();
 
@@ -394,7 +394,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 displayPickupLocation_textView.setText("");
                 displayPickupLocation_textView.setText(Employee_HomeAddress);
                 displayPickupLocation_textView.setVisibility(View.VISIBLE);
-                textView_selectTime.setText("Drop Time");
+                textView_selectTime.setText(R.string.field_drop_time);
                 editText_otherPickUp.setVisibility(View.GONE);
 
             }
@@ -405,7 +405,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 displayPickupLocation_textView.setText(Employee_OfficeAddress);
                 displayPickupLocation_textView.setVisibility(View.VISIBLE);
                 editText_otherPickUp.setVisibility(View.GONE);
-                textView_selectTime.setText("Pickup Time");
+                textView_selectTime.setText(R.string.field_pickup_time);
             }
 
 
@@ -484,13 +484,13 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 //            if(position==0){
 //                managerQLid_textField.setVisibility(View.GONE);}
 
-            if (position  == 0) {
+            if (position == 0) {
                 Counter = 1;
-                managerQLid_textField.setText(Employee_Manager_1_Name+"  Qlid: "+Employee_Manager_1_Qlid);
+                managerQLid_textField.setText(new StringBuilder().append(Employee_Manager_1_Name).append("  Qlid: ").append(Employee_Manager_1_Qlid).toString());
                 managerQLid_textField.setVisibility(View.VISIBLE);
             }
             if (position == 1) {
-                managerQLid_textField.setText(Employee_Manager_2_Name+"  Qlid: "+Employee_Manager_2_Qlid);
+                managerQLid_textField.setText(new StringBuilder().append(Employee_Manager_2_Name).append("  Qlid: ").append(Employee_Manager_2_Qlid).toString());
                 managerQLid_textField.setVisibility(View.VISIBLE);
                 Counter = 2;
             }
@@ -524,8 +524,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
     }
 
-    public void sendRequest()
-    {
+    public void sendRequest() {
         diff = to_date.getTime() - from_date.getTime();
         diffDays = diff / (24 * 60 * 60 * 1000) + 1;
         if ((validation()) && (diffDays > 0)) {
@@ -636,13 +635,13 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     }
 
 
-    public void getData(){
-       mSqLiteDatabase =  ncabSQLiteHelper.getReadableDatabase();
-        Cursor c =  mSqLiteDatabase.rawQuery("SELECT * FROM "+ EmployeeContract.DB_TABLE,null);
-        while (c.moveToNext()){
+    public void getData() {
+
+        Cursor c = mSqLiteDatabase.rawQuery("SELECT * FROM " + EmployeeContract.DB_TABLE, null);
+        while (c.moveToNext()) {
             Employee_Qlid = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_EMP_QLID));
             Employee_Name = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_FIRST_NAME))
-                            +c.getString(c.getColumnIndex(EmployeeContract.COLUMN_LAST_NAME));
+                    + c.getString(c.getColumnIndex(EmployeeContract.COLUMN_LAST_NAME));
             Employee_Contact_number = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_CONTACT_NUMBER));
             Employee_HomeAddress = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_HOME_ADDRESS));
             Employee_OfficeAddress = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_OFFICE_ADDRESS));
@@ -654,5 +653,5 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         c.close();
 
     }
-  }
+}
 

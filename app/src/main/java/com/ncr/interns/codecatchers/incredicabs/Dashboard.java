@@ -1,6 +1,10 @@
 package com.ncr.interns.codecatchers.incredicabs;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -20,7 +24,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.ncr.interns.codecatchers.incredicabs.Adapter.*;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeCabMatesDetails;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
 
 import java.util.ArrayList;
 
@@ -30,6 +36,11 @@ public class Dashboard extends AppCompatActivity
     RecyclerView mRecyclerView;
     ArrayList<EmployeeCabMatesDetails> mList;
     Button checkIn,checkOut,Complaints,request;
+    SQLiteDatabase mSqLiteDatabase;
+    NcabSQLiteHelper ncabSQLiteHelper;
+    Cursor cursor;
+    private static final String MY_PREFERENCES = "MyPrefs_login";
+    Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +48,8 @@ public class Dashboard extends AppCompatActivity
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        prepareCabmatesDetails();
+        ncabSQLiteHelper = new NcabSQLiteHelper(this);
+        mSqLiteDatabase = ncabSQLiteHelper.getWritableDatabase();
 
         checkIn = findViewById(R.id.button_checkIn);
         checkOut = findViewById(R.id.button_checkOut);
@@ -46,11 +58,12 @@ public class Dashboard extends AppCompatActivity
         linearLayout = findViewById(R.id.dashboard_linerarParent);
         mRecyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        CabMatesAdapter adapter = new CabMatesAdapter(mList);
+        CabMatesAdapter adapter = new CabMatesAdapter(getCabmatesDetails());
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.addItemDecoration(new
                 DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(adapter);
+
 
         checkIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +137,7 @@ public class Dashboard extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -141,39 +154,42 @@ public class Dashboard extends AppCompatActivity
 
         } else if (id == R.id.nav_app_feedback) {
             Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_EMAIL, "gs250365@ncr.com");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Test");
+            intent.putExtra(Intent.EXTRA_TEXT," Test Test");
             intent.setType("message/rfc822");
-            intent.putExtra(Intent.EXTRA_EMAIL, Uri.parse("mailto:gauravsati1997@gmail.com "));
-            intent.putExtra(Intent.EXTRA_SUBJECT,"Feedback about iNCRedicabs");
-            intent.putExtra(Intent.EXTRA_TEXT, "Enter Your Helpful Feedback");
-            startActivity(Intent.createChooser(intent, "Send Email with"));
+            startActivity(Intent.createChooser(intent, "Choose an email client"));
 
         } else if (id == R.id.nav_about_developers) {
-
+            // TODO: 3/18/2018 About Page
         } else if(id == R.id.LogOut){
-            Snackbar snackbar = Snackbar.make(linearLayout,"Logging Out",Snackbar.LENGTH_LONG);
+            /*Snackbar snackbar = Snackbar.make(linearLayout,"Logging Out",Snackbar.LENGTH_LONG);
             snackbar.show();
+            */
+            Intent intent = new Intent(this,Login.class);
+            mSqLiteDatabase.execSQL("DELETE FROM "+CabMatesContract.DB_TABLE);
+            SharedPreferences sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+            startActivity(intent);
+            finish();
         }
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    public void prepareCabmatesDetails()
-    {
-        mList = new ArrayList<>();
-        mList.add(new EmployeeCabMatesDetails("Pulkit Gupta","Saraswati Kunj, Golf Cource road, Sector 53","8:00AM",
-                "987654321","gs250365"));
-        mList.add(new EmployeeCabMatesDetails("Gaurav Sati","NCR Corporation Vipul Plaza","8:10AM",
-                "987654321","gs250365"));
-        mList.add(new EmployeeCabMatesDetails("Sonia Chawla","NCR Corporation Vipul Plaza","8:40AM",
-                "987654321","gs250365"));
-        mList.add(new EmployeeCabMatesDetails("Neeraj joshi","NCR Corporation Vipul Plaza","9:00AM",
-                "987654321","gs250365"));
-        mList.add(new EmployeeCabMatesDetails("Abhinav Gunwant","NCR Corporation Vipul Plaza","9:05AM",
-                "987654321","gs250365"));
-    }
 
+
+    public Cursor getCabmatesDetails(){
+
+        cursor = mSqLiteDatabase.rawQuery("SELECT * FROM "+ CabMatesContract.DB_TABLE,null);
+        return cursor;
+
+
+    }
 
 }

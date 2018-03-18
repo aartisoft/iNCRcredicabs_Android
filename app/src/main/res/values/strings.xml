@@ -41,4 +41,6 @@
     <string name="request_cab">Request Cab</string>
     <string name="check_in">CHECK IN</string>
     <string name="check_out">CHECK OUT</string>
+    <string name="field_drop_time">Drop Time</string>
+    <string name="field_pickup_time">Pickup Time</string>
 </resources>
