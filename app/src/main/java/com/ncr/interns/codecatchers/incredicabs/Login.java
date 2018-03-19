@@ -89,20 +89,15 @@ public class Login extends AppCompatActivity {
 
                 sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
                 String shared_pref_userName = sharedPreferences.getString("user_qlid","");
-                if(shared_pref_userName.isEmpty()){
-                    login(jsonBodyRequest); //fuction with the code to Hit the Login API
-
-                } else{
+                if(shared_pref_userName.equals(user.getText().toString())){
                     Intent intent = new Intent(Login.this,Dashboard.class);
                     startActivity(intent);
                     finish();
 
+                } else{
+                    login(jsonBodyRequest); //fuction with the code to Hit the Login API
                 }
-
-
-
-
-            }
+   }
 
         });
 
@@ -170,7 +165,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(JSONObject jsonBodyRequest){
-        // TODO: 3/18/2018 Yet to implement
+
         JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBodyRequest,
                 new Response.Listener<JSONObject>() {
                     @Override

@@ -10,7 +10,6 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Dashboard"
     android:orientation="vertical"
-    android:weightSum="10"
     tools:showIn="@layout/app_bar_dashboard">
 
 
@@ -18,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="8dp"
-        android:layout_weight="4"
+        android:layout_weight="5"
         android:backgroundTint="#ffffff"
         android:elevation="8dp"
         app:cardCornerRadius="5dp">
@@ -52,7 +51,7 @@
                         android:layout_weight="2"
                         android:gravity="center"
                         android:text="Your Current Shift is 10AM - 7PM"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -62,8 +61,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="Shift starts in 1 HOUR"
-                        android:textSize="18sp"
-                        android:textStyle="italic" />
+                        android:textSize="20sp" />
 
 
                 </LinearLayout>
@@ -93,7 +91,7 @@
                     android:id="@+id/button_checkIn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="3dp"
+                    android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/button_dashboard"
                     android:elevation="5dp"
@@ -107,7 +105,7 @@
                     android:id="@+id/button_checkOut"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="3dp"
+                    android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:textSize="20sp"
                     android:paddingStart="4dp"
@@ -129,13 +127,13 @@
         app:cardCornerRadius="8dp"
         android:elevation="6dp"
         android:layout_margin="4dp"
-        android:layout_weight="5">
+        android:layout_weight="4">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:padding="2dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
         </android.support.v7.widget.RecyclerView>
 
