@@ -41,7 +41,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="25dp"
         android:textColor="#ffffff"
-        android:text="2018 | NCR Corporation" />
+        android:text="2018 ©| NCR Corporation" />
 
     <TextView
         android:id="@+id/textView6"

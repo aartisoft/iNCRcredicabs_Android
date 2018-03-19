@@ -1,13 +1,20 @@
 package com.ncr.interns.codecatchers.incredicabs;
 
+import android.*;
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.ncr.interns.codecatchers.incredicabs.Adapter.*;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
@@ -41,6 +49,8 @@ public class Dashboard extends AppCompatActivity
     Cursor cursor;
     private static final String MY_PREFERENCES = "MyPrefs_login";
     Context context = this;
+    private static final int REQUEST_CALL = 1;
+    String mobNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +68,7 @@ public class Dashboard extends AppCompatActivity
         linearLayout = findViewById(R.id.dashboard_linerarParent);
         mRecyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        CabMatesAdapter adapter = new CabMatesAdapter(getCabmatesDetails());
+        CabMatesAdapter adapter = new CabMatesAdapter(getCabmatesDetails(),this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.addItemDecoration(new
                 DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
@@ -192,4 +202,15 @@ public class Dashboard extends AppCompatActivity
 
     }
 
+   /* @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CALL) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                CabMatesAdapter adapter = new CabMatesAdapter();
+                adapter.makePhoneCall();
+            } else {
+                Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }*/
 }

@@ -4,15 +4,27 @@ package com.ncr.interns.codecatchers.incredicabs.Adapter;
  * Created by gs250365 on 3/15/2018.
  */
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.ncr.interns.codecatchers.incredicabs.Dashboard;
+import com.ncr.interns.codecatchers.incredicabs.Manifest;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeCabMatesDetails;
 import com.ncr.interns.codecatchers.incredicabs.R;
@@ -27,26 +39,30 @@ public class CabMatesAdapter extends Adapter<CabMatesAdapter.cabMatesViewHolder>
 
     //ArrayList<EmployeeCabMatesDetails> matesList  = new ArrayList<>();
     Cursor cursor;
+    Context ctx;
+    private static final int REQUEST_CALL = 1;
+    String mobNum;
 
-    public CabMatesAdapter(Cursor c) {
+    public CabMatesAdapter(Cursor c,Context context) {
         cursor = c;
+        ctx = context;
+    }
+    public CabMatesAdapter() {
+
     }
 
     public static class cabMatesViewHolder extends RecyclerView.ViewHolder {
 
         TextView name, address, pickupTime;
-        ImageView contactNumber;
+        ImageButton contactNumber;
 
-
-        public cabMatesViewHolder(View itemView) {
+         public cabMatesViewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.employeeName);
             address = itemView.findViewById(R.id.Emp_pickupAddress);
             pickupTime = itemView.findViewById(R.id.emp_pickupTime);
             contactNumber = itemView.findViewById(R.id.button_call_cabMate);
-
-
-        }
+          }
     }
 
     @Override
@@ -63,9 +79,20 @@ public class CabMatesAdapter extends Adapter<CabMatesAdapter.cabMatesViewHolder>
         }
         String emp_name = cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_NAME));
         String emp_address = cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_ADDRESS));
-        // String emp_contact_number=cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER));
+         final String emp_contact_number=cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER));
         holder.name.setText(emp_name);
         holder.address.setText(emp_address);
+        holder.contactNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mobNum = emp_contact_number;
+                makePhoneCall();
+                //Toast.makeText(ctx, " "+mobNum, Toast.LENGTH_SHORT).show();
+                /*Dashboard dashboard = new Dashboard();
+                dashboard.makePhoneCall(mobNum);*/
+
+            }
+        });
 
     }
 
@@ -73,6 +100,26 @@ public class CabMatesAdapter extends Adapter<CabMatesAdapter.cabMatesViewHolder>
     public int getItemCount() {
         return cursor.getCount();
     }
+
+    public void makePhoneCall(){
+        String mobNumber = mobNum;
+       // this.mobNum = mobNum;
+        if(true){
+            if(ContextCompat.checkSelfPermission((Activity)ctx,
+                    android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions( (Activity)ctx,
+                        new String[]{android.Manifest.permission.CALL_PHONE}, REQUEST_CALL);
+            }else{
+                String dial = "tel:"+mobNumber;
+                ctx.startActivity(new Intent(Intent.ACTION_CALL,Uri.parse(dial)));
+            }
+        }else{
+            Toast.makeText(ctx, "Phone Number not Specified", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
 
 
 }
