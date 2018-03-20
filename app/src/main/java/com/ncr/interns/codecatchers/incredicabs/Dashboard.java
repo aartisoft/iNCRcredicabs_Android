@@ -47,6 +47,7 @@ public class Dashboard extends AppCompatActivity
     SQLiteDatabase mSqLiteDatabase;
     NcabSQLiteHelper ncabSQLiteHelper;
     Cursor cursor;
+    Button button_sos;
     private static final String MY_PREFERENCES = "MyPrefs_login";
     Context context = this;
     private static final int REQUEST_CALL = 1;
@@ -60,7 +61,7 @@ public class Dashboard extends AppCompatActivity
         setSupportActionBar(toolbar);
         ncabSQLiteHelper = new NcabSQLiteHelper(this);
         mSqLiteDatabase = ncabSQLiteHelper.getWritableDatabase();
-
+        button_sos = findViewById(R.id.button_sos);
         checkIn = findViewById(R.id.button_checkIn);
         checkOut = findViewById(R.id.button_checkOut);
         Complaints = findViewById(R.id.button_complaint);
@@ -101,6 +102,13 @@ public class Dashboard extends AppCompatActivity
             public void onClick(View v) {
                 Intent intent = new Intent(Dashboard.this,MainRequestActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        button_sos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 3/20/2018 By Harshit pandey SOS implementation
             }
         });
 

@@ -312,11 +312,23 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                     timePicker.setText("" + hourOfDay + ":0" + minute);
                     startTime = "" + hourOfDay + ":0" + minute;
                 } else {
-                    timePicker.setText("" + hourOfDay + ":" + minute);
-                    startTime = "" + hourOfDay + ":" + minute;
-                }
+                    //<editor-fold desc="rahul- if number of hours are less than 10 it will now work">
+                    if (minute < 10 ) {
+                        if(hourOfDay<10)
+                        {  timePicker.setText("0" + hourOfDay + ":0" + minute);
+                            startTime = "0" + hourOfDay + ":0" + minute;}else{timePicker.setText("" + hourOfDay + ":0" + minute);
+                            startTime = "" + hourOfDay + ":0" + minute;
 
-            }
+                        }
+                    } else {  if(hourOfDay<10){
+                        timePicker.setText("0" + hourOfDay + ":" + minute);
+                        startTime = "0" + hourOfDay + ":" + minute;
+                    }else{
+                        timePicker.setText("" + hourOfDay + ":" + minute);
+                        startTime = "" + hourOfDay + ":" + minute;
+                    }
+                    //</editor-fold>
+                 }}}
         }, mHour, mMinute, false);
         timePickerDialog.show();
     }
@@ -563,6 +575,8 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                     jsonBody.put("Other_Addr", destination_database_entry);
                                     jsonBody.put("Reason", reasonForRequest.getText().toString());
                                     jsonBody.put("Start_Date_Time", startDate + startTime);
+                                    Log.d(LOG_TAG, "onClick: "+startDate +" "+ startTime+":00");
+                                    Log.d(LOG_TAG, "onClick: "+endDate);
                                     jsonBody.put("End_Date_Time", endDate);
 
                                 } catch (JSONException e) {
