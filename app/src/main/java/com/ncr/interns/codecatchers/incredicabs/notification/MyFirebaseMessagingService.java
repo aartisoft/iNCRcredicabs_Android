@@ -81,10 +81,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         sharedPreferences.edit().putString("reqId",reqSubString).commit();
         //</editor-fold>
 
-         //int reqid= Integer.parseInt(reqSubString);
     Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, ADMIN_CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)// FIXME: 3/14/2018 a resource for your custom small icon
+            .setSmallIcon(R.drawable.ic_launcher_foreground)// FIXME: 3/14/2018 a resource for your custom small icon
             .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
             .setContentTitle(remoteMessage.getData().get("title")) //the "title" value you sent in your notification
             //.setContentText(remoteMessage.getData().get("message")) //ditto

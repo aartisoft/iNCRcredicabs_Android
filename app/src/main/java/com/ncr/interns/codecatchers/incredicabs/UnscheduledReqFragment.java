@@ -34,7 +34,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeContract;
-import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeData;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
 
 import org.json.JSONException;
@@ -49,7 +48,7 @@ import java.util.Locale;
 
 public class UnscheduledReqFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
 
-    private final static String LOG_TAG = UnscheduledReqFragment.class.getSimpleName();
+    private final static String TAG = UnscheduledReqFragment.class.getSimpleName();
 
     SQLiteDatabase mSqLiteDatabase;
     View rootView;
@@ -61,7 +60,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     EditText fromDate, toDate, reasonForRequest, timePicker, editText_otherPickUp, editText_otherDrop;
     TextView managerQLid_textField, displayDropLocation_textView, textView_selectTime, displayPickupLocation_textView;
     NestedScrollView nsv;
-    String startDate, endDate, startTime, destination_database_entry, sourceAddress, dropAddress;
+    String startDate, endDate, startTime, destination_entry_source, sourceAddress, dropAddress, destination_entry_to;
     Button submit;
     Spinner spinner_location, spinner_dropLocation, managerQLid;
     JSONObject jsonBody;
@@ -69,9 +68,9 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     public int Counter;
     Context ctx;
     NcabSQLiteHelper ncabSQLiteHelper;
-    String url = "http://192.168.43.108:8522/NCAB/RequestService/sendRequest";
+    String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/RequestService/sendRequest";
 
-    String pickupLocationArray[] = {"Select", "Home", "Office", "Other"}; //String Array : make in reusable
+    String pickupLocationArray[] = {"Select", "Home", "Office", "Other"}; //String Array
     String dropLocationArray[] = {"Select", "Home", "Office", "Other"}; //String Array
     String approverManagerArray[] = {"Lvl 1 Manager", "Lvl 2 Manager"}; //String Array
 
@@ -365,7 +364,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                     snackbar.show();
 
                 } else {
-                    // TODO: 3/9/2018 Solve the bug associated with the Source and destination_database_entry Location
+                    // TODO: 3/9/2018 Solve the bug associated with the Source and destination_entry_source Location
                     if (TextUtils.isEmpty(startTime)) {
                         Snackbar snackbar = Snackbar.make(nsv, "Time Can't be empty", Snackbar.LENGTH_LONG);
                         snackbar.show();
@@ -401,7 +400,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 displayPickupLocation_textView.setVisibility(View.GONE);
             }
             if (position == 1) {
-                destination_database_entry = "HOME TO ";
+                destination_entry_source = "HOME TO ";
                 //TODO have to get the Data from DATABASE
                 displayPickupLocation_textView.setText("");
                 displayPickupLocation_textView.setText(Employee_HomeAddress);
@@ -411,7 +410,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
             }
             if (position == 2) {
-                destination_database_entry = "OFFICE TO ";
+                destination_entry_source = "OFFICE TO ";
                 //TODO have to get the Data from DATABASE
                 displayPickupLocation_textView.setText("");
                 displayPickupLocation_textView.setText(Employee_OfficeAddress);
@@ -422,7 +421,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
 
             if (position == 3) {
-                destination_database_entry = "OTHERS TO ";
+                destination_entry_source = "OTHERS TO ";
                 textView_selectTime.setText("Pickup Time");
                 displayPickupLocation_textView.setText("");
                 displayPickupLocation_textView.setVisibility(View.GONE);
@@ -449,29 +448,35 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             selectDrop = position;
             if (position == 0) {
                 displayDropLocation_textView.setText("");
+                destination_entry_to = "";
                 displayDropLocation_textView.setVisibility(View.GONE);
 
             }
             if (position == 1) {
                 displayDropLocation_textView.setVisibility(View.VISIBLE);
                 editText_otherDrop.setVisibility(View.GONE);
-                destination_database_entry = destination_database_entry + "HOME";
-                //TODO have to get the Data from DATABASE
+                destination_entry_to = "";
+                destination_entry_to = "HOME";
+                destination_entry_source = destination_entry_source + destination_entry_to;
                 displayDropLocation_textView.setText(Employee_HomeAddress);
 
             }
             if (position == 2) {
-                destination_database_entry = destination_database_entry + "OFFICE";
+                destination_entry_to = "";
+                destination_entry_to = "OFFICE";
+                destination_entry_source = destination_entry_source + destination_entry_to;
                 displayDropLocation_textView.setVisibility(View.VISIBLE);
                 editText_otherDrop.setVisibility(View.GONE);
                 displayDropLocation_textView.setText("");
                 displayDropLocation_textView.setText(Employee_OfficeAddress);
-                //TODO have to get the Data from DATABASE
+
             }
 
 
             if (position == 3) {
-                destination_database_entry = destination_database_entry + "OTHERS ";
+                destination_entry_to = "";
+                destination_entry_to = "OTHERS";
+                destination_entry_source = destination_entry_source + destination_entry_to;
                 displayDropLocation_textView.setVisibility(View.GONE);
                 displayDropLocation_textView.setText("");
                 editText_otherDrop.setVisibility(View.VISIBLE);
@@ -572,11 +577,9 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                     jsonBody.put("Source", sourceAddress);
                                     jsonBody.put("Destination", dropAddress);
                                     jsonBody.put("Level2_mgr", Employee_Manager_2_Qlid);
-                                    jsonBody.put("Other_Addr", destination_database_entry);
+                                    jsonBody.put("Other_Addr", destination_entry_source);
                                     jsonBody.put("Reason", reasonForRequest.getText().toString());
-                                    jsonBody.put("Start_Date_Time", startDate + startTime);
-                                    Log.d(LOG_TAG, "onClick: "+startDate +" "+ startTime+":00");
-                                    Log.d(LOG_TAG, "onClick: "+endDate);
+                                    jsonBody.put("Start_Date_Time", startDate +" "+ startTime+":00");
                                     jsonBody.put("End_Date_Time", endDate);
 
                                 } catch (JSONException e) {
@@ -591,7 +594,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
                                         try {
                                             if (response.getString("status").equalsIgnoreCase("success")) {
-                                                Toast.makeText(getActivity(), "Your request is in process", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(getActivity(), "Your request is Submitted", Toast.LENGTH_LONG).show();
                                             } else {
                                                 Toast.makeText(getActivity(), "Failed to make request", Toast.LENGTH_LONG).show();
                                             }
@@ -611,17 +614,17 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                         snackbar.setAction("Retry", new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
-                                                sendRequest();
+                                                //sendRequest();
                                             }
                                         });
                                         snackbar.show();
                                         error.printStackTrace();
                                     }
                                 });
-                                jsonObjRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
+                                /*jsonObjRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
                                         DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
+*/
                                 RESTService.getInstance(getContext().getApplicationContext()).addToRequestQueue(jsonObjRequest);
 
                             } else {
@@ -665,6 +668,11 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             Employee_Manager_2_Name = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_LEVEL_2_MANAGER_NAME));
         }
         c.close();
+
+    }
+
+
+    public void ValidationCheck(){
 
     }
 }
