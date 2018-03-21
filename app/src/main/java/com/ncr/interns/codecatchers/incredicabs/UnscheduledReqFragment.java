@@ -671,9 +671,5 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
     }
 
-
-    public void ValidationCheck(){
-
-    }
 }
 
