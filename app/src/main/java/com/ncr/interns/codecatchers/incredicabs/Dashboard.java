@@ -3,6 +3,8 @@ package com.ncr.interns.codecatchers.incredicabs;
 import android.*;
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,6 +39,7 @@ import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeCabMatesDet
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -50,8 +53,7 @@ public class Dashboard extends AppCompatActivity
     Button button_sos;
     private static final String MY_PREFERENCES = "MyPrefs_login";
     Context context = this;
-    private static final int REQUEST_CALL = 1;
-    String mobNum;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +63,7 @@ public class Dashboard extends AppCompatActivity
         setSupportActionBar(toolbar);
         ncabSQLiteHelper = new NcabSQLiteHelper(this);
         mSqLiteDatabase = ncabSQLiteHelper.getWritableDatabase();
-        button_sos = findViewById(R.id.button_sos);
-        checkIn = findViewById(R.id.button_checkIn);
-        checkOut = findViewById(R.id.button_checkOut);
-        Complaints = findViewById(R.id.button_complaint);
-        request = findViewById(R.id.button_request);
-        linearLayout = findViewById(R.id.dashboard_linerarParent);
-        mRecyclerView = findViewById(R.id.recyclerView);
+        getIdofComponents();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         CabMatesAdapter adapter = new CabMatesAdapter(getCabmatesDetails(),this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -75,6 +71,7 @@ public class Dashboard extends AppCompatActivity
                 DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(adapter);
 
+        cabMatesNotification();
 
         checkIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,9 +108,6 @@ public class Dashboard extends AppCompatActivity
                 // TODO: 3/20/2018 By Harshit pandey SOS implementation
             }
         });
-
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -200,7 +194,16 @@ public class Dashboard extends AppCompatActivity
         return true;
     }
 
+    public void getIdofComponents(){
+        button_sos = findViewById(R.id.button_sos);
+        checkIn = findViewById(R.id.button_checkIn);
+        checkOut = findViewById(R.id.button_checkOut);
+        Complaints = findViewById(R.id.button_complaint);
+        request = findViewById(R.id.button_request);
+        linearLayout = findViewById(R.id.dashboard_linerarParent);
+        mRecyclerView = findViewById(R.id.recyclerView);
 
+    }
 
     public Cursor getCabmatesDetails(){
 
@@ -210,15 +213,16 @@ public class Dashboard extends AppCompatActivity
 
     }
 
-   /* @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_CALL) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                CabMatesAdapter adapter = new CabMatesAdapter();
-                adapter.makePhoneCall();
-            } else {
-                Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }*/
+    public void cabMatesNotification(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
+        calendar.set(Calendar.MINUTE, 32);
+        // TODO: 3/21/2018 Get the Current shift time from SQlite database
+        Intent intent1 = new Intent(Dashboard.this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(Dashboard.this, 0,intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) Dashboard.this.getSystemService(ALARM_SERVICE);
+        assert am != null;
+        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+    }
 }

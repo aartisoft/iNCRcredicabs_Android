@@ -178,7 +178,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(JSONObject jsonBodyRequest){
-        // TODO: 3/18/2018 Yet to implement
+
         Log.d(TAG, "login: qlid: " + qlid);
         FirebaseTokenUtility ftu = new FirebaseTokenUtility(Login.this);
         JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBodyRequest,

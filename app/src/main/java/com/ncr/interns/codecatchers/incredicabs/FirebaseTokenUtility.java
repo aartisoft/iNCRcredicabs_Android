@@ -60,7 +60,7 @@ public class FirebaseTokenUtility {
             e.printStackTrace();
         }
 
-//        String url = "http://localhost:8080/EmployeeService/set-push-token-android";
+//        String baseUrl = "http://localhost:8080/EmployeeService/set-push-token-android";
 
         JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, SAVE_TOKEN_URL, jsonBodyRequest,
                 new Response.Listener<JSONObject>() {

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ncr.interns.codecatchers.incredicabs"
-    >
+    package="com.ncr.interns.codecatchers.incredicabs">
 
-<uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".Login"
+        <activity
+            android:name=".Login"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,8 +29,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainRequestActivity"
-            android:parentActivityName=".Dashboard"
             android:label="@string/title_activity_unscheduled_request"
+            android:parentActivityName=".Dashboard"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
@@ -48,18 +48,22 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
         <receiver android:name=".notification.Approve">
             <intent-filter>
-                <action android:name="Approve"></action>
+                <action android:name="Approve" />
             </intent-filter>
         </receiver>
-
         <receiver android:name=".notification.Reject">
             <intent-filter>
-                <action android:name="Reject"></action>
+                <action android:name="Reject" />
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".FeedbackActivity"
+            android:label="@string/title_activity_feedback"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

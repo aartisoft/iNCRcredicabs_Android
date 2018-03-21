@@ -28,7 +28,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -68,8 +67,9 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     public int Counter;
     Context ctx;
     NcabSQLiteHelper ncabSQLiteHelper;
-    String url = "http://192.168.43.108:8522/NCAB/RequestService/sendRequest";
-
+    String baseUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080";
+    String pathUrl = "/NCAB/RequestService/sendRequest";
+    String mainUrl = baseUrl+pathUrl;
     String pickupLocationArray[] = {"Select", "Home", "Office", "Other"}; //String Array
     String dropLocationArray[] = {"Select", "Home", "Office", "Other"}; //String Array
     String approverManagerArray[] = {"Lvl 1 Manager", "Lvl 2 Manager"}; //String Array
@@ -364,7 +364,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                     snackbar.show();
 
                 } else {
-                    // TODO: 3/9/2018 Solve the bug associated with the Source and destination_entry_source Location
+                    // FIXME: 3/21/2018 Solve the bug associated with the Source and destination_entry_source Location
                     if (TextUtils.isEmpty(startTime)) {
                         Snackbar snackbar = Snackbar.make(nsv, "Time Can't be empty", Snackbar.LENGTH_LONG);
                         snackbar.show();
@@ -590,7 +590,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                     e.printStackTrace();
                                 }
 
-                                JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
+                                JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, mainUrl, jsonBody, new Response.Listener<JSONObject>() {
                                     @Override
                                     public void onResponse(JSONObject response) {
                                         Log.i("VOLLEY", "inside onResponse method:UnscheduledRequest");
