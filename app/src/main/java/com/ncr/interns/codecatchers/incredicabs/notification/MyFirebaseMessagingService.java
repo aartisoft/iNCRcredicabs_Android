@@ -80,26 +80,48 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         SharedPreferences sharedPreferences = getSharedPreferences(MY_PREFERENCES,MODE_PRIVATE);
         sharedPreferences.edit().putString("reqId",reqSubString).commit();
         //</editor-fold>
-
+     if(!remoteMessage.getData().get("title").equals("Cab Request Status")){
     Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-    NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, ADMIN_CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)// FIXME: 3/14/2018 a resource for your custom small icon
-            .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
-            .setContentTitle(remoteMessage.getData().get("title")) //the "title" value you sent in your notification
-            //.setContentText(remoteMessage.getData().get("message")) //ditto
-            .setAutoCancel(false)  //dismisses the notification on click
-            .setSound(defaultSoundUri)
-            //.setContentIntent()
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, ADMIN_CHANNEL_ID)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)// FIXME: 3/14/2018 a resource for your custom small icon
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
+                    .setContentTitle(remoteMessage.getData().get("title")) //the "title" value you sent in your notification
+                    //.setContentText(remoteMessage.getData().get("message")) //ditto
+                    .setAutoCancel(false)  //dismisses the notification on click
+                    .setSound(defaultSoundUri)
 
-            .addAction(new NotificationCompat.Action(R.drawable.ic_check_black_24dp,"Approve",action1PendingIntent))
-            .addAction(new NotificationCompat.Action(R.drawable.ic_clear_black_24dp,"Reject",action2PendingIntent));
+                    //.setContentIntent()
+
+                    .addAction(new NotificationCompat.Action(R.drawable.ic_check_black_24dp, "Approve", action1PendingIntent))
+                    .addAction(new NotificationCompat.Action(R.drawable.ic_clear_black_24dp, "Reject", action2PendingIntent));
             //.setFullScreenIntent(this,true)
 
 
-    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-    notificationManager.notify(notificationId /* ID of notification */, notificationBuilder.build());
+            notificationManager.notify(notificationId /* ID of notification */, notificationBuilder.build());
+        }else{
 
+
+         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, ADMIN_CHANNEL_ID)
+                 .setSmallIcon(R.drawable.ic_launcher_foreground)// FIXME: 3/14/2018 a resource for your custom small icon
+                 .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
+                 .setContentTitle(remoteMessage.getData().get("title")) //the "title" value you sent in your notification
+                 //.setContentText(remoteMessage.getData().get("message")) //ditto
+                 //dismisses the notification on click
+                 .setSound(defaultSoundUri);
+                 //.setContentIntent()
+
+                 //.setFullScreenIntent(this,true)
+
+
+         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+         notificationManager.notify(notificationId /* ID of notification */, notificationBuilder.build());
+
+
+     }
 }
 
 

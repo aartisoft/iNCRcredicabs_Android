@@ -571,12 +571,16 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                 jsonBody = new JSONObject();
                                 try {
                                     jsonBody.put("Emp_QLID", Employee_Qlid);
+                                    jsonBody.put("Employee_Name", Employee_Name);
+
                                     jsonBody.put("Shift_ID", "4");
                                     jsonBody.put("Mgr_QLID", Employee_Manager_1_Qlid);
+                                    jsonBody.put("Employee_Manager_1_Name", Employee_Manager_1_Name);
                                     jsonBody.put("Counter", Counter);
                                     jsonBody.put("Source", sourceAddress);
                                     jsonBody.put("Destination", dropAddress);
                                     jsonBody.put("Level2_mgr", Employee_Manager_2_Qlid);
+                                    jsonBody.put("Employee_Manager_2_Name", Employee_Manager_2_Name);
                                     jsonBody.put("Other_Addr", destination_entry_source);
                                     jsonBody.put("Reason", reasonForRequest.getText().toString());
                                     jsonBody.put("Start_Date_Time", startDate +" "+ startTime+":00");

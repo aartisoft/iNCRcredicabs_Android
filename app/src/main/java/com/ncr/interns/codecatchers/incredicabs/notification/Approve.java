@@ -30,7 +30,7 @@ public class Approve extends BroadcastReceiver {
     String url = "http://192.168.43.108:8522/NCAB/AndroidService/approval";
     SharedPreferences sharedPreferences;
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, Intent intent) {
 
         sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
         reqId = sharedPreferences.getString("reqId",null);
@@ -40,7 +40,7 @@ public class Approve extends BroadcastReceiver {
         JSONObject jsonBodyRequest = new JSONObject();
         try {
             jsonBodyRequest.put("request_id", reqId);
-            jsonBodyRequest.put("Approval","Approved");
+            jsonBodyRequest.put("Approval","APPROVED");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -55,7 +55,17 @@ public class Approve extends BroadcastReceiver {
                         Log.i("VOLLEY", "inside onResponse method:login");
                         Log.i("VOLLEY", response.toString());
 
-
+                        try {
+                            if (response.getString("status").equalsIgnoreCase("success")) {
+                                Toast.makeText(context, "Your response is Submitted", Toast.LENGTH_LONG).show();
+                            } else {if (response.getString("status").equalsIgnoreCase("Already")) {
+                                Toast.makeText(context, "Response is Already Submitted", Toast.LENGTH_LONG).show();
+                            }else{
+                                Toast.makeText(context, "Failed to submit", Toast.LENGTH_LONG).show();
+                            }}
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 },
                 new Response.ErrorListener() {

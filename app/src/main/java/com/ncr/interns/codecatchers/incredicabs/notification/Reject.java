@@ -27,7 +27,7 @@ public class Reject extends BroadcastReceiver {
     private static final String MY_PREFERENCES = "MyPrefs";
     String url = "http://192.168.43.108:8522/NCAB/AndroidService/approval";
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, Intent intent) {
 
         sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
         reqId = sharedPreferences.getString("reqId",null);
@@ -36,7 +36,7 @@ public class Reject extends BroadcastReceiver {
         JSONObject jsonBodyRequest = new JSONObject();
         try {
             jsonBodyRequest.put("request_id", reqId);
-            jsonBodyRequest.put("Approval","Rejected");
+            jsonBodyRequest.put("Approval","REJECTED");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -50,7 +50,17 @@ public class Reject extends BroadcastReceiver {
 
                         Log.i("VOLLEY", "inside onResponse method:login");
                         Log.i("VOLLEY", response.toString());
-
+                        try {
+                            if (response.getString("status").equalsIgnoreCase("success")) {
+                                Toast.makeText(context, "Your response is Submitted", Toast.LENGTH_LONG).show();
+                            } else {if (response.getString("status").equalsIgnoreCase("Already")) {
+                                Toast.makeText(context, "Response is Already Submitted", Toast.LENGTH_LONG).show();
+                            }else{
+                                Toast.makeText(context, "Failed to submit", Toast.LENGTH_LONG).show();
+                            }}
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
                     }
                 },
