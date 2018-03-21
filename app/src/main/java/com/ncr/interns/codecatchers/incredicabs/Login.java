@@ -4,21 +4,30 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.ncr.interns.codecatchers.incredicabs.Adapter.CabMatesAdapter;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeCabMatesDetails;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeContract;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeData;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
+import com.ncr.interns.codecatchers.incredicabs.notification.DeleteFirebaseTokenService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +50,9 @@ public class Login extends AppCompatActivity {
     String contactNumber;
     String refreshedToken;
     String emergencyContactNumber;
+    String firebaseToken;
+    String qlid;
+
     private static final String MY_PREFERENCES = "MyPrefs_login";
     int role;
     JSONObject jsonBodyRequest;
@@ -53,12 +65,15 @@ public class Login extends AppCompatActivity {
 
     String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/EmployeeService/login-android";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_login);
+
+        String copyStr = getResources().getString(R.string.login_copy);
+        TextView copyTV = (TextView)findViewById(R.id.copy_text);
+
+        copyTV.setText(Html.fromHtml(copyStr, 0));
 
         user = findViewById(R.id.editText_Qlid);
         pass = findViewById(R.id.editText_password);
@@ -70,31 +85,33 @@ public class Login extends AppCompatActivity {
         mSqLiteDatabase = ncabSQLiteHelper.getWritableDatabase();
         //</editor-fold>
 
+        final Intent intent = new Intent(this, DeleteFirebaseTokenService.class);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                qlid = user.getText().toString();
                 //json for request
-               jsonBodyRequest = new JSONObject();
+                jsonBodyRequest = new JSONObject();
                 try {
                     jsonBodyRequest.put("qlid", user.getText().toString());
                     jsonBodyRequest.put("password", pass.getText().toString());
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
                 sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
+                firebaseToken = FirebaseInstanceId.getInstance().getToken();
+                Log.d(TAG, "firebase Token:- "+firebaseToken);
+
                 String shared_pref_userName = sharedPreferences.getString("user_qlid","");
-                if(shared_pref_userName.equals(user.getText().toString())){
+                if(shared_pref_userName.isEmpty()){
+                    login(jsonBodyRequest); //fuction with the code to Hit the Login API
+                } else{
                     Intent intent = new Intent(Login.this,Dashboard.class);
                     startActivity(intent);
                     finish();
-
-                } else{
-                    login(jsonBodyRequest); //fuction with the code to Hit the Login API
                 }
-   }
-
+            }
         });
 
     }
@@ -161,7 +178,9 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(JSONObject jsonBodyRequest){
-
+        // TODO: 3/18/2018 Yet to implement
+        Log.d(TAG, "login: qlid: " + qlid);
+        FirebaseTokenUtility ftu = new FirebaseTokenUtility(Login.this);
         JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBodyRequest,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -177,8 +196,14 @@ public class Login extends AppCompatActivity {
 
                                 //<editor-fold desc="Saving the User Credentials in Shared Preferences">
                                 sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
-                                 editor = sharedPreferences.edit();
+                                editor = sharedPreferences.edit();
+//                                 qlid = user.getText().toString();
                                 editor.putString("user_qlid",user.getText().toString());
+                                editor.putString("user_name",
+                                        response.getString("empFName")+" "+
+                                                response.getString("empMName")+" "+
+                                                response.getString("empLName")
+                                );
                                 editor.putString("user_password",pass.getText().toString());
                                 editor.apply();
                                 //</editor-fold>
@@ -203,11 +228,13 @@ public class Login extends AppCompatActivity {
                     }
                 });
 
-
-
-
         RESTService.getInstance(Login.this).addToRequestQueue(jsonObjRequest);
 
+        ftu.saveTokenToDB(
+//                sharedPreferences.getString("user_qlid", ""),
+                qlid,
+                firebaseToken
+        );
     }
 
     @Override

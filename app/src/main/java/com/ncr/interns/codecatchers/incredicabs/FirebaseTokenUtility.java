@@ -27,7 +27,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class FirebaseTokenUtility {
     private static final String MY_PREFERENCES = "MyPrefs";
 
-    private final String BASE_URL = "http://153.58.57.134:8080/NCAB";
+    private final String BASE_URL = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB";
     private final String SAVE_TOKEN_URL = BASE_URL + "/EmployeeService/set-push-token-android";
     private final String GET_TOKEN_URL = BASE_URL + "/EmployeeService/get-push-token-android";
 

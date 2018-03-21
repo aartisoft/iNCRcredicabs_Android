@@ -52,7 +52,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 action1Intent, PendingIntent.FLAG_ONE_SHOT);
 
         PendingIntent action2PendingIntent = PendingIntent.getBroadcast(this, 0,
-                action1Intent, PendingIntent.FLAG_ONE_SHOT);
+                action2Intent, PendingIntent.FLAG_ONE_SHOT);
        // notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
 
@@ -92,10 +92,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             //.setContentIntent()
 
             .addAction(new NotificationCompat.Action(R.drawable.ic_check_black_24dp,"Approve",action1PendingIntent))
-            .addAction(new NotificationCompat.Action(R.drawable.ic_clear_black_24dp,"Reject",action2PendingIntent))
-
+            .addAction(new NotificationCompat.Action(R.drawable.ic_clear_black_24dp,"Reject",action2PendingIntent));
             //.setFullScreenIntent(this,true)
-               ;
+
 
     NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 

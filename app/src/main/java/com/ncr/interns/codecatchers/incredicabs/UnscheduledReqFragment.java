@@ -68,7 +68,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     public int Counter;
     Context ctx;
     NcabSQLiteHelper ncabSQLiteHelper;
-    String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/RequestService/sendRequest";
+    String url = "http://192.168.43.108:8522/NCAB/RequestService/sendRequest";
 
     String pickupLocationArray[] = {"Select", "Home", "Office", "Other"}; //String Array
     String dropLocationArray[] = {"Select", "Home", "Office", "Other"}; //String Array

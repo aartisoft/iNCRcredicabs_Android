@@ -4,92 +4,125 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:paddingRight="@dimen/login_layout_padding"
+    android:paddingLeft="@dimen/login_layout_padding"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.ncr.interns.codecatchers.incredicabs.Login"
     android:background="@drawable/login_background"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="161dp"
-        android:text="iNCRediCabs"
-        android:textColor="#ffffff"
-        android:textSize="45sp"
-        android:fontFamily="sans-serif"/>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/textView3"
-        android:layout_alignTop="@+id/textView3"
-        android:layout_marginTop="63dp"
-        android:text="The NCR internal Cab System"
-        android:textColor="#ffffff"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/login_login_top_label_bottom_margin"
+            android:text="@string/login_login_top_label"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/login_top_label_text_size"
+            app:layout_constraintBottom_toTopOf="@+id/editText_Qlid"
+            tools:layout_editor_absoluteX="0dp" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="25dp"
-        android:textColor="#ffffff"
-        android:text="2018 ©| NCR Corporation" />
+        <EditText
+            android:id="@+id/editText_Qlid"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_edit_text_height"
+            android:layout_marginBottom="@dimen/login_edit_text_relative_bottom_margin"
+            android:background="@drawable/login_text_fields"
+            android:drawableLeft="@drawable/ic_account_circle_white_24px"
+            android:drawablePadding="@dimen/login_edit_text_drawable_padding"
+            android:ems="10"
+            android:textSize="@dimen/login_edit_text_size"
+            android:gravity="center_vertical"
+            android:hint="@string/login_qlid_text_hint"
+            android:inputType="textPersonName"
+            android:paddingLeft="@dimen/login_edit_text_padding"
+            app:layout_constraintBottom_toTopOf="@+id/editText_password"
+            tools:layout_editor_absoluteX="0dp" />
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="86dp"
-        android:text="User Login"
-        android:textColor="#ffffff"
-        android:textSize="42sp" />
+        <EditText
+            android:id="@+id/editText_password"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_edit_text_height"
+            android:layout_alignStart="@+id/editText_Qlid"
+            android:layout_below="@+id/editText_Qlid"
+            android:layout_marginBottom="@dimen/login_edit_text_relative_bottom_margin"
+            android:background="@drawable/login_text_fields"
+            android:drawableLeft="@drawable/ic_lock_outline_white_24px"
+            android:drawablePadding="@dimen/login_edit_text_drawable_padding"
+            android:ems="10"
+            android:textSize="@dimen/login_edit_text_size"
+            android:gravity="center_vertical"
+            android:hint="@string/login_password_text_hint"
+            android:inputType="textPassword"
+            android:paddingLeft="@dimen/login_edit_text_padding"
+            app:layout_constraintBottom_toTopOf="@+id/button"
+            tools:layout_editor_absoluteX="16dp" />
 
-    <EditText
-        android:id="@+id/editText_Qlid"
-        android:layout_width="260dp"
-        android:layout_height="45dp"
-        android:layout_alignEnd="@+id/textView4"
-        android:layout_below="@+id/textView6"
-        android:layout_marginTop="28dp"
-        android:background="@drawable/login_text_fields"
-        android:drawableLeft="@drawable/ic_account_circle_white_24px"
-        android:ems="10"
-        android:gravity="center_vertical"
-        android:hint="  Quicklook ID"
-        android:inputType="textPersonName"
-        android:paddingLeft="5dp" />
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_login_button_height"
+            android:layout_marginBottom="@dimen/login_login_button_bottom_margin"
+            android:background="@drawable/button_submit"
+            android:text="@string/login_login_button_text"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/login_login_button_text_size"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/textView4"
+            tools:layout_editor_absoluteX="0dp" />
 
-    <EditText
-        android:id="@+id/editText_password"
-        android:layout_width="260dp"
-        android:layout_height="45dp"
-        android:layout_alignStart="@+id/editText_Qlid"
-        android:layout_below="@+id/editText_Qlid"
-        android:layout_marginTop="27dp"
-        android:background="@drawable/login_text_fields"
-        android:drawableLeft="@drawable/ic_lock_outline_white_24px"
-        android:ems="10"
-        android:gravity="center_vertical"
-        android:hint="  Password"
-        android:inputType="textPassword"
-        android:paddingLeft="5dp" />
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/login_title_bottom_margin"
+            android:fontFamily="sans-serif"
+            android:text="@string/login_title_text"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/login_title_text_size"
+            android:typeface="normal"
+            app:layout_constraintBottom_toTopOf="@+id/copy_text"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/textView5"
-        android:layout_centerVertical="true"
-        android:background="@drawable/button_submit"
-        android:text="LOGIN" />
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/login_subtitle_bottom_margin"
+            android:text="@string/login_subtitle_text"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/login_subtitle_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/copy_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/login_copy_text_bottom_margin"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/login_copy_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="h,20:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/login_copy" />
+    </android.support.constraint.ConstraintLayout>
+
 </RelativeLayout>

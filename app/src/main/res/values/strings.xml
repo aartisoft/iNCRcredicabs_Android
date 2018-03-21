@@ -21,6 +21,15 @@
         <item>Lvl 2 Manager</item>
     </string-array>
 
+
+    <string name="login_login_top_label">User Login</string>
+    <string name="login_qlid_text_hint">QLID</string>
+    <string name="login_password_text_hint">Password</string>
+    <string name="login_login_button_text">Login</string>
+    <string name="login_title_text">iNCRediCabs</string>
+    <string name="login_subtitle_text">The NCR internal Cab System</string>
+    <string name="login_copy">Copyright (C) 2018 NCR Corp. All rights reserved</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 

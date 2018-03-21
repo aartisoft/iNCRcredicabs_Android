@@ -25,7 +25,7 @@ public class Reject extends BroadcastReceiver {
     String reqId;
     SharedPreferences sharedPreferences;
     private static final String MY_PREFERENCES = "MyPrefs";
-    String url = "http://192.168.43.213:8080/NCAB/AndroidService/approval";
+    String url = "http://192.168.43.108:8522/NCAB/AndroidService/approval";
     @Override
     public void onReceive(Context context, Intent intent) {
 

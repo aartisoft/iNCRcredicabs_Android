@@ -27,7 +27,7 @@ public class Approve extends BroadcastReceiver {
     public String reqId;
     private static final String TAG = "Approve.java";
     private static final String MY_PREFERENCES = "MyPrefs";
-    String url = "http://192.168.43.213:8080/NCAB/AndroidService/approval";
+    String url = "http://192.168.43.108:8522/NCAB/AndroidService/approval";
     SharedPreferences sharedPreferences;
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -35,7 +35,7 @@ public class Approve extends BroadcastReceiver {
         sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
         reqId = sharedPreferences.getString("reqId",null);
         Log.d(TAG, "onReceive:  Request id "+reqId);
-        Toast.makeText(context, "Approve", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Approve"+reqId, Toast.LENGTH_SHORT).show();
 
         JSONObject jsonBodyRequest = new JSONObject();
         try {
