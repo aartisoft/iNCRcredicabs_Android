@@ -12,4 +12,6 @@ public class CabMatesContract implements BaseColumns {
     public static final String COLUMN_CABMATE_CONTACT_NUMBER = "ContactNumber";
     public static final String COLUMN_CABMATE_ADDRESS = "CabMateAddress";
     public static final String COLUMN_CABMATE_QLID = "CabMateQlid";
+    public static final String COLUMN_CABMATE_PICKUPTIME = "CabMatePickupTime";
+    public static final String COLUMN_SHIFT_ID = "ShiftId";
 }

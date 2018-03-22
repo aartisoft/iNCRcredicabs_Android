@@ -12,7 +12,7 @@ import android.util.Log;
 public class NcabSQLiteHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "NCABDatabase";
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 5;
     Context ctx;
     SQLiteDatabase sqLiteDatabase;
     private static final String TAG = "NcabSQLiteHelper";
@@ -34,12 +34,30 @@ public class NcabSQLiteHelper extends SQLiteOpenHelper {
             EmployeeContract.COLUMN_EMP_REFERESHED_TOKEN+" TEXT);";
     // TODO: 3/18/2018 If getting refreshed token make it not null
 
-    private final String CREATE_CABMATE_TABLE_QUERY = "CREATE TABLE "+CabMatesContract.DB_TABLE+" ("
-            +CabMatesContract._ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
+    private final String CREATE_CABMATE_TABLE_QUERY = "CREATE TABLE "+CabMatesContract.DB_TABLE+" ("+
+            CabMatesContract._ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
             CabMatesContract.COLUMN_CABMATE_QLID+" TEXT NOT NULL,"+
             CabMatesContract.COLUMN_CABMATE_NAME+" TEXT NOT NULL,"+
+            CabMatesContract.COLUMN_CABMATE_PICKUPTIME+" TEXT NOT NULL,"+
+            CabMatesContract.COLUMN_SHIFT_ID+" INTEGER NOT NULL,"+
             CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER+" TEXT NOT NULL,"+
             CabMatesContract.COLUMN_CABMATE_ADDRESS+" TEXT NOT NULL);";
+
+    private static final String CREATE_SHIFT_TABLE_QUERY = "CREATE TABLE "+ShiftContract.DB_TABLE+" ("+
+            ShiftContract._ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
+            ShiftContract.COLUMN_SHIFT_ID+" INTEGER NOT NULL,"+
+            ShiftContract.COLUMN_SHIFT_NAME+" TEXT NOT NULL,"+
+            ShiftContract.COLUMN_START_TIME+" TEXT NOT NULL,"+
+            ShiftContract.COLUMN_END_TIME+" TEXT NOT NULL);";
+
+    private static final String CREATE_TABLE_CONTACTS_QUERTY = "CREATE TABLE "+ContactsContract.DB_TABLE+" ("+
+            ContactsContract._ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
+            ContactsContract.COLUMN_CONTACT_ID+" TEXT NOT NULL,"+
+            ContactsContract.COLUMN_CONTACT_NAME+" TEXT NOT NULL,"+
+            ContactsContract.COLUMN_CONTACT_SOS+" TEXT NOT NULL,"+
+            ContactsContract.COLUMN_CONTACT_NUMBER+" TEXT NOT NULL,"+
+            ContactsContract.COLUMN_CONTACT_SOS_PRIORITY+" TEXT NOT NULL,"+
+            ContactsContract.COLUMN_CONTACT_ROLE+" TEXT NOT NULL);";
 
 
     public NcabSQLiteHelper(Context context) {
@@ -52,6 +70,9 @@ public class NcabSQLiteHelper extends SQLiteOpenHelper {
         //Create Employee Table in SQlite Database
         db.execSQL(CREATE_EMPLOYEE_TABLE_QUERY);
         db.execSQL(CREATE_CABMATE_TABLE_QUERY);
+        db.execSQL(CREATE_SHIFT_TABLE_QUERY);
+        db.execSQL(CREATE_TABLE_CONTACTS_QUERTY);
+
         Log.i(TAG, "onCreate: Table Created ");
     }
 

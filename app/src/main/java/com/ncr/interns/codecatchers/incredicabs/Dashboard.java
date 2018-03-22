@@ -33,6 +33,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.Dash;
 import com.ncr.interns.codecatchers.incredicabs.Adapter.*;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeCabMatesDetails;
@@ -71,7 +72,7 @@ public class Dashboard extends AppCompatActivity
                 DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(adapter);
 
-        cabMatesNotification();
+        cabMatesNotification();//Abhishek Alarm manager
 
         checkIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +91,8 @@ public class Dashboard extends AppCompatActivity
         Complaints.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 3/15/2018 Feedback Activity Intent
+                Intent intent = new Intent(Dashboard.this,FeedbackActivity.class);
+                startActivity(intent);
             }
         });
 

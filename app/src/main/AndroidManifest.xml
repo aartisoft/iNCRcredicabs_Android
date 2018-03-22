@@ -63,7 +63,8 @@
         <activity
             android:name=".FeedbackActivity"
             android:label="@string/title_activity_feedback"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:parentActivityName=".Dashboard"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     </application>
 
 </manifest>

@@ -52,5 +52,5 @@
     <string name="check_out"> CHECK OUT</string>
     <string name="field_drop_time">Drop Time</string>
     <string name="field_pickup_time">Pickup Time</string>
-    <string name="title_activity_feedback">FeedbackActivity</string>
+    <string name="title_activity_feedback">Complaints</string>
 </resources>

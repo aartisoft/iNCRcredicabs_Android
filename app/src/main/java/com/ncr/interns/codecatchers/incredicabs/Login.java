@@ -1,10 +1,10 @@
 package com.ncr.interns.codecatchers.incredicabs;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,12 +21,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.ncr.interns.codecatchers.incredicabs.Adapter.CabMatesAdapter;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
-import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeCabMatesDetails;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ContactsContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeContract;
-import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeData;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ShiftContract;
 import com.ncr.interns.codecatchers.incredicabs.notification.DeleteFirebaseTokenService;
 
 import org.json.JSONArray;
@@ -52,6 +51,7 @@ public class Login extends AppCompatActivity {
     String emergencyContactNumber;
     String firebaseToken;
     String qlid;
+    ProgressDialog progressDialog;
 
     private static final String MY_PREFERENCES = "MyPrefs_login";
     int role;
@@ -63,15 +63,24 @@ public class Login extends AppCompatActivity {
     SharedPreferences.Editor editor;
     private static final String TAG = Login.class.getSimpleName();
 
-    String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/EmployeeService/login-android";
-
+    String baseUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080";
+    String loginUrl = "/NCAB/EmployeeService/login-android";
+    String mainUrl = baseUrl + loginUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
+        String shared_pref_userName = sharedPreferences.getString("user_name","");
+        String shared_pref_password = sharedPreferences.getString("user_password","");
+
+        if(!shared_pref_userName.isEmpty() && !shared_pref_password.isEmpty()){
+            startActivity(new Intent(Login.this,Dashboard.class));
+
+        }
 
         String copyStr = getResources().getString(R.string.login_copy);
-        TextView copyTV = (TextView)findViewById(R.id.copy_text);
+        TextView copyTV = findViewById(R.id.copy_text);
 
         copyTV.setText(Html.fromHtml(copyStr, 0));
 
@@ -86,9 +95,16 @@ public class Login extends AppCompatActivity {
         //</editor-fold>
 
         final Intent intent = new Intent(this, DeleteFirebaseTokenService.class);
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                progressDialog = new ProgressDialog(Login.this,0);
+                progressDialog.setTitle("Logging in..");
+                progressDialog.setMessage("Please Wait");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
                 qlid = user.getText().toString();
                 //json for request
                 jsonBodyRequest = new JSONObject();
@@ -98,19 +114,9 @@ public class Login extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-                sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
                 firebaseToken = FirebaseInstanceId.getInstance().getToken();
                 Log.d(TAG, "firebase Token:- "+firebaseToken);
-
-                String shared_pref_userName = sharedPreferences.getString("user_qlid","");
-                if(shared_pref_userName.isEmpty()){
-                    login(jsonBodyRequest); //fuction with the code to Hit the Login API
-                } else{
-                    Intent intent = new Intent(Login.this,Dashboard.class);
-                    startActivity(intent);
-                    finish();
-                }
+                login(jsonBodyRequest);
             }
         });
 
@@ -159,15 +165,57 @@ public class Login extends AppCompatActivity {
                 String CabMate_name = cabmateX.getString("f_name")+" "+cabmateX.getString("l_name");
                 String CabMate_contactNumber = cabmateX.getString("e_mob");
                 String CabMate_address = cabmateX.getString("p_a");
+                String CabMate_pickupTime = cabmateX.getString("pickup_time");
+                int CabMate_shiftId = cabmateX.getInt("shift_id");
                 ContentValues cabmateValues = new ContentValues();
                 cabmateValues.put(CabMatesContract.COLUMN_CABMATE_QLID,CabMate_Qlid);
                 cabmateValues.put(CabMatesContract.COLUMN_CABMATE_NAME,CabMate_name);
                 cabmateValues.put(CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER,CabMate_contactNumber);
                 cabmateValues.put(CabMatesContract.COLUMN_CABMATE_ADDRESS,CabMate_address);
+                cabmateValues.put(CabMatesContract.COLUMN_SHIFT_ID,CabMate_shiftId);
+                cabmateValues.put(CabMatesContract.COLUMN_CABMATE_PICKUPTIME,CabMate_pickupTime);
                 mSqLiteDatabase.insert(CabMatesContract.DB_TABLE,null,cabmateValues);
                 Log.d(TAG, "parseJSON: Data Inserted to Cabmate Table row :-_"+i+"\n");
-
             }
+
+            JSONArray contactSos = response.getJSONArray("contacts");
+            for(int i = 0;i<contactSos.length();i++){
+
+                JSONObject contactSOSObject = contactSos.getJSONObject(i);
+
+                String contactSOS = contactSOSObject.getString("contactSos");
+                String contactId = contactSOSObject.getString("contactId");
+                String contactName = contactSOSObject.getString("contactName");
+                String contactSosPriority =contactSOSObject.getString("contactSosPriority");
+                String contactNumber = contactSOSObject.getString("contactNbr");
+                String contactRole = contactSOSObject.getString("contactRole");
+                ContentValues contactValues = new ContentValues();
+                // TODO: 3/22/2018 Add values to database
+                contactValues.put(ContactsContract.COLUMN_CONTACT_ID,contactId);
+                contactValues.put(ContactsContract.COLUMN_CONTACT_SOS,contactSOS);
+                contactValues.put(ContactsContract.COLUMN_CONTACT_NAME,contactName);
+                contactValues.put(ContactsContract.COLUMN_CONTACT_SOS_PRIORITY,contactSosPriority);
+                contactValues.put(ContactsContract.COLUMN_CONTACT_NUMBER,contactNumber);
+                contactValues.put(ContactsContract.COLUMN_CONTACT_ROLE,contactRole);
+                mSqLiteDatabase.insert(ContactsContract.DB_TABLE,null,contactValues);
+            }
+
+            JSONArray shiftInfo = response.getJSONArray("shiftInfo");
+
+            for (int i  =0;i<shiftInfo.length();i++){
+                JSONObject shiftTableInfo = shiftInfo.getJSONObject(i);
+                int shiftId =  shiftTableInfo.getInt("shiftId");
+                String shiftName = shiftTableInfo.getString("shiftName");
+                String startTime = shiftTableInfo.getString("startTime");
+                ContentValues shiftInfoValues = new ContentValues();
+                // TODO: 3/22/2018 Add values to teh database
+                shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_ID,shiftId);
+                shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_NAME,shiftName);
+                shiftInfoValues.put(ShiftContract.COLUMN_START_TIME,startTime);
+
+                mSqLiteDatabase.insert(ShiftContract.DB_TABLE,null,shiftInfoValues);
+            }
+
             //</editor-fold>
 
         } catch (JSONException e) {
@@ -176,12 +224,11 @@ public class Login extends AppCompatActivity {
 
 
     }
-
     public void login(JSONObject jsonBodyRequest){
 
         Log.d(TAG, "login: qlid: " + qlid);
         FirebaseTokenUtility ftu = new FirebaseTokenUtility(Login.this);
-        JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBodyRequest,
+        JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, mainUrl, jsonBodyRequest,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -197,17 +244,15 @@ public class Login extends AppCompatActivity {
                                 //<editor-fold desc="Saving the User Credentials in Shared Preferences">
                                 sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
                                 editor = sharedPreferences.edit();
-//                                 qlid = user.getText().toString();
-                                editor.putString("user_qlid",user.getText().toString());
+//                              editor.putString("user_qlid",user.getText().toString());
                                 editor.putString("user_name",
                                         response.getString("empFName")+" "+
                                                 response.getString("empMName")+" "+
-                                                response.getString("empLName")
-                                );
+                                                response.getString("empLName"));
                                 editor.putString("user_password",pass.getText().toString());
                                 editor.apply();
                                 //</editor-fold>
-
+                                progressDialog.cancel();
                                 startActivity(intent);
                                 Toast.makeText(Login.this, "Welcome "+EmployeeFirstName, Toast.LENGTH_SHORT).show();
                             } else {
