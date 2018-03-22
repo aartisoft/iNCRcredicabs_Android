@@ -36,6 +36,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.Dash;
 import com.ncr.interns.codecatchers.incredicabs.Adapter.*;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ContactsContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeCabMatesDetails;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
 
@@ -77,14 +78,17 @@ public class Dashboard extends AppCompatActivity
         checkIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 3/15/2018 CHeckIn Intent
+            Intent checkIn_intent = new Intent(Dashboard.this,CheckIn.class);
+            startActivity(checkIn_intent);
+
             }
         });
 
         checkOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 3/15/2018  CheckOut Intent
+                Intent checkOut_intent = new Intent(Dashboard.this,CheckOut.class);
+                startActivity(checkOut_intent);
             }
         });
 
@@ -144,7 +148,7 @@ public class Dashboard extends AppCompatActivity
         int id = item.getItemId();
         if(id == R.id.call_transport){
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("tel:7895305782"));
+            intent.setData(Uri.parse("tel:9998764636"));
             startActivity(intent);
         }
 
@@ -158,12 +162,13 @@ public class Dashboard extends AppCompatActivity
         int id = item.getItemId();
         if (id == R.id.nav_call_transport_one) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("tel:7895305782"));
+
+            intent.setData(Uri.parse("tel:9998764636"));
             startActivity(intent);
 
         } else if (id == R.id.nav_call_transport_two) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("tel:7895305782"));
+            intent.setData(Uri.parse("tel:7864648383"));
             startActivity(intent);
 
         } else if (id == R.id.nav_app_feedback) {
@@ -176,10 +181,9 @@ public class Dashboard extends AppCompatActivity
 
         } else if (id == R.id.nav_about_developers) {
             // TODO: 3/18/2018 About Page
+
         } else if(id == R.id.LogOut){
-            /*Snackbar snackbar = Snackbar.make(linearLayout,"Logging Out",Snackbar.LENGTH_LONG);
-            snackbar.show();
-            */
+
             Intent intent = new Intent(this,Login.class);
             mSqLiteDatabase.execSQL("DELETE FROM "+CabMatesContract.DB_TABLE);
             SharedPreferences sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
@@ -227,4 +231,5 @@ public class Dashboard extends AppCompatActivity
         am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
     }
+
 }

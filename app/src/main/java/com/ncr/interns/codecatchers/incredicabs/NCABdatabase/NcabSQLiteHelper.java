@@ -12,7 +12,7 @@ import android.util.Log;
 public class NcabSQLiteHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "NCABDatabase";
-    private static final int DB_VERSION = 5;
+    private static final int DB_VERSION = 6;
     Context ctx;
     SQLiteDatabase sqLiteDatabase;
     private static final String TAG = "NcabSQLiteHelper";
@@ -45,10 +45,10 @@ public class NcabSQLiteHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_SHIFT_TABLE_QUERY = "CREATE TABLE "+ShiftContract.DB_TABLE+" ("+
             ShiftContract._ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
-            ShiftContract.COLUMN_SHIFT_ID+" INTEGER NOT NULL,"+
-            ShiftContract.COLUMN_SHIFT_NAME+" TEXT NOT NULL,"+
-            ShiftContract.COLUMN_START_TIME+" TEXT NOT NULL,"+
-            ShiftContract.COLUMN_END_TIME+" TEXT NOT NULL);";
+            ShiftContract.COLUMN_SHIFT_ID+" INTEGER ,"+
+            ShiftContract.COLUMN_SHIFT_NAME+" TEXT ,"+
+            ShiftContract.COLUMN_START_TIME+" TEXT ,"+
+            ShiftContract.COLUMN_END_TIME+" TEXT );";
 
     private static final String CREATE_TABLE_CONTACTS_QUERTY = "CREATE TABLE "+ContactsContract.DB_TABLE+" ("+
             ContactsContract._ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+

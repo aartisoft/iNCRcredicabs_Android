@@ -64,7 +64,11 @@
             android:name=".FeedbackActivity"
             android:label="@string/title_activity_feedback"
             android:parentActivityName=".Dashboard"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".CheckIn" />
+        <activity android:name=".CheckOut" />
+        <activity android:name=".CustomScannerActivity" />
+        <activity android:name=".CustomScannerCheckOutActivity"></activity>
     </application>
 
 </manifest>

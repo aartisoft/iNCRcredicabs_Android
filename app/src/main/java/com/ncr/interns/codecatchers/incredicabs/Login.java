@@ -82,7 +82,7 @@ public class Login extends AppCompatActivity {
         String copyStr = getResources().getString(R.string.login_copy);
         TextView copyTV = findViewById(R.id.copy_text);
 
-        copyTV.setText(Html.fromHtml(copyStr, 0));
+       // copyTV.setText(Html.fromHtml(copyStr, 0));
 
         user = findViewById(R.id.editText_Qlid);
         pass = findViewById(R.id.editText_password);
