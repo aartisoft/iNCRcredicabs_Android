@@ -103,7 +103,7 @@ public class CabMatesAdapter extends Adapter<CabMatesAdapter.cabMatesViewHolder>
         return cursor.getCount();
     }
 
-    public void makePhoneCall(){
+    private void makePhoneCall(){
         String mobNumber = mobNum;
        // this.mobNum = mobNum;
         if(true){

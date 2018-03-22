@@ -1,6 +1,8 @@
 package com.ncr.interns.codecatchers.incredicabs;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ShiftContract;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,6 +29,8 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class CheckOut extends AppCompatActivity {
 
+    SQLiteDatabase mSqLiteDatabase;
+    NcabSQLiteHelper ncabSQLiteHelper;
     private ZXingScannerView scannerView;
     String ipaddress="192.168.43.45:8080";
     String url = "http://"+ipaddress+"/iNCRcredicabs_WS/VendorService/checkout";
@@ -36,6 +43,11 @@ public class CheckOut extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+       ncabSQLiteHelper = new NcabSQLiteHelper(this);
+       mSqLiteDatabase = ncabSQLiteHelper.getReadableDatabase();
+
+
         openScanner();
         try
         {
@@ -165,6 +177,17 @@ public class CheckOut extends AppCompatActivity {
 
             finish();
         }
+   }
 
+    public void getData(){
+        Cursor cursor_cabMates = mSqLiteDatabase.rawQuery("SELECT * FROM "+ CabMatesContract.DB_TABLE,null);
+        Cursor cursor_shiftTable = mSqLiteDatabase.rawQuery("SELECT * FROM "+ ShiftContract.DB_TABLE,null);
+        // TODO: 3/22/2018 Fazle's Work
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
     }
 }

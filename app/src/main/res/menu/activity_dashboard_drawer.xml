@@ -22,7 +22,8 @@
             <item
                 android:id="@+id/nav_app_feedback"
                 android:icon="@drawable/ic_feedback_black_24dp"
-                android:title="Help and Support"/>
+                android:title="Help and Support"
+                android:visible="false"/>
             <item
                 android:id="@+id/nav_about_developers"
                 android:icon="@drawable/ic_info_about_developers"
