@@ -21,7 +21,9 @@
         <item>Lvl 2 Manager</item>
     </string-array>
 
-
+    <string name="app_description">iNCRediCabs is a Product fully developed by interns 2018 batch
+                                    this app and website is made to make the handling of the transport
+                                    department easier.</string>
     <string name="login_login_top_label">User Login</string>
     <string name="login_qlid_text_hint">QLID</string>
     <string name="login_password_text_hint">Password</string>
@@ -35,6 +37,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="log_out">Log Out</string>
+    <string name="message">Do you realy want to exit ?</string>
     <string name="title_activity_unscheduled_request">Unscheduled Request</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -53,4 +56,6 @@
     <string name="field_drop_time">Drop Time</string>
     <string name="field_pickup_time">Pickup Time</string>
     <string name="title_activity_feedback">Complaints</string>
+    <string name="copy_right">Copyright</string>
+    <string name="sos_cancelled">SOS cancelled</string>
 </resources>

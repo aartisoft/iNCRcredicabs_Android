@@ -68,7 +68,8 @@
         <activity android:name=".CheckIn" />
         <activity android:name=".CheckOut" />
         <activity android:name=".CustomScannerActivity" />
-        <activity android:name=".CustomScannerCheckOutActivity"></activity>
+        <activity android:name=".CustomScannerCheckOutActivity" />
+        <activity android:name=".AboutPage"></activity>
     </application>
 
 </manifest>

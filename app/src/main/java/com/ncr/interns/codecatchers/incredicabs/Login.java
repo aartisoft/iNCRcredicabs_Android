@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +54,7 @@ public class Login extends AppCompatActivity {
     String firebaseToken;
     String qlid;
     ProgressDialog progressDialog;
+    RelativeLayout relativeLayout;
 
     private static final String MY_PREFERENCES = "MyPrefs_login";
     int role;
@@ -70,6 +73,7 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        relativeLayout = findViewById(R.id.login_layout);
         sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
         String shared_pref_userName = sharedPreferences.getString("user_name","");
         String shared_pref_password = sharedPreferences.getString("user_password","");
@@ -82,7 +86,7 @@ public class Login extends AppCompatActivity {
         String copyStr = getResources().getString(R.string.login_copy);
         TextView copyTV = findViewById(R.id.copy_text);
 
-       // copyTV.setText(Html.fromHtml(copyStr, 0));
+        copyTV.setText(Html.fromHtml(copyStr, 0));
 
         user = findViewById(R.id.editText_Qlid);
         pass = findViewById(R.id.editText_password);
@@ -254,9 +258,12 @@ public class Login extends AppCompatActivity {
                                 //</editor-fold>
                                 progressDialog.cancel();
                                 startActivity(intent);
-                                Toast.makeText(Login.this, "Welcome "+EmployeeFirstName, Toast.LENGTH_SHORT).show();
+                                Snackbar snackbar = Snackbar.make(relativeLayout,"Welcome",Snackbar.LENGTH_SHORT);
+                                snackbar.show();
                             } else {
-                                Toast.makeText(Login.this, "Invalid Credentials", Toast.LENGTH_LONG).show();
+                                progressDialog.cancel();
+                                Snackbar snackbar = Snackbar.make(relativeLayout,"Invalid Credentials",Snackbar.LENGTH_SHORT);
+                                snackbar.show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

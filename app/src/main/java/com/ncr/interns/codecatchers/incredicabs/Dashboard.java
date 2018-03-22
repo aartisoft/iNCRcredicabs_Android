@@ -110,6 +110,14 @@ public class Dashboard extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 // TODO: 3/20/2018 By Harshit pandey SOS implementation
+                if(ContextCompat.checkSelfPermission(Dashboard.this, android.Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(Dashboard.this, new String[] {android.Manifest.permission.CALL_PHONE},CustomDialogClass.REQUEST_CALL);
+                }else{
+//                    startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:9760179474")));
+                    CustomDialogClass cdd=new CustomDialogClass(Dashboard.this);
+                    cdd.show();
+                    cdd.start();
+                }
             }
         });
 
@@ -177,7 +185,7 @@ public class Dashboard extends AppCompatActivity
             //</editor-fold>
 
         } else if (id == R.id.nav_about_developers) {
-            // TODO: 3/18/2018 About Page
+           startActivity(new Intent(Dashboard.this,AboutPage.class));
 
         } else if (id == R.id.LogOut) {
 
