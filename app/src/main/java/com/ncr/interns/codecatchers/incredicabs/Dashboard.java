@@ -1,13 +1,17 @@
 package com.ncr.interns.codecatchers.incredicabs;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -50,6 +54,7 @@ public class Dashboard extends AppCompatActivity
     Cursor cursor;
     Button button_sos;
     String number;
+    boolean checkCon;
     SharedPreferences sharedPreferences;
     private static final String MY_PREFERENCES = "MyPrefs_login";
     Context context = this;
@@ -72,6 +77,7 @@ public class Dashboard extends AppCompatActivity
         mRecyclerView.addItemDecoration(new
                 DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(adapter);
+        checkCon = checkConnection(Dashboard.this);
 
        /* cabMatesNotification();//Abhishek Alarm manager
         getCabMateShiftTimeNew();
@@ -79,8 +85,22 @@ public class Dashboard extends AppCompatActivity
         checkIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent checkIn_intent = new Intent(Dashboard.this, CheckIn.class);
-                startActivity(checkIn_intent);
+                if (checkCon == true) {
+                    Intent checkIn_intent = new Intent(Dashboard.this, CheckIn.class);
+                    startActivity(checkIn_intent);
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(Dashboard.this).create();
+                    alertDialog.setTitle("No Connection Available");
+                    alertDialog.setMessage("Please Connect to the Internet");
+                    alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+                    alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            alertDialog.cancel();
+                        }
+                    });
+                    alertDialog.show();
+                }
 
             }
         });
@@ -88,8 +108,22 @@ public class Dashboard extends AppCompatActivity
         checkOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent checkOut_intent = new Intent(Dashboard.this, CheckOut.class);
-                startActivity(checkOut_intent);
+                if (checkCon == true) {
+                    Intent checkOut_intent = new Intent(Dashboard.this, CheckOut.class);
+                    startActivity(checkOut_intent);
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(Dashboard.this).create();
+                    alertDialog.setTitle("No Connection Available");
+                    alertDialog.setMessage("Please Connect to the Internet");
+                    alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+                    alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            alertDialog.cancel();
+                        }
+                    });
+                    alertDialog.show();
+                }
             }
         });
 
@@ -266,7 +300,7 @@ public class Dashboard extends AppCompatActivity
     }
     //</editor-fold>
 
-   /* //<editor-fold desc="Method to get CabMatesShift Time">
+    //<editor-fold desc="Method to get CabMatesShift Time">
     public String[] getCabMatesShiftTime() {
         Cursor cursorShiftTime = mSqLiteDatabase.rawQuery("SELECT * FROM " + CabMatesContract.DB_TABLE, null);
         int len = cursor.getCount();
@@ -281,10 +315,10 @@ public class Dashboard extends AppCompatActivity
         return shiftTimes_array;
     }
     //</editor-fold>
-
+/*
     public void getCabMateShiftTimeNew(){
-       *//* Cursor cursor = mSqLiteDatabase.rawQuery("SELECT "+CabMatesContract.COLUMN_CABMATE_PICKUPTIME+" FROM "
-        +CabMatesContract.DB_TABLE+" WHERE ",null)*//*
+        Cursor cursor = mSqLiteDatabase.rawQuery("SELECT "+CabMatesContract.COLUMN_CABMATE_PICKUPTIME+" FROM "
+        +CabMatesContract.DB_TABLE+" WHERE ",null);
 
 
        Cursor cursor = mSqLiteDatabase.query(CabMatesContract.DB_TABLE,
@@ -321,12 +355,31 @@ public class Dashboard extends AppCompatActivity
 
         }
  }
-    //</editor-fold>
-*/
+    //</editor-fold>*/
     public String getEmployeeQlid(){
         sharedPreferences = getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
         String Employee_Qlid = sharedPreferences.getString("user_qlid","");
         return Employee_Qlid;
+    }
+
+
+    public static boolean checkConnection(Context context) {
+        final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetworkInfo = connMgr.getActiveNetworkInfo();
+
+        if (activeNetworkInfo != null) { // connected to the internet
+            //Toast.makeText(context, activeNetworkInfo.getTypeName(), Toast.LENGTH_SHORT).show();
+
+            if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                // connected to wifi
+                return true;
+            } else if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                // connected to the mobile provider's data plan
+                return true;
+            }
+        }
+        return false;
     }
 
 }

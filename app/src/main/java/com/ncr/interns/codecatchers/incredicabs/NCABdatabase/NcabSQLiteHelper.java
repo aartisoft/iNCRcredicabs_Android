@@ -38,8 +38,8 @@ public class NcabSQLiteHelper extends SQLiteOpenHelper {
             CabMatesContract._ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
             CabMatesContract.COLUMN_CABMATE_QLID+" TEXT NOT NULL,"+
             CabMatesContract.COLUMN_CABMATE_NAME+" TEXT NOT NULL,"+
-            CabMatesContract.COLUMN_CABMATE_PICKUPTIME+" TEXT NOT NULL,"+
-            CabMatesContract.COLUMN_SHIFT_ID+" INTEGER NOT NULL,"+
+            CabMatesContract.COLUMN_CABMATE_PICKUPTIME+" TEXT ,"+
+            CabMatesContract.COLUMN_SHIFT_ID+" INTEGER ,"+
             CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER+" TEXT NOT NULL,"+
             CabMatesContract.COLUMN_CABMATE_ADDRESS+" TEXT NOT NULL);";
 

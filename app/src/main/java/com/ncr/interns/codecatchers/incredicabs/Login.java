@@ -1,11 +1,15 @@
 package com.ncr.interns.codecatchers.incredicabs;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -55,6 +59,7 @@ public class Login extends AppCompatActivity {
     String qlid;
     ProgressDialog progressDialog;
     RelativeLayout relativeLayout;
+    boolean checkCon;
 
     private static final String MY_PREFERENCES = "MyPrefs_login";
     int role;
@@ -103,24 +108,41 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                progressDialog = new ProgressDialog(Login.this,0);
-                progressDialog.setTitle("Logging in..");
-                progressDialog.setMessage("Please Wait");
-                progressDialog.setCanceledOnTouchOutside(false);
-                progressDialog.show();
-                qlid = user.getText().toString();
-                //json for request
-                jsonBodyRequest = new JSONObject();
-                try {
-                    jsonBodyRequest.put("qlid", user.getText().toString());
-                    jsonBodyRequest.put("password", pass.getText().toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                checkCon=checkConnection(Login.this);
+                if(checkCon==true){
+                    progressDialog = new ProgressDialog(Login.this,0);
+                    progressDialog.setTitle("Logging in..");
+                    progressDialog.setMessage("Please Wait");
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.show();
+                    qlid = user.getText().toString();
+                    //json for request
+                    jsonBodyRequest = new JSONObject();
+                    try {
+                        jsonBodyRequest.put("qlid", user.getText().toString());
+                        jsonBodyRequest.put("password", pass.getText().toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    firebaseToken = FirebaseInstanceId.getInstance().getToken();
+                    Log.d(TAG, "firebase Token:- "+firebaseToken);
+                    login(jsonBodyRequest);
                 }
-                firebaseToken = FirebaseInstanceId.getInstance().getToken();
-                Log.d(TAG, "firebase Token:- "+firebaseToken);
-                login(jsonBodyRequest);
+                else
+                {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(Login.this).create();
+                    alertDialog.setTitle("No Connection Available");
+                    alertDialog.setMessage("Please Connect to the Internet");
+                    alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+                    alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            alertDialog.cancel();
+                        }
+                    });
+                    alertDialog.show();
+                }
+
             }
         });
 
@@ -289,6 +311,26 @@ public class Login extends AppCompatActivity {
                 firebaseToken
         );
     }
+
+    public static boolean checkConnection(Context context) {
+        final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetworkInfo = connMgr.getActiveNetworkInfo();
+
+        if (activeNetworkInfo != null) { // connected to the internet
+            //Toast.makeText(context, activeNetworkInfo.getTypeName(), Toast.LENGTH_SHORT).show();
+
+            if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                // connected to wifi
+                return true;
+            } else if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                // connected to the mobile provider's data plan
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     @Override
     protected void onPause() {

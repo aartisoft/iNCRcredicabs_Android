@@ -14,10 +14,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeContract;
-import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
-import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ShiftContract;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,8 +27,6 @@ public class CheckIn extends AppCompatActivity {
     public static final String DATABASE_NAME= "NCABDatabase";
     String DB_TABLE = "EmployeeData";
     SQLiteDatabase mDatabase;
-    SQLiteDatabase mSqLiteDatabase;
-    NcabSQLiteHelper ncabSQLiteHelper;
     String Route_No = null;
     String Pickup_Time = null;
     String Start_Time = null;
@@ -43,11 +38,6 @@ public class CheckIn extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        ncabSQLiteHelper = new NcabSQLiteHelper(this);
-        mSqLiteDatabase = ncabSQLiteHelper.getReadableDatabase();
-
         openScanner();
         JSONObject jsonBodyRequest = new JSONObject();
         try {
@@ -55,23 +45,25 @@ public class CheckIn extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, url_roasterinfo, jsonBodyRequest,
+        JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST,
+                url_roasterinfo,
+                jsonBodyRequest,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            JSONObject jsonObject = new JSONObject(response.getString("result"));
-                            Route_No = jsonObject.getString("Route_No");
-                            Pickup_Time = jsonObject.getString("Pickup_Time");
-                            Start_Time = jsonObject.getString("Start_Time");
+                            JSONObject js = new JSONObject(response.getString("result"));
+                            Route_No = js.getString("Route_No");
+                            Pickup_Time = js.getString("Pickup_Time");
+                            Start_Time = js.getString("Start_Time");
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(getApplicationContext(), "Server Error", Toast.LENGTH_LONG).show();
                             Intent Dashboard_intent = new Intent(getApplicationContext(), Dashboard.class);
                             startActivity(Dashboard_intent);
                         }
-                        Log.i("VOLLEY_CHECKIN", "inside onResponse method:login");
-                        Log.i("VOLLEY_CHECKIN", response.toString());
+                        Log.i("VOLLEY", "inside onResponse method:login");
+                        Log.i("VOLLEY", response.toString());
                     }
                 },
                 new Response.ErrorListener() {
@@ -188,19 +180,5 @@ public class CheckIn extends AppCompatActivity {
         {
             finish();
         }
-    }
-
-
-    public void getData(){
-        Cursor cursor_cabMates = mSqLiteDatabase.rawQuery("SELECT * FROM "+ CabMatesContract.DB_TABLE,null);
-        Cursor cursor_shiftTable = mSqLiteDatabase.rawQuery("SELECT * FROM "+ ShiftContract.DB_TABLE,null);
-        // TODO: 3/22/2018 Fazle's Work
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        finish();
     }
 }
