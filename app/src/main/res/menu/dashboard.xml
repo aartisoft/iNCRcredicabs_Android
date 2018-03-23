@@ -7,4 +7,11 @@
         app:showAsAction="always"
         android:icon="@drawable/abu_hanif_transport"
         android:tooltipText="Call Transport Authority"/>
+
+    <item
+        android:id="@+id/refresh"
+        android:title="Refresh"
+        android:icon="@drawable/ic_refresh_black_24dp"
+        app:showAsAction="always"
+        android:tooltipText="Refresh"/>
 </menu>

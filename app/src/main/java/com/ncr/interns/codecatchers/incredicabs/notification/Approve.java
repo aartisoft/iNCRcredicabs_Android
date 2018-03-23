@@ -35,7 +35,7 @@ public class Approve extends BroadcastReceiver {
         sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
         reqId = sharedPreferences.getString("reqId",null);
         Log.d(TAG, "onReceive:  Request id "+reqId);
-        Toast.makeText(context, "Approve"+reqId, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Processing for Request ID "+reqId, Toast.LENGTH_SHORT).show();
 
         JSONObject jsonBodyRequest = new JSONObject();
         try {

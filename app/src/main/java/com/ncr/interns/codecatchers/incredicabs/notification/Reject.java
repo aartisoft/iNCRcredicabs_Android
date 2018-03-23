@@ -32,7 +32,7 @@ public class Reject extends BroadcastReceiver {
         sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
         reqId = sharedPreferences.getString("reqId",null);
 
-        Toast.makeText(context, "Rejected", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Processing for Request ID "+reqId, Toast.LENGTH_SHORT).show();
         JSONObject jsonBodyRequest = new JSONObject();
         try {
             jsonBodyRequest.put("request_id", reqId);

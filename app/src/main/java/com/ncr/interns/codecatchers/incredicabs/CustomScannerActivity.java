@@ -148,6 +148,7 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
     protected void onPause() {
         super.onPause();
         capture.onPause();
+        finish();
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
@@ -156,6 +157,11 @@ public class Dashboard extends AppCompatActivity
             number = "9998764636";
             makePhoneCall(number);
         }
+        if(id == R.id.refresh){
+            // TODO: 3/23/2018 Yet to implement
+            Snackbar snackbar = Snackbar.make(linearLayout,"Refresh",Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -284,7 +290,9 @@ public class Dashboard extends AppCompatActivity
             Log.d(TAG, "cabMatesNotification: shiftTime: " + shiftTime);
             String arr[] = shiftTime.split(":");
             String hour = arr[0];
+            Log.d(TAG, "cabMatesNotification: hour: - "+hour);
             String min = arr[1];
+            Log.d(TAG, "cabMatesNotification: min: - "+min);
             calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hour));
             calendar.set(Calendar.MINUTE, Integer.parseInt(min));
             Intent intent1 = new Intent(Dashboard.this, AlarmReceiver.class);

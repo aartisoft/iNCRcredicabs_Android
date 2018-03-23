@@ -59,9 +59,10 @@ public class FeedbackActivity extends AppCompatActivity {
     List<String> ComplaintsTypeSpinner;
     JSONArray cabshift;
     String startDate;
+    String tempdate;
     EditText shiftTiming;
     EditText cabNumber;
-    private String url = "http://153.58.56.173:8080/Cab_Managemnet/CBMang/complaint";
+    private String url = "http://192.168.43.49:8090/Cab_Managemnet/CBMang/complaint";
     private String getShiftDetailsUrl = "http://192.168.43.49:8090/Cab_Managemnet/CBMang/getCabShift";
 
     @Override
@@ -79,7 +80,6 @@ public class FeedbackActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 methodToSelectDate(datePicker);
-                getcabshift();
             }
 
         });
@@ -127,12 +127,13 @@ public class FeedbackActivity extends AppCompatActivity {
 
     private void getcabshift() {
         Log.d("getcabshift: ", "inside");
-        Log.d("selectedDate: ", " " + selectedDate);
+        Log.d("selectedDate: ", " " + startDate);
+        Log.d("selectedDate: ", " " + this.startDate);
 
         jsonBody = new JSONObject();
         try {
-            jsonBody.put("qlid", "AK250783");
-            jsonBody.put("date", "2018/03/20");
+            jsonBody.put("qlid", "DB250491");
+            jsonBody.put("date", startDate);
             Log.d("getcabshift: ", jsonBody.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -170,55 +171,46 @@ public class FeedbackActivity extends AppCompatActivity {
     }
 
     private boolean isvalid() {
-        if (TextUtils.isEmpty(selectedDate)) {
-            // Snackbar sb = Snackbar.make(mylayout, "Date must be filled!", 0);
-            // View view = sb.getView();
-            // view.setBackgroundColor(Color.RED);
-            //sb.show();
+        boolean flag=true;
+        if (TextUtils.isEmpty(datePicker.getText())) {
+            Snackbar sb = Snackbar.make(mylayout, "Date must be filled!", 0);
+            View view = sb.getView();
+            view.setBackgroundColor(Color.RED);
+            sb.show();
+            flag=false;
 
 
-        } else {
-            if (TextUtils.isEmpty(selectType)) {
-                Snackbar sb = Snackbar.make(mylayout, "Type must be selected!", 0);
-                View view = sb.getView();
-                view.setBackgroundColor(Color.RED);
-                sb.show();
+        } else if (TextUtils.isEmpty(selectType)) {
+            Snackbar sb = Snackbar.make(mylayout, "Type must be selected!", 0);
+            View view = sb.getView();
+            view.setBackgroundColor(Color.RED);
+            sb.show();
+            flag=false;
 
-            } else {
-                if (TextUtils.isEmpty(selectPickupDropType)) {
-                    Snackbar sb = Snackbar.make(mylayout, "PickUp/Drop must be selected!", 0);
-                    View view = sb.getView();
-                    view.setBackgroundColor(Color.RED);
-                    sb.show();
+        } else if (TextUtils.isEmpty(selectPickupDropType)) {
+            Snackbar sb = Snackbar.make(mylayout, "PickUp/Drop must be selected!", 0);
+            View view = sb.getView();
+            view.setBackgroundColor(Color.RED);
+            sb.show();
+            flag=false;
 
-                } else {
-                    if (TextUtils.isEmpty(complaintType)) {
-                        Snackbar sb = Snackbar.make(mylayout, "Complaint Type must be selected!", 0);
-                        View view = sb.getView();
-                        view.setBackgroundColor(Color.RED);
-                        sb.show();
-
-
-                    } else {
-                        if (TextUtils.isEmpty(comment.getText().toString())) {
-                            Snackbar sb = Snackbar.make(mylayout, "Comment can't be empty!", 0);
-                            View view = sb.getView();
-                            view.setBackgroundColor(Color.RED);
-                            sb.show();
-
-                        } else {
-                            return true;
-                        }
-                    }
+        } else if (TextUtils.isEmpty(complaintType)) {
+            Snackbar sb = Snackbar.make(mylayout, "Complaint Type must be selected!", 0);
+            View view = sb.getView();
+            view.setBackgroundColor(Color.RED);
+            sb.show();
+            flag=false;
 
 
-                }
+        } else if (TextUtils.isEmpty(comment.getText().toString())) {
+            Snackbar sb = Snackbar.make(mylayout, "Comment can't be empty!", 0);
+            View view = sb.getView();
+            view.setBackgroundColor(Color.RED);
+            sb.show();
+            flag=false;
 
-
-            }
         }
-
-        return false;
+        return flag;
 
     }
 
@@ -254,6 +246,8 @@ public class FeedbackActivity extends AppCompatActivity {
                 //own code ends
 
                 startDate = date;
+                tempdate=startDate;
+                getcabshift();
                 datePicker.setText(startDate);
                 Log.d("FeedBack Activity", "onDateSet: Startdate:- "+startDate);
 
@@ -261,6 +255,7 @@ public class FeedbackActivity extends AppCompatActivity {
         }, mYear, mMonth, mDay);
 
         datePickerDialog.setTitle("");
+        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
     }
 
@@ -281,29 +276,47 @@ public class FeedbackActivity extends AppCompatActivity {
             if (i == 1) {
                 selectType = "Schedule";
                 try {
-                    shiftTiming.setText(cabshift.getJSONObject(0).getString("shift"));
-                    cabNumber.setText(cabshift.getJSONObject(0).getString("cabno"));
-                    Log.d( "onItemSelected: "," "+cabshift.getJSONObject(0).getString("shift"));
-                    Log.d( "onItemSelected: "," "+cabshift.getJSONObject(0).getString("cabno"));
-                } catch (Exception e) {
+                    if(cabshift.getJSONObject(0).getString("shift").contains("Shift")
+                            ||cabshift.getJSONObject(0).getString("shift").contains("Regular")){
+                        shiftTiming.setText(cabshift.getJSONObject(0).getString("shift"));
+                        cabNumber.setText(cabshift.getJSONObject(0).getString("cabno"));
+                    }
+                    else if(cabshift.getJSONObject(1).getString("shift").contains("Shift")
+                            ||cabshift.getJSONObject(1).getString("shift").contains("Regular")){
+                        shiftTiming.setText(cabshift.getJSONObject(1).getString("shift"));
+                        cabNumber.setText(cabshift.getJSONObject(1).getString("cabno"));
+                    }
+                    else {
+                        shiftTiming.setText("");
+                        cabNumber.setText("");
+                    }
+                    Log.d( "onItemSelected: "," "+shiftTiming.getText());
+                    Log.d( "onItemSelected: "," "+cabNumber.getText());
+                    Log.d( "onItemSelected: ",cabshift.getJSONObject(0).getString("shift"));
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                 }
             }
             if (i == 2) {
                 selectType = "Unschedule";
                 try {
-                    if(cabshift.length()<2){
-                        shiftTiming.setText("");
-                        cabNumber.setText("");
+                    if(cabshift.getJSONObject(0).getString("shift").contentEquals("Unscheduled")){
+                        shiftTiming.setText(cabshift.getJSONObject(0).getString("shift"));
+                        cabNumber.setText(cabshift.getJSONObject(0).getString("cabno"));
                     }
-                    else{
+                    else if(cabshift.getJSONObject(1).getString("shift").contentEquals("Unscheduled")){
                         shiftTiming.setText(cabshift.getJSONObject(1).getString("shift"));
                         cabNumber.setText(cabshift.getJSONObject(1).getString("cabno"));
                     }
-
-                    Log.d( "onItemSelected: "," "+cabshift.getJSONObject(1).getString("shift"));
-                    Log.d( "onItemSelected: "," "+cabshift.getJSONObject(1).getString("cabno"));
-                } catch (Exception e) {
+                    else {
+                        shiftTiming.setText("");
+                        cabNumber.setText("");
+                    }
+                    Log.d( "onItemSelected: "," "+shiftTiming.getText());
+                    Log.d( "onItemSelected: "," "+cabNumber.getText());
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -424,6 +437,7 @@ public class FeedbackActivity extends AppCompatActivity {
     }
 
     public void sendfeedback() {
+        Log.d("send feed back: ", "inside send feed back ");
 
         if (spinnerDropType.getSelectedItem().toString() == "Select" ||
                 complaint_type_spinner.getSelectedItem().toString() == "Select" ||
@@ -441,14 +455,17 @@ public class FeedbackActivity extends AppCompatActivity {
 
             jsonBody = new JSONObject();
             try {
-                jsonBody.put("date", selectedDate);
-                jsonBody.put("type", selectType);
+
+                //jsonBody.put("type", selectType);
                 jsonBody.put("pd", selectPickupDropType);
-                //jsonBody.put("shift", "shift");
-                //jsonBody.put("cab", "cab no");
-                jsonBody.put("qlid", "gs250365"); // TODO: 3/19/2018 Get Qlid from Database
+                jsonBody.put("date",tempdate);
+                Log.d( "sendfeedback: ", tempdate);
+                jsonBody.put("type", shiftTiming.getText());
+                jsonBody.put("cab", cabNumber.getText());
+                jsonBody.put("qlid", "dp250369"); // TODO: 3/19/2018 Get Qlid from Database
                 jsonBody.put("comp", complaintType);
                 jsonBody.put("comments", comment.getText().toString());
+                Log.d("sendfeedback: ", jsonBody.toString());
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -486,28 +503,25 @@ public class FeedbackActivity extends AppCompatActivity {
                 public void onErrorResponse(VolleyError error) {
 
                     // Do something when error occurred
-                    Log.d("VOLLEY", "Something went wrong");
+                    Log.d("VOLLEY", String.valueOf(error));
                     //  Toast.makeText(getActivity(), "Oops..Something Went wrong", Toast.LENGTH_SHORT).show();
                                 /*Snackbar snackbar = Snackbar.make(mylayout, "Oops Something Went Wrong", Snackbar.LENGTH_LONG);
                                 snackbar.show();*/
                     error.printStackTrace();
                 }
             });
-            jsonObjRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
             RESTService.getInstance(FeedbackActivity.this).addToRequestQueue(jsonObjRequest);
 
-        } else {
-            //  Toast.makeText(getApplicationContext(), "Please check your entered information", Toast.LENGTH_LONG).show();
+        }
+
+        else {
+            Toast.makeText(getApplicationContext(), "Please check your entered information", Toast.LENGTH_LONG).show();
         }
 
 
     }
 
 }
-
 
 
 

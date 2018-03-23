@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.support.v7.app.*;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -55,11 +56,12 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     long diffDays, diff;    //diffDays stores the difference between from and to date and is to be used while sending the message to the manager
     SimpleDateFormat dateFormat;
     Date from_date, to_date;
-    String dateToCheck, dateFromCheck, day_st;
+    String dateToCheck, dateFromCheck, day_st, from_address;;
     EditText fromDate, toDate, reasonForRequest, timePicker, editText_otherPickUp, editText_otherDrop;
     TextView managerQLid_textField, displayDropLocation_textView, textView_selectTime, displayPickupLocation_textView;
     NestedScrollView nsv;
-    String startDate, endDate, startTime, destination_entry_source, sourceAddress, dropAddress, destination_entry_to;
+    String startDate, endDate, startTime, destination_entry_source, sourceAddress, dropAddress;
+    String destination_entry_to;
     Button submit;
     Spinner spinner_location, spinner_dropLocation, managerQLid;
     JSONObject jsonBody;
@@ -394,14 +396,13 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             //System.out.println(position);
             selectPick = position;
-
             if (position == 0) {
                 displayDropLocation_textView.setText("");
                 displayPickupLocation_textView.setVisibility(View.GONE);
             }
             if (position == 1) {
-                destination_entry_source = "HOME TO ";
-                //TODO have to get the Data from DATABASE
+               // destination_entry_source = "HOME TO ";
+                from_address = "HOME";
                 displayPickupLocation_textView.setText("");
                 displayPickupLocation_textView.setText(Employee_HomeAddress);
                 displayPickupLocation_textView.setVisibility(View.VISIBLE);
@@ -410,8 +411,8 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
             }
             if (position == 2) {
-                destination_entry_source = "OFFICE TO ";
-                //TODO have to get the Data from DATABASE
+             //   destination_entry_source = "OFFICE TO ";
+                from_address = "OFFICE";
                 displayPickupLocation_textView.setText("");
                 displayPickupLocation_textView.setText(Employee_OfficeAddress);
                 displayPickupLocation_textView.setVisibility(View.VISIBLE);
@@ -421,7 +422,8 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
 
             if (position == 3) {
-                destination_entry_source = "OTHERS TO ";
+               // destination_entry_source = "OTHERS TO ";
+                from_address = "OTHERS";
                 textView_selectTime.setText("Pickup Time");
                 displayPickupLocation_textView.setText("");
                 displayPickupLocation_textView.setVisibility(View.GONE);
@@ -448,23 +450,19 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             selectDrop = position;
             if (position == 0) {
                 displayDropLocation_textView.setText("");
-                destination_entry_to = "";
+                destination_entry_source = "";
                 displayDropLocation_textView.setVisibility(View.GONE);
 
             }
             if (position == 1) {
                 displayDropLocation_textView.setVisibility(View.VISIBLE);
                 editText_otherDrop.setVisibility(View.GONE);
-                destination_entry_to = "";
                 destination_entry_to = "HOME";
-                destination_entry_source = destination_entry_source + destination_entry_to;
                 displayDropLocation_textView.setText(Employee_HomeAddress);
 
             }
             if (position == 2) {
-                destination_entry_to = "";
                 destination_entry_to = "OFFICE";
-                destination_entry_source = destination_entry_source + destination_entry_to;
                 displayDropLocation_textView.setVisibility(View.VISIBLE);
                 editText_otherDrop.setVisibility(View.GONE);
                 displayDropLocation_textView.setText("");
@@ -474,21 +472,23 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
 
             if (position == 3) {
-                destination_entry_to = "";
                 destination_entry_to = "OTHERS";
-                destination_entry_source = destination_entry_source + destination_entry_to;
                 displayDropLocation_textView.setVisibility(View.GONE);
                 displayDropLocation_textView.setText("");
                 editText_otherDrop.setVisibility(View.VISIBLE);
                 editText_otherDrop.getText();
             }
 
+            destination_entry_source = from_address + " TO " + destination_entry_to;
         }
 
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
 
         }
+
+
+
     }
     //</editor-fold>
 
@@ -566,13 +566,12 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             builder.setTitle("Confirmation").setMessage("You are requesting cab for " + diffDays + " " + day_st + " , Do you want to continue")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(final DialogInterface dialog, int which) {
                             if (validation()) {
                                 jsonBody = new JSONObject();
                                 try {
                                     jsonBody.put("Emp_QLID", Employee_Qlid);
                                     jsonBody.put("Employee_Name", Employee_Name);
-
                                     jsonBody.put("Shift_ID", "4");
                                     jsonBody.put("Mgr_QLID", Employee_Manager_1_Qlid);
                                     jsonBody.put("Employee_Manager_1_Name", Employee_Manager_1_Name);
@@ -596,9 +595,21 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                         Log.i("VOLLEY", "inside onResponse method:UnscheduledRequest");
                                         Log.i("VOLLEY", response.toString());
 
-                                        try {
+                                         try {
                                             if (response.getString("status").equalsIgnoreCase("success")) {
-                                                Toast.makeText(getActivity(), "Your request is Submitted", Toast.LENGTH_LONG).show();
+                                               // Toast.makeText(getActivity(), "Your request is Submitted", Toast.LENGTH_LONG).show();
+                                                final AlertDialog alertDialog = new AlertDialog.Builder(ctx).create();
+                                                alertDialog.setTitle("Alert!!");
+                                                alertDialog.setMessage("Your Request is Successfully Submitted");
+                                                alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+                                                alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        alertDialog.cancel();
+                                                    }
+                                                });
+                                                alertDialog.show();
+
                                             } else {
                                                 Toast.makeText(getActivity(), "Failed to make request", Toast.LENGTH_LONG).show();
                                             }

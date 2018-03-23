@@ -123,6 +123,7 @@ public class CustomScannerCheckOutActivity extends AppCompatActivity  implements
     protected void onPause() {
         super.onPause();
         capture.onPause();
+        finish();
     }
 
     @Override
