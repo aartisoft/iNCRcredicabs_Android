@@ -1,8 +1,6 @@
 package com.ncr.interns.codecatchers.incredicabs;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,7 +25,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,11 +34,12 @@ import android.widget.Toast;
 
 import com.ncr.interns.codecatchers.incredicabs.Adapter.*;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ContactsContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeCabMatesDetails;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ShiftContract;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -72,7 +70,7 @@ public class Dashboard extends AppCompatActivity
         mSqLiteDatabase = ncabSQLiteHelper.getWritableDatabase();
         getIdofComponents();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        CabMatesAdapter adapter = new CabMatesAdapter(getCabmatesDetails(), this);
+        CabMatesAdapter adapter = new CabMatesAdapter(getCabMatesDetails(), this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.addItemDecoration(new
                 DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -233,6 +231,8 @@ public class Dashboard extends AppCompatActivity
 
             Intent intent = new Intent(this, Login.class);
             mSqLiteDatabase.execSQL("DELETE FROM " + CabMatesContract.DB_TABLE);
+            mSqLiteDatabase.execSQL("DELETE FROM " + ShiftContract.DB_TABLE);
+            mSqLiteDatabase.execSQL("DELETE FROM " + ContactsContract.DB_TABLE);
             sharedPreferences = context.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
@@ -259,7 +259,7 @@ public class Dashboard extends AppCompatActivity
     }
 
     //<editor-fold desc="Function to get the Current Cab Mates Details from the Database">
-    public Cursor getCabmatesDetails() {
+    public Cursor getCabMatesDetails() {
         cursor = mSqLiteDatabase.rawQuery("SELECT * FROM " + CabMatesContract.DB_TABLE, null);
         return cursor;
     }

@@ -94,6 +94,9 @@ public class CustomDialogClass extends Dialog implements
 //                break;
             case R.id.btn_no:
                 this.cancel();
+                countDownTimer.cancel();
+                countDownTimer = null;
+                text.setText(R.string.sos_cancelled);
                 dismiss();
                 break;
             default:
@@ -155,14 +158,14 @@ public class CustomDialogClass extends Dialog implements
 
     }
 
-//    public void cancel() {
+    public void cancel() {
 //        if (countDownTimer != null) {
 //            countDownTimer.cancel();
 //            countDownTimer = null;
 //            text.setText(R.string.sos_cancelled);
 //            dismiss();
 //        }
-//    }
+    }
 
     public String nextNum(){
         if(this.currentNum+1 > numLength){

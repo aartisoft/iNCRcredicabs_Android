@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -85,8 +86,8 @@ public class Login extends AppCompatActivity {
 
         if(!shared_pref_userName.isEmpty() && !shared_pref_password.isEmpty()){
             startActivity(new Intent(Login.this,Dashboard.class));
-
-        }
+          //  startActivity(new Intent(Login.this, Splash.class));
+         }
 
         String copyStr = getResources().getString(R.string.login_copy);
         TextView copyTV = findViewById(R.id.copy_text);
@@ -150,6 +151,8 @@ public class Login extends AppCompatActivity {
 
     private void parseJSON(JSONObject response) {
 
+        Log.d(TAG, "parseJSON: Response:- "+response);
+
         try {
             EmployeeQlID = response.getString("empQlid");
             EmployeeFirstName = response.getString("empFName");
@@ -184,25 +187,30 @@ public class Login extends AppCompatActivity {
 
             //<editor-fold desc="Yet to Implement">
             JSONArray cabMates = response.getJSONArray("rosterInfo");
-            for (int i = 0;i<cabMates.length();i++){
+            for (int i = 0;i< cabMates.length();i++){
 
-                JSONObject cabmateX = cabMates.getJSONObject(i);
-                String CabMate_Qlid = cabmateX.getString("Qlid");
-                String CabMate_name = cabmateX.getString("f_name")+" "+cabmateX.getString("l_name");
-                String CabMate_contactNumber = cabmateX.getString("e_mob");
-                String CabMate_address = cabmateX.getString("p_a");
-                String CabMate_pickupTime = cabmateX.getString("pickup_time");
-                int CabMate_shiftId = cabmateX.getInt("shift_id");
-                ContentValues cabmateValues = new ContentValues();
-                cabmateValues.put(CabMatesContract.COLUMN_CABMATE_QLID,CabMate_Qlid);
-                cabmateValues.put(CabMatesContract.COLUMN_CABMATE_NAME,CabMate_name);
-                cabmateValues.put(CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER,CabMate_contactNumber);
-                cabmateValues.put(CabMatesContract.COLUMN_CABMATE_ADDRESS,CabMate_address);
-                cabmateValues.put(CabMatesContract.COLUMN_SHIFT_ID,CabMate_shiftId);
-                cabmateValues.put(CabMatesContract.COLUMN_CABMATE_PICKUPTIME,CabMate_pickupTime);
-                mSqLiteDatabase.insert(CabMatesContract.DB_TABLE,null,cabmateValues);
-                Log.d(TAG, "parseJSON: Data Inserted to Cabmate Table row :-_"+i+"\n");
+                try {
+                    JSONObject cabMateJSON = cabMates.getJSONObject(i);
+                    String CabMate_Qlid = cabMateJSON.getString("Qlid");
+                    String CabMate_name = cabMateJSON.getString("f_name")+" "+cabMateJSON.getString("l_name");
+                    String CabMate_contactNumber = cabMateJSON.getString("e_mob");
+                    String CabMate_address = cabMateJSON.getString("p_a");
+//                    String CabMate_pickupTime = cabMateJSON.getString("pickup_time");
+                    ContentValues cabMateValues = new ContentValues();
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_QLID,CabMate_Qlid);
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_NAME,CabMate_name);
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER,CabMate_contactNumber);
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_ADDRESS,CabMate_address);
+  //                  cabMateValues.put(CabMatesContract.COLUMN_CABMATE_PICKUPTIME,CabMate_pickupTime);
+                    mSqLiteDatabase.insert(CabMatesContract.DB_TABLE,null,cabMateValues);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+
+                    Log.d(TAG, "parseJSON: Data Inserted to Cabmate Table row :- "+i);
+                }
+                Log.d(TAG, "parseJSON: Data Inserted to Cabmate Table row :- "+i);
             }
+
 
             JSONArray contactSos = response.getJSONArray("contacts");
             for(int i = 0;i<contactSos.length();i++){
@@ -216,7 +224,7 @@ public class Login extends AppCompatActivity {
                 String contactNumber = contactSOSObject.getString("contactNbr");
                 String contactRole = contactSOSObject.getString("contactRole");
                 ContentValues contactValues = new ContentValues();
-                // TODO: 3/22/2018 Add values to database
+
                 contactValues.put(ContactsContract.COLUMN_CONTACT_ID,contactId);
                 contactValues.put(ContactsContract.COLUMN_CONTACT_SOS,contactSOS);
                 contactValues.put(ContactsContract.COLUMN_CONTACT_NAME,contactName);
@@ -226,7 +234,7 @@ public class Login extends AppCompatActivity {
                 mSqLiteDatabase.insert(ContactsContract.DB_TABLE,null,contactValues);
             }
 
-            JSONArray shiftInfo = response.getJSONArray("shiftInfo");
+           /* JSONArray shiftInfo = response.getJSONArray("shiftInfo");
 
             for (int i  =0;i<shiftInfo.length();i++){
                 JSONObject shiftTableInfo = shiftInfo.getJSONObject(i);
@@ -240,7 +248,7 @@ public class Login extends AppCompatActivity {
                 shiftInfoValues.put(ShiftContract.COLUMN_START_TIME,startTime);
 
                 mSqLiteDatabase.insert(ShiftContract.DB_TABLE,null,shiftInfoValues);
-            }
+            }*/
 
             //</editor-fold>
 

@@ -37,7 +37,7 @@ import java.util.ArrayList;
 
 public class CabMatesAdapter extends Adapter<CabMatesAdapter.cabMatesViewHolder> {
 
-    //ArrayList<EmployeeCabMatesDetails> matesList  = new ArrayList<>();
+
     Cursor cursor;
     Context ctx;
     private static final int REQUEST_CALL = 1;
@@ -79,11 +79,11 @@ public class CabMatesAdapter extends Adapter<CabMatesAdapter.cabMatesViewHolder>
         }
         String emp_name = cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_NAME));
         String emp_address = cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_ADDRESS));
-        String emp_pickupTime = cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_PICKUPTIME));
+//        String emp_pickupTime = cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_PICKUPTIME));
         final String emp_contact_number=cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER));
         holder.name.setText(emp_name);
         holder.address.setText(emp_address);
-        holder.pickupTime.setText(emp_pickupTime);
+  //      holder.pickupTime.setText(emp_pickupTime);
         holder.contactNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

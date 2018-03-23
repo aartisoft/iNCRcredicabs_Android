@@ -12,7 +12,7 @@ import android.util.Log;
 public class NcabSQLiteHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "NCABDatabase";
-    private static final int DB_VERSION = 6;
+    private static final int DB_VERSION = 1;
     Context ctx;
     SQLiteDatabase sqLiteDatabase;
     private static final String TAG = "NcabSQLiteHelper";
@@ -32,14 +32,12 @@ public class NcabSQLiteHelper extends SQLiteOpenHelper {
             EmployeeContract.COLUMN_LEVEL_2_MANAGER+" TEXT NOT NULL,"+
             EmployeeContract.COLUMN_EMP_ROLE+" INTEGER NOT NULL,"+
             EmployeeContract.COLUMN_EMP_REFERESHED_TOKEN+" TEXT);";
-    // TODO: 3/18/2018 If getting refreshed token make it not null
+
 
     private final String CREATE_CABMATE_TABLE_QUERY = "CREATE TABLE "+CabMatesContract.DB_TABLE+" ("+
             CabMatesContract._ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
             CabMatesContract.COLUMN_CABMATE_QLID+" TEXT NOT NULL,"+
             CabMatesContract.COLUMN_CABMATE_NAME+" TEXT NOT NULL,"+
-            CabMatesContract.COLUMN_CABMATE_PICKUPTIME+" TEXT ,"+
-            CabMatesContract.COLUMN_SHIFT_ID+" INTEGER ,"+
             CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER+" TEXT NOT NULL,"+
             CabMatesContract.COLUMN_CABMATE_ADDRESS+" TEXT NOT NULL);";
 
