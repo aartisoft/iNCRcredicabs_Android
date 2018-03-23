@@ -1,8 +1,12 @@
 package com.ncr.interns.codecatchers.incredicabs;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -61,13 +65,17 @@ public class FeedbackActivity extends AppCompatActivity {
     String startDate;
     String tempdate;
     EditText shiftTiming;
+    SharedPreferences sharedPreferences;
     EditText cabNumber;
+    String Employee_Qlid;
+    private static final String MY_PREFERENCES = "MyPrefs_login";
     private String url = "http://192.168.43.49:8090/Cab_Managemnet/CBMang/complaint";
     private String getShiftDetailsUrl = "http://192.168.43.49:8090/Cab_Managemnet/CBMang/getCabShift";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Employee_Qlid = getEmployeeQlid();
         setContentView(R.layout.activity_feedback);
         mylayout = findViewById(R.id.feedbacklayout);
         shiftTiming=findViewById(R.id.Shift_timing);
@@ -132,7 +140,7 @@ public class FeedbackActivity extends AppCompatActivity {
 
         jsonBody = new JSONObject();
         try {
-            jsonBody.put("qlid", "DB250491");
+            jsonBody.put("qlid", Employee_Qlid);
             jsonBody.put("date", startDate);
             Log.d("getcabshift: ", jsonBody.toString());
         } catch (JSONException e) {
@@ -276,13 +284,17 @@ public class FeedbackActivity extends AppCompatActivity {
             if (i == 1) {
                 selectType = "Schedule";
                 try {
-                    if(cabshift.getJSONObject(0).getString("shift").contains("Shift")
-                            ||cabshift.getJSONObject(0).getString("shift").contains("Regular")){
+                    if(cabshift.length()>0&&
+                            cabshift.getJSONObject(0).getString("shift").contains("Shift")
+                            ||cabshift.length()>0&&
+                            cabshift.getJSONObject(0).getString("shift").contains("Regular")){
                         shiftTiming.setText(cabshift.getJSONObject(0).getString("shift"));
                         cabNumber.setText(cabshift.getJSONObject(0).getString("cabno"));
                     }
-                    else if(cabshift.getJSONObject(1).getString("shift").contains("Shift")
-                            ||cabshift.getJSONObject(1).getString("shift").contains("Regular")){
+                    else if(cabshift.length()>1&&
+                            cabshift.getJSONObject(1).getString("shift").contains("Shift")
+                            ||cabshift.length()>1&&
+                            cabshift.getJSONObject(1).getString("shift").contains("Regular")){
                         shiftTiming.setText(cabshift.getJSONObject(1).getString("shift"));
                         cabNumber.setText(cabshift.getJSONObject(1).getString("cabno"));
                     }
@@ -299,19 +311,25 @@ public class FeedbackActivity extends AppCompatActivity {
                 }
             }
             if (i == 2) {
+                Log.d("Unschedule: ", "inside Unschedule");
                 selectType = "Unschedule";
                 try {
-                    if(cabshift.getJSONObject(0).getString("shift").contentEquals("Unscheduled")){
+                    if(cabshift.length()>0&&
+                            cabshift.getJSONObject(0).getString("shift").contains("Unscheduled")){
                         shiftTiming.setText(cabshift.getJSONObject(0).getString("shift"));
                         cabNumber.setText(cabshift.getJSONObject(0).getString("cabno"));
+                        Log.d("Unschedule: ", "inside Unschedule 1");
                     }
-                    else if(cabshift.getJSONObject(1).getString("shift").contentEquals("Unscheduled")){
+                    else if(cabshift.length()>1&&
+                            cabshift.getJSONObject(1).getString("shift").contains("Unscheduled")){
                         shiftTiming.setText(cabshift.getJSONObject(1).getString("shift"));
                         cabNumber.setText(cabshift.getJSONObject(1).getString("cabno"));
+                        Log.d("Unschedule: ", "inside Unschedule 2");
                     }
                     else {
                         shiftTiming.setText("");
                         cabNumber.setText("");
+                        Log.d("Unschedule: ", "inside Unschedule 3");
                     }
                     Log.d( "onItemSelected: "," "+shiftTiming.getText());
                     Log.d( "onItemSelected: "," "+cabNumber.getText());
@@ -442,16 +460,28 @@ public class FeedbackActivity extends AppCompatActivity {
         if (spinnerDropType.getSelectedItem().toString() == "Select" ||
                 complaint_type_spinner.getSelectedItem().toString() == "Select" ||
                 spinnerShiftType.getSelectedItem().toString() == "Select") {
-            Snackbar sb = Snackbar.make(mylayout, "Data insufficient!", 0);
-            View view1 = sb.getView();
-            view1.setBackgroundColor(Color.RED);
-            sb.show();
+            // Snackbar sb = Snackbar.make(mylayout, "Data insufficient!", 0);
+            // View view1 = sb.getView();
+            //view1.setBackgroundColor(Color.RED);
+            // sb.show();
         }
 
         if (isvalid()) {
-
+            Toast.makeText(this, "Submitted", Toast.LENGTH_SHORT).show();
             Snackbar snackbar = Snackbar.make(mylayout,"Submitted",Snackbar.LENGTH_LONG);
             snackbar.show();
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    Intent Dashboard_intent=new Intent(getApplicationContext(),Dashboard.class);
+                    startActivity(Dashboard_intent);
+                    finish();
+                }
+            }, 2000);
+
+            ;
 
             jsonBody = new JSONObject();
             try {
@@ -462,7 +492,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 Log.d( "sendfeedback: ", tempdate);
                 jsonBody.put("type", shiftTiming.getText());
                 jsonBody.put("cab", cabNumber.getText());
-                jsonBody.put("qlid", "dp250369"); // TODO: 3/19/2018 Get Qlid from Database
+                jsonBody.put("qlid", Employee_Qlid); // TODO: 3/19/2018 Get Qlid from Database
                 jsonBody.put("comp", complaintType);
                 jsonBody.put("comments", comment.getText().toString());
                 Log.d("sendfeedback: ", jsonBody.toString());
@@ -483,7 +513,10 @@ public class FeedbackActivity extends AppCompatActivity {
                             Snackbar snackbar = Snackbar.make(mylayout, "Your request was Submitted.", Snackbar.LENGTH_LONG);
                             snackbar.show();
 
-                        } else {
+
+
+                        }
+                        else {
                             Snackbar snackbar = Snackbar.make(mylayout, "There was a problem submitting your Request", Snackbar.LENGTH_LONG);
                             snackbar.setAction("Retry", new View.OnClickListener() {
                                 @Override
@@ -512,13 +545,21 @@ public class FeedbackActivity extends AppCompatActivity {
             });
             RESTService.getInstance(FeedbackActivity.this).addToRequestQueue(jsonObjRequest);
 
+
         }
 
         else {
             Toast.makeText(getApplicationContext(), "Please check your entered information", Toast.LENGTH_LONG).show();
+
         }
 
 
+    }
+
+    public String getEmployeeQlid(){
+        sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+        String Employee_Qlid = sharedPreferences.getString("user_qlid","");
+        return Employee_Qlid;
     }
 
 }

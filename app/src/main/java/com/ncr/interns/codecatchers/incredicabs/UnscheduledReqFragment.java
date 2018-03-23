@@ -469,8 +469,6 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 displayDropLocation_textView.setText(Employee_OfficeAddress);
 
             }
-
-
             if (position == 3) {
                 destination_entry_to = "OTHERS";
                 displayDropLocation_textView.setVisibility(View.GONE);
@@ -484,11 +482,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
-
         }
-
-
-
     }
     //</editor-fold>
 
@@ -497,9 +491,6 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-//            if(position==0){
-//                managerQLid_textField.setVisibility(View.GONE);}
 
             if (position == 0) {
                 Counter = 1;

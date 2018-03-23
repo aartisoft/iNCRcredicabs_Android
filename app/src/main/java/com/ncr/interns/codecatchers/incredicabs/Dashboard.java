@@ -50,6 +50,7 @@ public class Dashboard extends AppCompatActivity
     Cursor cursor;
     Button button_sos;
     String number;
+    SharedPreferences sharedPreferences;
     private static final String MY_PREFERENCES = "MyPrefs_login";
     Context context = this;
     private static final String TAG = "Dashboard Debugging";
@@ -72,8 +73,9 @@ public class Dashboard extends AppCompatActivity
                 DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(adapter);
 
-        cabMatesNotification();//Abhishek Alarm manager
-
+       /* cabMatesNotification();//Abhishek Alarm manager
+        getCabMateShiftTimeNew();
+*/
         checkIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,7 +199,7 @@ public class Dashboard extends AppCompatActivity
 
             Intent intent = new Intent(this, Login.class);
             mSqLiteDatabase.execSQL("DELETE FROM " + CabMatesContract.DB_TABLE);
-            SharedPreferences sharedPreferences = context.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+            sharedPreferences = context.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
             editor.apply();
@@ -232,7 +234,7 @@ public class Dashboard extends AppCompatActivity
     //<editor-fold desc="Function to make the phone call">
     private void makePhoneCall(String number) {
         //String number = mEditTextNumber.getText().toString();
-        if (number.trim().length() > 0) {
+        if (true) {
 
             if (ContextCompat.checkSelfPermission(Dashboard.this,
                     android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -264,7 +266,7 @@ public class Dashboard extends AppCompatActivity
     }
     //</editor-fold>
 
-    //<editor-fold desc="Method to get CabMatesShift Time">
+   /* //<editor-fold desc="Method to get CabMatesShift Time">
     public String[] getCabMatesShiftTime() {
         Cursor cursorShiftTime = mSqLiteDatabase.rawQuery("SELECT * FROM " + CabMatesContract.DB_TABLE, null);
         int len = cursor.getCount();
@@ -279,6 +281,22 @@ public class Dashboard extends AppCompatActivity
         return shiftTimes_array;
     }
     //</editor-fold>
+
+    public void getCabMateShiftTimeNew(){
+       *//* Cursor cursor = mSqLiteDatabase.rawQuery("SELECT "+CabMatesContract.COLUMN_CABMATE_PICKUPTIME+" FROM "
+        +CabMatesContract.DB_TABLE+" WHERE ",null)*//*
+
+
+       Cursor cursor = mSqLiteDatabase.query(CabMatesContract.DB_TABLE,
+               new String[]{CabMatesContract.COLUMN_CABMATE_PICKUPTIME},
+               CabMatesContract.COLUMN_CABMATE_QLID+ "="+getEmployeeQlid(),
+               null,null,null,null,null);
+
+       while (cursor.moveToNext()){
+          String pickup_time =  cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_PICKUPTIME));
+           Log.d(TAG, "getCabMateShiftTimeNew: PickupTime:- "+pickup_time);
+       }
+    }
 
     //<editor-fold desc="Method to send System notification to The Users">
     public void cabMatesNotification() {
@@ -304,7 +322,11 @@ public class Dashboard extends AppCompatActivity
         }
  }
     //</editor-fold>
-
-
+*/
+    public String getEmployeeQlid(){
+        sharedPreferences = getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
+        String Employee_Qlid = sharedPreferences.getString("user_qlid","");
+        return Employee_Qlid;
+    }
 
 }

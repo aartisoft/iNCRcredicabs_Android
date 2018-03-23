@@ -86,7 +86,7 @@ public class Login extends AppCompatActivity {
         String copyStr = getResources().getString(R.string.login_copy);
         TextView copyTV = findViewById(R.id.copy_text);
 
-        copyTV.setText(Html.fromHtml(copyStr, 0));
+       // copyTV.setText(Html.fromHtml(copyStr, 0));
 
         user = findViewById(R.id.editText_Qlid);
         pass = findViewById(R.id.editText_password);
@@ -253,6 +253,7 @@ public class Login extends AppCompatActivity {
                                         response.getString("empFName")+" "+
                                                 response.getString("empMName")+" "+
                                                 response.getString("empLName"));
+                                editor.putString("user_qlid",qlid);
                                 editor.putString("user_password",pass.getText().toString());
                                 editor.apply();
                                 //</editor-fold>
