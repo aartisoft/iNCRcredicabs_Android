@@ -199,7 +199,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 dateSelection.set(year, monthOfYear, dayOfMonth);
-                String dateFormat = "YYYY/MM/dd";
+                String dateFormat = "YYYY-MM-dd";
 //                datePicker.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 //                datePicker.setText();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.US);
@@ -210,7 +210,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 //own code starts    status:- working
                 String status = null;
                 Date userselected = new Date();
-                UnscheduledReqFragment.this.dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                UnscheduledReqFragment.this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 try {
                     userselected = UnscheduledReqFragment.this.dateFormat.parse(date);
                     Date currentDate = new Date();
@@ -259,16 +259,14 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 dateSelection.set(year, monthOfYear, dayOfMonth);
-                String dateFormat = "YYYY/MM/dd";
-//                datePicker.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-//                datePicker.setText();
+                String dateFormat = "YYYY-MM-dd";
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.US);
                 String date = simpleDateFormat.format(new Date(year - 1900, monthOfYear, dayOfMonth));
 
                 //own code starts
                 String status = null;
                 Date userselected = new Date();
-                SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd");
+                SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
                 try {
                     userselected = dateformat.parse(date);
                     Date currentdate = new Date();
@@ -366,7 +364,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                     snackbar.show();
 
                 } else {
-                    // FIXME: 3/21/2018 Solve the bug associated with the Source and destination_entry_source Location
+
                     if (TextUtils.isEmpty(startTime)) {
                         Snackbar snackbar = Snackbar.make(nsv, "Time Can't be empty", Snackbar.LENGTH_LONG);
                         snackbar.show();

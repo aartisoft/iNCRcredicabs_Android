@@ -27,7 +27,7 @@ public class Reject extends BroadcastReceiver {
     String reqId;
     SharedPreferences sharedPreferences;
     private static final String MY_PREFERENCES = "MyPrefs";
-    String url = "http://192.168.43.108:8522/NCAB/AndroidService/approval";
+    String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/approval";
     @Override
     public void onReceive(final Context context, Intent intent) {
 
@@ -50,7 +50,7 @@ public class Reject extends BroadcastReceiver {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        Log.i("VOLLEY", "inside onResponse method:login");
+                        Log.i("VOLLEY", "inside onResponse method:doLogin");
                         Log.i("VOLLEY", response.toString());
                         try {
                             if (response.getString("status").equalsIgnoreCase("success")) {

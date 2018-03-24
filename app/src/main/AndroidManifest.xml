@@ -59,6 +59,7 @@
                 <action android:name="Reject" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".AlarmReceiver"/>
 
         <activity
             android:name=".FeedbackActivity"

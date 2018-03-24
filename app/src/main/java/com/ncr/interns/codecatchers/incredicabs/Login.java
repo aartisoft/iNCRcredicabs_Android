@@ -19,9 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.Space;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -32,7 +30,6 @@ import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ContactsContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
-import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ShiftContract;
 import com.ncr.interns.codecatchers.incredicabs.notification.DeleteFirebaseTokenService;
 
 import org.json.JSONArray;
@@ -73,7 +70,7 @@ public class Login extends AppCompatActivity {
     private static final String TAG = Login.class.getSimpleName();
 
     String baseUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080";
-    String loginUrl = "/NCAB/EmployeeService/login-android";
+    String loginUrl = "/NCAB/EmployeeService/doLogin-android";
     String mainUrl = baseUrl + loginUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +89,7 @@ public class Login extends AppCompatActivity {
         String copyStr = getResources().getString(R.string.login_copy);
         TextView copyTV = findViewById(R.id.copy_text);
 
-       // copyTV.setText(Html.fromHtml(copyStr, 0));
+        copyTV.setText(Html.fromHtml(copyStr, 0));
 
         user = findViewById(R.id.editText_Qlid);
         pass = findViewById(R.id.editText_password);
@@ -120,14 +117,16 @@ public class Login extends AppCompatActivity {
                     //json for request
                     jsonBodyRequest = new JSONObject();
                     try {
-                        jsonBodyRequest.put("qlid", user.getText().toString());
-                        jsonBodyRequest.put("password", pass.getText().toString());
+                        String userIdtoSend = user.getText().toString().trim();
+                        String passwordToSend = pass.getText().toString().trim();
+                        jsonBodyRequest.put("qlid",userIdtoSend);
+                        jsonBodyRequest.put("password", passwordToSend);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     firebaseToken = FirebaseInstanceId.getInstance().getToken();
                     Log.d(TAG, "firebase Token:- "+firebaseToken);
-                    login(jsonBodyRequest);
+                    doLogin(jsonBodyRequest);
                 }
                 else
                 {
@@ -233,34 +232,15 @@ public class Login extends AppCompatActivity {
                 contactValues.put(ContactsContract.COLUMN_CONTACT_ROLE,contactRole);
                 mSqLiteDatabase.insert(ContactsContract.DB_TABLE,null,contactValues);
             }
-
-           /* JSONArray shiftInfo = response.getJSONArray("shiftInfo");
-
-            for (int i  =0;i<shiftInfo.length();i++){
-                JSONObject shiftTableInfo = shiftInfo.getJSONObject(i);
-                int shiftId =  shiftTableInfo.getInt("shiftId");
-                String shiftName = shiftTableInfo.getString("shiftName");
-                String startTime = shiftTableInfo.getString("startTime");
-                ContentValues shiftInfoValues = new ContentValues();
-                // TODO: 3/22/2018 Add values to teh database
-                shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_ID,shiftId);
-                shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_NAME,shiftName);
-                shiftInfoValues.put(ShiftContract.COLUMN_START_TIME,startTime);
-
-                mSqLiteDatabase.insert(ShiftContract.DB_TABLE,null,shiftInfoValues);
-            }*/
-
-            //</editor-fold>
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
 
     }
-    public void login(JSONObject jsonBodyRequest){
+    public void doLogin(JSONObject jsonBodyRequest){
 
-        Log.d(TAG, "login: qlid: " + qlid);
+        Log.d(TAG, "doLogin: qlid: " + qlid);
         FirebaseTokenUtility ftu = new FirebaseTokenUtility(Login.this);
         JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, mainUrl, jsonBodyRequest,
                 new Response.Listener<JSONObject>() {

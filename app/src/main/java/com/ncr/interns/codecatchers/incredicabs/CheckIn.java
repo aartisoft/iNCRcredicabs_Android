@@ -1,6 +1,8 @@
 package com.ncr.interns.codecatchers.incredicabs;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -30,15 +32,18 @@ public class CheckIn extends AppCompatActivity {
     String Route_No = null;
     String Pickup_Time = null;
     String Start_Time = null;
-    String ipaddress = "192.168.43.45:8080";
-    String url = "http://" + ipaddress + "/iNCRcredicabs_WS/VendorService/checkin";
-    String url_roasterinfo = "http://" + ipaddress + "/iNCRcredicabs_WS/VendorService/RoasterDetailsByEmpID";
-    String Emp_Qlid = "AN250279";
+    String ipaddress = "ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080";
+    String url = "http://" + ipaddress + "/NCAB/VendorService/checkin";
+    String url_roasterinfo = "http://" + ipaddress + "/NCAB/VendorService/RoasterDetailsByEmpID";
+    String Emp_Qlid;
     String Check_In=null;
+    private static final String MY_PREFERENCES = "MyPrefs_login";
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         openScanner();
+        Emp_Qlid = getEmployeeQlid();
         JSONObject jsonBodyRequest = new JSONObject();
         try {
             jsonBodyRequest.put("Emp_Qlid", Emp_Qlid);
@@ -62,7 +67,7 @@ public class CheckIn extends AppCompatActivity {
                             Intent Dashboard_intent = new Intent(getApplicationContext(), Dashboard.class);
                             startActivity(Dashboard_intent);
                         }
-                        Log.i("VOLLEY", "inside onResponse method:login");
+                        Log.i("VOLLEY", "inside onResponse method:doLogin");
                         Log.i("VOLLEY", response.toString());
                     }
                 },
@@ -149,7 +154,7 @@ public class CheckIn extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                Log.i("VOLLEY", "inside onResponse method:login");
+                                Log.i("VOLLEY", "inside onResponse method:doLogin");
                                 Log.i("VOLLEY", response.toString());
 
 
@@ -180,5 +185,10 @@ public class CheckIn extends AppCompatActivity {
         {
             finish();
         }
+    }
+    public String getEmployeeQlid(){
+        sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+        String Employee_Qlid = sharedPreferences.getString("user_qlid","");
+        return Employee_Qlid;
     }
 }

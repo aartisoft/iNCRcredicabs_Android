@@ -1,6 +1,8 @@
 package com.ncr.interns.codecatchers.incredicabs;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +27,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +35,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.ncr.interns.codecatchers.incredicabs.Adapter.*;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ContactsContract;
@@ -39,7 +46,11 @@ import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeCabMatesDet
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ShiftContract;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -52,7 +63,9 @@ public class Dashboard extends AppCompatActivity
     Cursor cursor;
     Button button_sos;
     String number;
+    String Pickuptime;
     boolean checkCon;
+    String mainUrl = " "; // TODO: 3/24/2018 Get the URL from abhishek
     SharedPreferences sharedPreferences;
     private static final String MY_PREFERENCES = "MyPrefs_login";
     Context context = this;
@@ -144,7 +157,7 @@ public class Dashboard extends AppCompatActivity
         button_sos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 3/20/2018 By Harshit pandey SOS implementation
+
                 if(ContextCompat.checkSelfPermission(Dashboard.this, android.Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions(Dashboard.this, new String[] {android.Manifest.permission.CALL_PHONE},CustomDialogClass.REQUEST_CALL);
                 }else{
@@ -156,7 +169,7 @@ public class Dashboard extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -169,7 +182,7 @@ public class Dashboard extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -231,7 +244,7 @@ public class Dashboard extends AppCompatActivity
 
             Intent intent = new Intent(this, Login.class);
             mSqLiteDatabase.execSQL("DELETE FROM " + CabMatesContract.DB_TABLE);
-            mSqLiteDatabase.execSQL("DELETE FROM " + ShiftContract.DB_TABLE);
+            //mSqLiteDatabase.execSQL("DELETE FROM " + ShiftContract.DB_TABLE);
             mSqLiteDatabase.execSQL("DELETE FROM " + ContactsContract.DB_TABLE);
             sharedPreferences = context.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -315,47 +328,98 @@ public class Dashboard extends AppCompatActivity
         return shiftTimes_array;
     }
     //</editor-fold>
+
 /*
-    public void getCabMateShiftTimeNew(){
-        Cursor cursor = mSqLiteDatabase.rawQuery("SELECT "+CabMatesContract.COLUMN_CABMATE_PICKUPTIME+" FROM "
-        +CabMatesContract.DB_TABLE+" WHERE ",null);
-
-
-       Cursor cursor = mSqLiteDatabase.query(CabMatesContract.DB_TABLE,
-               new String[]{CabMatesContract.COLUMN_CABMATE_PICKUPTIME},
-               CabMatesContract.COLUMN_CABMATE_QLID+ "="+getEmployeeQlid(),
-               null,null,null,null,null);
-
-       while (cursor.moveToNext()){
-          String pickup_time =  cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_PICKUPTIME));
-           Log.d(TAG, "getCabMateShiftTimeNew: PickupTime:- "+pickup_time);
-       }
-    }
-
-    //<editor-fold desc="Method to send System notification to The Users">
-    public void cabMatesNotification() {
-
-        String[] cabMatesShiftTime = getCabMatesShiftTime();
-        Calendar calendar = Calendar.getInstance();
-        for (int i = 0; i < cabMatesShiftTime.length; i++) {
-            String shiftTime = cabMatesShiftTime[i];
-            Log.d(TAG, "cabMatesNotification: shiftTime: " + shiftTime);
-            String arr[] = shiftTime.split(":");
-            String hour = arr[0];
-            Log.d(TAG, "cabMatesNotification: hour: - "+hour);
-            String min = arr[1];
-            Log.d(TAG, "cabMatesNotification: min: - "+min);
-            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hour));
-            calendar.set(Calendar.MINUTE, Integer.parseInt(min));
-            Intent intent1 = new Intent(Dashboard.this, AlarmReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(Dashboard.this, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager am = (AlarmManager) Dashboard.this.getSystemService(ALARM_SERVICE);
-            assert am != null;
-            am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-
+    //<editor-fold desc="method CabmatesNotification">
+    public void cabMatesNotification(String Pickuptim) {
+        String cabMatesShiftTime = Pickuptim;
+        String[] time = cabMatesShiftTime.split(":");
+        int hour = Integer.parseInt(time[0].trim());
+        int min = Integer.parseInt(time[1].trim());
+        if (min >= 30)
+            min -= 30;
+        else {
+            hour -= 1;
+            min += 30;
         }
- }
-    //</editor-fold>*/
+        Log.e("my log alarm", "h- " + hour + "m-" + min);
+        //Toast.makeText(context, "h- "+hour+"m-"+min, Toast.LENGTH_SHORT).show();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, min);
+        Intent intent1 = new Intent(Dashboard.this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(Dashboard.this, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) Dashboard.this.getSystemService(ALARM_SERVICE);
+        assert am != null;
+        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+
+    }
+    //</editor-fold>
+
+
+    //<editor-fold desc="OnStart">
+    @Override
+    protected void onStart() {
+        gettingPickuptime();
+        super.onStart();
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="gettingPickupTime">
+    private void gettingPickuptime() {
+
+        final String[] pickuptime = new String[1];
+        JSONObject jsonBodynot = new JSONObject();
+        try {
+            jsonBodynot.put("Emp_QLID", "AM250914");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, mainUrl, jsonBodynot, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("VOLLEY", "inside onResponse method:UnscheduledRequest");
+                Log.i("VOLLEY", response.toString());
+
+                try {
+                    if (response.getString("status").equalsIgnoreCase("success")) {
+                        pickuptime[0] =response.getString("Pickup_Time");
+                        Pickuptime = pickuptime[0];
+                        cabMatesNotification(Pickuptime);
+                        // Toast.makeText(Dashboard.this, "Your request is Submitted", Toast.LENGTH_LONG).show();
+                    } else {
+                        //Toast.makeText(Dashboard.this, "Failed to make request", Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                // Do something when error occurred
+                Log.d("VOLLEY", "Something went wrong");
+                //  Toast.makeText(getActivity(), "Oops..Something Went wrong", Toast.LENGTH_SHORT).show();
+
+                error.printStackTrace();
+            }
+        });
+
+        RESTService.getInstance(Dashboard.this).addToRequestQueue(jsonObjRequest);
+
+
+    }
+    //</editor-fold>
+*/
+
+
+
     public String getEmployeeQlid(){
         sharedPreferences = getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
         String Employee_Qlid = sharedPreferences.getString("user_qlid","");
@@ -382,4 +446,8 @@ public class Dashboard extends AppCompatActivity
         return false;
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 }

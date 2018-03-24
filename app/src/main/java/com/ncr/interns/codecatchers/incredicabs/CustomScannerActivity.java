@@ -112,7 +112,7 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
                                     {
                                         Toast.makeText(getApplicationContext(), "Already Checkedin", Toast.LENGTH_LONG).show();
                                     }
-                                    Log.i("VOLLEY", "inside onResponse method:login");
+                                    Log.i("VOLLEY", "inside onResponse method:doLogin");
                                     Log.i("VOLLEY", response.toString());
 
 

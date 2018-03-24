@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -181,7 +182,7 @@ public class FeedbackActivity extends AppCompatActivity {
     private boolean isvalid() {
         boolean flag=true;
         if (TextUtils.isEmpty(datePicker.getText())) {
-            Snackbar sb = Snackbar.make(mylayout, "Date must be filled!", 0);
+            Snackbar sb = Snackbar.make(mylayout, "Date must be filled!", Snackbar.LENGTH_LONG);
             View view = sb.getView();
             view.setBackgroundColor(Color.RED);
             sb.show();
@@ -189,21 +190,37 @@ public class FeedbackActivity extends AppCompatActivity {
 
 
         } else if (TextUtils.isEmpty(selectType)) {
-            Snackbar sb = Snackbar.make(mylayout, "Type must be selected!", 0);
+            Snackbar sb = Snackbar.make(mylayout, "Type must be selected!", Snackbar.LENGTH_LONG);
             View view = sb.getView();
             view.setBackgroundColor(Color.RED);
             sb.show();
             flag=false;
 
-        } else if (TextUtils.isEmpty(selectPickupDropType)) {
-            Snackbar sb = Snackbar.make(mylayout, "PickUp/Drop must be selected!", 0);
+        } if(TextUtils.isEmpty(shiftTiming.getText())){
+
+            Snackbar sb = Snackbar.make(mylayout, "Error in Fetching Shift timing !", Snackbar.LENGTH_LONG);
+            View view = sb.getView();
+            view.setBackgroundColor(Color.RED);
+            sb.show();
+            flag=false;
+        }
+        if(TextUtils.isEmpty(cabNumber.getText())){
+            Snackbar sb = Snackbar.make(mylayout, "Error in Fetching Cab Number!", Snackbar.LENGTH_LONG);
+            View view = sb.getView();
+            view.setBackgroundColor(Color.RED);
+            sb.show();
+            flag=false;
+        }
+
+        else if (TextUtils.isEmpty(selectPickupDropType)) {
+            Snackbar sb = Snackbar.make(mylayout, "PickUp/Drop must be selected!", Snackbar.LENGTH_LONG);
             View view = sb.getView();
             view.setBackgroundColor(Color.RED);
             sb.show();
             flag=false;
 
         } else if (TextUtils.isEmpty(complaintType)) {
-            Snackbar sb = Snackbar.make(mylayout, "Complaint Type must be selected!", 0);
+            Snackbar sb = Snackbar.make(mylayout, "Complaint Type must be selected!", Snackbar.LENGTH_LONG);
             View view = sb.getView();
             view.setBackgroundColor(Color.RED);
             sb.show();
@@ -211,7 +228,7 @@ public class FeedbackActivity extends AppCompatActivity {
 
 
         } else if (TextUtils.isEmpty(comment.getText().toString())) {
-            Snackbar sb = Snackbar.make(mylayout, "Comment can't be empty!", 0);
+            Snackbar sb = Snackbar.make(mylayout, "Comment can't be empty!", Snackbar.LENGTH_LONG);
             View view = sb.getView();
             view.setBackgroundColor(Color.RED);
             sb.show();
@@ -324,12 +341,12 @@ public class FeedbackActivity extends AppCompatActivity {
                             cabshift.getJSONObject(1).getString("shift").contains("Unscheduled")){
                         shiftTiming.setText(cabshift.getJSONObject(1).getString("shift"));
                         cabNumber.setText(cabshift.getJSONObject(1).getString("cabno"));
-                        Log.d("Unschedule: ", "inside Unschedule 2");
+                        Log.d("Unscheduled: ", "inside Unscheduled 2");
                     }
                     else {
                         shiftTiming.setText("");
                         cabNumber.setText("");
-                        Log.d("Unschedule: ", "inside Unschedule 3");
+                        Log.d("Unscheduled: ", "inside Unscheduled 3");
                     }
                     Log.d( "onItemSelected: "," "+shiftTiming.getText());
                     Log.d( "onItemSelected: "," "+cabNumber.getText());
@@ -460,10 +477,7 @@ public class FeedbackActivity extends AppCompatActivity {
         if (spinnerDropType.getSelectedItem().toString() == "Select" ||
                 complaint_type_spinner.getSelectedItem().toString() == "Select" ||
                 spinnerShiftType.getSelectedItem().toString() == "Select") {
-            // Snackbar sb = Snackbar.make(mylayout, "Data insufficient!", 0);
-            // View view1 = sb.getView();
-            //view1.setBackgroundColor(Color.RED);
-            // sb.show();
+
         }
 
         if (isvalid()) {
@@ -492,7 +506,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 Log.d( "sendfeedback: ", tempdate);
                 jsonBody.put("type", shiftTiming.getText());
                 jsonBody.put("cab", cabNumber.getText());
-                jsonBody.put("qlid", Employee_Qlid); // TODO: 3/19/2018 Get Qlid from Database
+                jsonBody.put("qlid", Employee_Qlid); //
                 jsonBody.put("comp", complaintType);
                 jsonBody.put("comments", comment.getText().toString());
                 Log.d("sendfeedback: ", jsonBody.toString());
@@ -535,11 +549,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
 
-                    // Do something when error occurred
                     Log.d("VOLLEY", String.valueOf(error));
-                    //  Toast.makeText(getActivity(), "Oops..Something Went wrong", Toast.LENGTH_SHORT).show();
-                                /*Snackbar snackbar = Snackbar.make(mylayout, "Oops Something Went Wrong", Snackbar.LENGTH_LONG);
-                                snackbar.show();*/
                     error.printStackTrace();
                 }
             });

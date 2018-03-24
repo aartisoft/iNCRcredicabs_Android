@@ -86,7 +86,7 @@ public class CustomScannerCheckOutActivity extends AppCompatActivity  implements
                                 @Override
                                 public void onResponse(JSONObject response) {
 
-                                    Log.i("VOLLEY", "inside onResponse method:login");
+                                    Log.i("VOLLEY", "inside onResponse method:doLogin");
                                     Log.i("VOLLEY", response.toString());
 
 

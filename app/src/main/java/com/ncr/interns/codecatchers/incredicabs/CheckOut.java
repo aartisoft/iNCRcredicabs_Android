@@ -1,6 +1,8 @@
 package com.ncr.interns.codecatchers.incredicabs;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -32,14 +34,16 @@ public class CheckOut extends AppCompatActivity {
     SQLiteDatabase mSqLiteDatabase;
     NcabSQLiteHelper ncabSQLiteHelper;
     private ZXingScannerView scannerView;
-    String ipaddress="192.168.43.45:8080";
-    String url = "http://"+ipaddress+"/iNCRcredicabs_WS/VendorService/checkout";
-    String url_roasterinfo="http://"+ipaddress+"/iNCRcredicabs_WS/VendorService/RoasterDetailsByEmpID";
+    String ipaddress="ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080";
+    String url = "http://"+ipaddress+"/NCAB/VendorService/checkout";
+    String url_roasterinfo="http://"+ipaddress+"/NCAB/VendorService/RoasterDetailsByEmpID";
     String Route_No=null;
     String Pickup_Time=null;
     String Start_Time=null;
-    String Emp_Qlid="AN250279";
+    String Emp_Qlid;
+    SharedPreferences sharedPreferences;
     JSONObject jsonBodyRequest = new JSONObject();
+    private static final String MY_PREFERENCES = "MyPrefs_login";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +77,7 @@ public class CheckOut extends AppCompatActivity {
                             Intent Dashboard_intent= new Intent(getApplicationContext(),Dashboard.class);
                             startActivity(Dashboard_intent);
                         }
-                        Log.i("VOLLEY", "inside onResponse method:login");
+                        Log.i("VOLLEY", "inside onResponse method:doLogin");
                         Log.i("VOLLEY", response.toString());
 
 
@@ -141,14 +145,12 @@ public class CheckOut extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST,
-                        url,
-                        jsonBodyRequest,
+                JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBodyRequest,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
 
-                                Log.i("VOLLEY", "inside onResponse method:login");
+                                Log.i("VOLLEY", "inside onResponse method:doLogin");
                                 Log.i("VOLLEY", response.toString());
 
 
@@ -178,13 +180,11 @@ public class CheckOut extends AppCompatActivity {
             finish();
         }
    }
-
-    public void getData(){
-        Cursor cursor_cabMates = mSqLiteDatabase.rawQuery("SELECT * FROM "+ CabMatesContract.DB_TABLE,null);
-        Cursor cursor_shiftTable = mSqLiteDatabase.rawQuery("SELECT * FROM "+ ShiftContract.DB_TABLE,null);
-        // TODO: 3/22/2018 Fazle's Work
+    public String getEmployeeQlid(){
+        sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+        String Employee_Qlid = sharedPreferences.getString("user_qlid","");
+        return Employee_Qlid;
     }
-
     @Override
     protected void onPause() {
         super.onPause();
