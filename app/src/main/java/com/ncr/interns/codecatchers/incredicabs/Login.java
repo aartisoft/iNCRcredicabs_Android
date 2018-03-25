@@ -71,7 +71,7 @@ public class Login extends AppCompatActivity {
 
     String baseUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080";
     String loginUrl = "/NCAB/EmployeeService/doLogin-android";
-    String mainUrl = baseUrl + loginUrl;
+    String mainUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/EmployeeService/login-android";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,8 +119,8 @@ public class Login extends AppCompatActivity {
                     try {
                         String userIdtoSend = user.getText().toString().trim();
                         String passwordToSend = pass.getText().toString().trim();
-                        jsonBodyRequest.put("qlid",userIdtoSend);
-                        jsonBodyRequest.put("password", passwordToSend);
+                        jsonBodyRequest.put("qlid",user.getText().toString());
+                        jsonBodyRequest.put("password", pass.getText().toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

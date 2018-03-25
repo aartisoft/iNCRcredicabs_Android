@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -397,6 +398,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             if (position == 0) {
                 displayDropLocation_textView.setText("");
                 displayPickupLocation_textView.setVisibility(View.GONE);
+                editText_otherPickUp.setVisibility(View.GONE);
             }
             if (position == 1) {
                // destination_entry_source = "HOME TO ";
@@ -450,6 +452,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 displayDropLocation_textView.setText("");
                 destination_entry_source = "";
                 displayDropLocation_textView.setVisibility(View.GONE);
+                editText_otherDrop.setVisibility(View.GONE);
 
             }
             if (position == 1) {
@@ -595,6 +598,8 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         alertDialog.cancel();
+                                                        startActivity(new Intent(ctx,Dashboard.class));
+
                                                     }
                                                 });
                                                 alertDialog.show();

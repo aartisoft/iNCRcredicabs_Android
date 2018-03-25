@@ -70,8 +70,8 @@ public class FeedbackActivity extends AppCompatActivity {
     EditText cabNumber;
     String Employee_Qlid;
     private static final String MY_PREFERENCES = "MyPrefs_login";
-    private String url = "http://192.168.43.49:8090/Cab_Managemnet/CBMang/complaint";
-    private String getShiftDetailsUrl = "http://192.168.43.49:8090/Cab_Managemnet/CBMang/getCabShift";
+    private String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/Cab_Managemnet/CBMang/complaint";
+    private String getShiftDetailsUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/Cab_Managemnet/CBMang/getCabShift";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -151,6 +151,7 @@ public class Dashboard extends AppCompatActivity
             public void onClick(View v) {
                 Intent intent = new Intent(Dashboard.this, MainRequestActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -161,7 +162,6 @@ public class Dashboard extends AppCompatActivity
                 if(ContextCompat.checkSelfPermission(Dashboard.this, android.Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions(Dashboard.this, new String[] {android.Manifest.permission.CALL_PHONE},CustomDialogClass.REQUEST_CALL);
                 }else{
-//                    startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:9760179474")));
                     CustomDialogClass cdd=new CustomDialogClass(Dashboard.this);
                     cdd.show();
                     cdd.start();
@@ -373,7 +373,8 @@ public class Dashboard extends AppCompatActivity
         final String[] pickuptime = new String[1];
         JSONObject jsonBodynot = new JSONObject();
         try {
-            jsonBodynot.put("Emp_QLID", "AM250914");
+        String Emp_qlid = getEmployeeQlid();
+            jsonBodynot.put("Emp_QLID", Emp_qlid);
         } catch (JSONException e) {
             e.printStackTrace();
         }

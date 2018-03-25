@@ -25,7 +25,7 @@ public class AboutPage extends AppCompatActivity {
         String description = getString(R.string.app_description);
         // TODO: 3/23/2018 Add NCR ICON
         View aboutPage = new mehdi.sakout.aboutpage.AboutPage(this)
-                .isRTL(false).setImage(R.drawable.ic_contact_transport_sidemenu).
+                .isRTL(false).setImage(R.mipmap.ic_launcher_ncr).
                         setDescription(description)
 
                 .addItem(new Element().setTitle("Developed by iNCRedible Interns 2018 batch."))

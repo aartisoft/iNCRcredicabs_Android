@@ -59,7 +59,7 @@ public class Approve extends BroadcastReceiver {
 
                         try {
                             if (response.getString("status").equalsIgnoreCase("success")) {
-                                AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                                /*AlertDialog alertDialog = new AlertDialog.Builder(context).create();
                                 alertDialog.setTitle("Response");
                                 alertDialog.setMessage("Your response is Submitted");
                                 alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
@@ -68,10 +68,10 @@ public class Approve extends BroadcastReceiver {
                                                 dialog.dismiss();
                                             }
                                         });
-                                alertDialog.show();
+                                alertDialog.show();*/
                                 Toast.makeText(context, "Your response is Submitted", Toast.LENGTH_LONG).show();
                             } else {if (response.getString("status").equalsIgnoreCase("Already")) {
-                                AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                                /*AlertDialog alertDialog = new AlertDialog.Builder(context).create();
                                 alertDialog.setTitle("Response");
                                 alertDialog.setMessage("Response is Already Submitted");
                                 alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
@@ -80,10 +80,10 @@ public class Approve extends BroadcastReceiver {
                                                 dialog.dismiss();
                                             }
                                         });
-                                alertDialog.show();
+                                alertDialog.show();*/
                                 Toast.makeText(context, "Response is Already Submitted", Toast.LENGTH_LONG).show();
                             }else{
-                                AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                                /*AlertDialog alertDialog = new AlertDialog.Builder(context).create();
                                 alertDialog.setTitle("Response");
                                 alertDialog.setMessage("Response is Already Submitted");
                                 alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
@@ -92,7 +92,7 @@ public class Approve extends BroadcastReceiver {
                                                 dialog.dismiss();
                                             }
                                         });
-                                alertDialog.show();
+                                alertDialog.show();*/
                                 Toast.makeText(context, "Failed to submit", Toast.LENGTH_LONG).show();
                             }}
                         } catch (JSONException e) {

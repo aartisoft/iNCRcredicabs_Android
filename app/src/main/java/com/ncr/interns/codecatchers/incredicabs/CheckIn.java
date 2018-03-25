@@ -77,9 +77,10 @@ public class CheckIn extends AppCompatActivity {
                         // Do something when error occurred
                         Log.d("VOLLEY", "Something went wrong");
                         Toast.makeText(getApplicationContext(), "No Network Connection", Toast.LENGTH_LONG).show();
-                        Intent Dashboard_intent = new Intent(getApplicationContext(), Dashboard.class);
-                        startActivity(Dashboard_intent);
+                        /*Intent Dashboard_intent = new Intent(getApplicationContext(), Dashboard.class);
+                        startActivity(Dashboard_intent);*/
                         error.printStackTrace();
+                        finish();
                     }
                 });
         RESTService.getInstance(getApplicationContext()).addToRequestQueue(jsonObjRequest);
@@ -172,10 +173,10 @@ public class CheckIn extends AppCompatActivity {
                             }
                         });
                 RESTService.getInstance(getApplicationContext()).addToRequestQueue(jsonObjRequest);
-
-                Intent Dashboard_intent = new Intent(getApplicationContext(), Dashboard.class);
+                finish();
+                /*Intent Dashboard_intent = new Intent(getApplicationContext(), Dashboard.class);
                 startActivity(Dashboard_intent);
-
+*/
             } else {
                 Toast.makeText(getApplicationContext(), "CheckIn failed,Contact Admin", Toast.LENGTH_LONG).show();
             }
