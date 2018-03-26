@@ -3,6 +3,7 @@ package com.ncr.interns.codecatchers.incredicabs;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -48,6 +49,7 @@ import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ShiftContract;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -64,20 +66,22 @@ public class Dashboard extends AppCompatActivity
     NcabSQLiteHelper ncabSQLiteHelper;
     Cursor cursor;
     Button button_sos;
-    String number,Pickuptime;
+    String number, Pickuptime = "14:10";
     String Employee_Qlid;
     String Employee_Name;
     String Employee_HomeAddress;
     String Employee_Contact_number;
+    CabMatesAdapter adapter;
 
     boolean checkCon;
     String mainUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/RoasterDetailsByEmpID"; //
+    String loginUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/EmployeeService/login-android";
     SharedPreferences sharedPreferences;
     private static final String MY_PREFERENCES = "MyPrefs_login";
     Context context = this;
     private static final String TAG = "Dashboard Debugging";
     private static final int REQUEST_CALL = 1;
-    TextView Emp_QLID_textView,Emp_Name_textView,Emp_HomeAddress_textView,Emp_ContactNum_textView;
+    TextView Emp_QLID_textView, Emp_Name_textView, Emp_HomeAddress_textView, Emp_ContactNum_textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +103,9 @@ public class Dashboard extends AppCompatActivity
         Emp_HomeAddress_textView.setText(String.format("Current Address : %s", Employee_HomeAddress));
         Emp_ContactNum_textView.setText(String.format("Contact Number:- %s", Employee_Contact_number));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        CabMatesAdapter adapter = new CabMatesAdapter(getCabMatesDetails(), this);
+
+        adapter = new CabMatesAdapter(getCabMatesDetails(), this);
+
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.addItemDecoration(new
                 DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -168,7 +174,7 @@ public class Dashboard extends AppCompatActivity
             public void onClick(View v) {
                 Intent intent = new Intent(Dashboard.this, MainRequestActivity.class);
                 startActivity(intent);
-                finish();
+
             }
         });
 
@@ -176,17 +182,17 @@ public class Dashboard extends AppCompatActivity
             @Override
             public void onClick(View v) {
 
-                if(ContextCompat.checkSelfPermission(Dashboard.this, android.Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(Dashboard.this, new String[] {android.Manifest.permission.CALL_PHONE},CustomDialogClass.REQUEST_CALL);
-                }else{
-                    CustomDialogClass cdd=new CustomDialogClass(Dashboard.this);
+                if (ContextCompat.checkSelfPermission(Dashboard.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(Dashboard.this, new String[]{android.Manifest.permission.CALL_PHONE}, CustomDialogClass.REQUEST_CALL);
+                } else {
+                    CustomDialogClass cdd = new CustomDialogClass(Dashboard.this);
                     cdd.show();
                     cdd.start();
                 }
             }
         });
 
-        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -199,7 +205,7 @@ public class Dashboard extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -221,14 +227,97 @@ public class Dashboard extends AppCompatActivity
             number = "9998764636";
             makePhoneCall(number);
         }
-        if(id == R.id.refresh){
+        if (id == R.id.refresh) {
             // TODO: 3/23/2018 Yet to implement
 
-            Snackbar snackbar = Snackbar.make(linearLayout,"Refresh",Snackbar.LENGTH_LONG);
-            snackbar.show();
+            JSONObject jsonObject = new JSONObject();
+            String shared_pref_userName = sharedPreferences.getString("user_qlid", "");
+            String shared_pref_password = sharedPreferences.getString("user_password", "");
+            try {
+                jsonObject.put("qlid", shared_pref_userName);
+                jsonObject.put("password", shared_pref_password);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, loginUrl, jsonObject,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            Log.i("VOLLEY", "inside onResponse method: Login");
+                            Log.i("VOLLEY", response.toString());
+
+                            try {
+                                if (response.getString("success").equalsIgnoreCase("true")) {
+                                    mSqLiteDatabase.execSQL("DELETE FROM " + CabMatesContract.DB_TABLE);
+                                    parseJSON(response);
+                                    Toast.makeText(context, "Refresh Done", Toast.LENGTH_SHORT).show();
+                                    /*adapter = new CabMatesAdapter(getCabMatesDetails(), Dashboard.this);
+                                    adapter.notifyDataSetChanged();*/
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // Do something when error occurred
+                            Log.d("VOLLEY", "Something went wrong");
+                            error.printStackTrace();
+                        }
+                    });
+
+            RESTService.getInstance(Dashboard.this).addToRequestQueue(jsonObjRequest);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void parseJSON(JSONObject response) {
+
+        Log.d(TAG, "parseJSON: Response:- " + response);
+
+        try {
+            //<editor-fold desc="Yet to Implement">
+            JSONArray cabMates = response.getJSONArray("rosterInfo");
+            for (int i = 0; i < cabMates.length(); i++) {
+
+                try {
+                    JSONObject cabMateJSON = cabMates.getJSONObject(i);
+                    String CabMate_Qlid = cabMateJSON.getString("Qlid");
+                    String CabMate_name = cabMateJSON.getString("f_name") + " " + cabMateJSON.getString("l_name");
+                    String CabMate_contactNumber = cabMateJSON.getString("e_mob");
+                    String CabMate_address = cabMateJSON.getString("p_a");
+//                    String CabMate_pickupTime = cabMateJSON.getString("pickup_time");
+                    ContentValues cabMateValues = new ContentValues();
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_QLID, CabMate_Qlid);
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_NAME, CabMate_name);
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER, CabMate_contactNumber);
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_ADDRESS, CabMate_address);
+                    //                  cabMateValues.put(CabMatesContract.COLUMN_CABMATE_PICKUPTIME,CabMate_pickupTime);
+                    mSqLiteDatabase.insert(CabMatesContract.DB_TABLE, null, cabMateValues);
+                    adapter = new CabMatesAdapter(getCabMatesDetails(), Dashboard.this);
+
+                    mRecyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+
+                    Log.d(TAG, "parseJSON: Data Inserted to Cabmate Table row :- " + i);
+                }
+                Log.d(TAG, "parseJSON: Data Inserted to Cabmate Table row :- " + i);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 
@@ -256,7 +345,7 @@ public class Dashboard extends AppCompatActivity
             //</editor-fold>
 
         } else if (id == R.id.nav_about_developers) {
-           startActivity(new Intent(Dashboard.this,AboutPage.class));
+            startActivity(new Intent(Dashboard.this, AboutPage.class));
 
         } else if (id == R.id.LogOut) {
 
@@ -323,7 +412,7 @@ public class Dashboard extends AppCompatActivity
         if (requestCode == REQUEST_CALL) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 CabMatesAdapter adapter = new CabMatesAdapter();
-            makePhoneCall(number);
+                makePhoneCall(number);
             } else {
                 Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
             }
@@ -390,9 +479,9 @@ public class Dashboard extends AppCompatActivity
         final String[] pickuptime = new String[1];
         JSONObject jsonBodynot = new JSONObject();
         try {
-        String Emp_qlid = getEmployeeQlid();
+            String Emp_qlid = getEmployeeQlid();
             jsonBodynot.put("Emp_Qlid", Emp_qlid);
-            Log.d(TAG, "gettingPickuptime: Emp_QLID:- "+Emp_qlid);
+            Log.d(TAG, "gettingPickuptime: Emp_QLID:- " + Emp_qlid);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -404,20 +493,20 @@ public class Dashboard extends AppCompatActivity
                 Log.i("VOLLEY", "inside onResponse method:UnscheduledRequest");
                 Log.i("VOLLEY", response.toString());
                 try {
-                   js[0] = new JSONObject(response.getString("result"));
+                    js[0] = new JSONObject(response.getString("result"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
                 try {
-                    if ( js[0].getString("Pickup_Time")!=null) {
-                        pickuptime[0] =js[0].getString("Pickup_Time");
+                    if (js[0].getString("Pickup_Time") != "") {
+                        pickuptime[0] = js[0].getString("Pickup_Time");
                         Pickuptime = pickuptime[0];
                         cabMatesNotification(Pickuptime);
 
                         // Toast.makeText(Dashboard.this, "Your request is Submitted", Toast.LENGTH_LONG).show();
                     } else {
-                        //Toast.makeText(Dashboard.this, "Failed to make request", Toast.LENGTH_LONG).show();
+                        cabMatesNotification("14:30");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -443,15 +532,14 @@ public class Dashboard extends AppCompatActivity
     //</editor-fold>
 
 
-
-    public String getEmployeeQlid(){
-        sharedPreferences = getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
-        String Employee_Qlid = sharedPreferences.getString("user_qlid","");
+    public String getEmployeeQlid() {
+        sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+        String Employee_Qlid = sharedPreferences.getString("user_qlid", "");
         return Employee_Qlid;
     }
 
     //<editor-fold desc="Method to get the Current Employee data from the database to show in dashboard">
-    public void getEmployeeData(){
+    public void getEmployeeData() {
         Cursor c = mSqLiteDatabase.rawQuery("SELECT * FROM " + EmployeeContract.DB_TABLE, null);
         while (c.moveToNext()) {
             Employee_Qlid = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_EMP_QLID));
@@ -459,7 +547,7 @@ public class Dashboard extends AppCompatActivity
                     + c.getString(c.getColumnIndex(EmployeeContract.COLUMN_LAST_NAME));
             Employee_Contact_number = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_CONTACT_NUMBER));
             Employee_HomeAddress = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_HOME_ADDRESS));
-            }
+        }
         c.close();
 
     }

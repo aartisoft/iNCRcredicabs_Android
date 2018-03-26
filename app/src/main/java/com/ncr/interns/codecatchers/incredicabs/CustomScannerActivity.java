@@ -1,5 +1,7 @@
 package com.ncr.interns.codecatchers.incredicabs;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.app.Activity;
@@ -40,11 +42,13 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
     String Route_No=null;
     String Pickup_Time=null;
     String Start_Time=null;
-    String Emp_Qlid="AN250279";
-    String ipaddress="192.168.43.254:8080";
+    String Emp_Qlid;
+    String ipaddress="http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080";
     String url = "http://"+ipaddress+"/NCAB/AndroidService/checkin";
     String url_roasterinfo="http://"+ipaddress+"/NCAB/AndroidService/RoasterDetailsByEmpID";
     JsonObjectRequest jsonObjRequest=null;
+    private static final String MY_PREFERENCES = "MyPrefs_login";
+    SharedPreferences sharedPreferences;
     JsonObjectRequest jsonObjRequest2=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,7 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
         manualEntryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Emp_Qlid = getEmployeeQlid();
                 Start_Time="10:00:00";
                 Pickup_Time="8:00";
                 Route_No="001";
@@ -200,5 +205,10 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
     @Override
     public void onTorchOff() {
         //   switchFlashlightButton.setText(R.string.turn_on_flashlight);
+    }
+    public String getEmployeeQlid(){
+        sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+        String Employee_Qlid = sharedPreferences.getString("user_qlid","");
+        return Employee_Qlid;
     }
 }

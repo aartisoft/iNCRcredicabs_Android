@@ -71,7 +71,7 @@ public class FeedbackActivity extends AppCompatActivity {
     String Employee_Qlid;
     private static final String MY_PREFERENCES = "MyPrefs_login";
     private String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCR/RosterService/complaint";
-    private String getShiftDetailsUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCR/RosterService/getCabShift";
+    private String getShiftDetailsUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/RosterService/getCabShift";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +84,7 @@ public class FeedbackActivity extends AppCompatActivity {
         comment = findViewById(R.id.text_reasonForRequest);
         datePicker = findViewById(R.id.text_fromDate);
         datePicker.setOnClickListener(new View.OnClickListener() {
-
-            @Override
+         @Override
             public void onClick(View view) {
 
                 methodToSelectDate(datePicker);
@@ -104,7 +103,7 @@ public class FeedbackActivity extends AppCompatActivity {
 
         prepareSpinnerData();
 
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, R.layout.custom_spinner, DropTypeList);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, R.layout.custom_spinner, DropTypeList);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerDropType.setOnItemSelectedListener(new DropTypeSpinner());
         spinnerDropType.setAdapter(adapter2);
@@ -142,21 +141,22 @@ public class FeedbackActivity extends AppCompatActivity {
         try {
             jsonBody.put("qlid", Employee_Qlid);
             jsonBody.put("date", startDate);
+
             Log.d("getcabshift: ", jsonBody.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
+
+        } catch (Exception e) {
+            System.out.println(String.valueOf(e));
         }
-        final JSONArray jsonArray =new JSONArray();
+
+        final JSONArray jsonArray = new JSONArray();
         jsonArray.put(jsonBody);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.POST,
-                getShiftDetailsUrl,
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, getShiftDetailsUrl,
                 jsonArray,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        cabshift=response;
-                        Log.d("getcabshift: ",cabshift.toString());
+                        cabshift = response;
+                        Log.d("Inside onResponseMethod","getCabShiftResponse "+cabshift.toString());
                     }
                 },
                 new Response.ErrorListener(){
@@ -296,8 +296,10 @@ public class FeedbackActivity extends AppCompatActivity {
                             cabshift.getJSONObject(0).getString("shift").contains("Shift")
                             ||cabshift.length()>0&&
                             cabshift.getJSONObject(0).getString("shift").contains("Regular")){
+
                         shiftTiming.setText(cabshift.getJSONObject(0).getString("shift"));
                         cabNumber.setText(cabshift.getJSONObject(0).getString("cabno"));
+
                     }
                     else if(cabshift.length()>1&&
                             cabshift.getJSONObject(1).getString("shift").contains("Shift")
@@ -323,13 +325,15 @@ public class FeedbackActivity extends AppCompatActivity {
                 selectType = "Unschedule";
                 try {
                     if(cabshift.length()>0&&
-                            cabshift.getJSONObject(0).getString("shift").contains("Unscheduled")){
+                            cabshift.getJSONObject(0).getString("shift").contains("Unscheduled"))
+                    {
                         shiftTiming.setText(cabshift.getJSONObject(0).getString("shift"));
                         cabNumber.setText(cabshift.getJSONObject(0).getString("cabno"));
                         Log.d("Unschedule: ", "inside Unschedule 1");
                     }
                     else if(cabshift.length()>1&&
-                            cabshift.getJSONObject(1).getString("shift").contains("Unscheduled")){
+                            cabshift.getJSONObject(1).getString("shift").contains("Unscheduled"))
+                    {
                         shiftTiming.setText(cabshift.getJSONObject(1).getString("shift"));
                         cabNumber.setText(cabshift.getJSONObject(1).getString("cabno"));
                         Log.d("Unscheduled: ", "inside Unscheduled 2");
