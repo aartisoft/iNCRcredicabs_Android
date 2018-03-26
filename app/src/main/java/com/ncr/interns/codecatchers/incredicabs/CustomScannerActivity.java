@@ -42,8 +42,8 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
     String Start_Time=null;
     String Emp_Qlid="AN250279";
     String ipaddress="192.168.43.254:8080";
-    String url = "http://"+ipaddress+"/iNCRcredicabs_WS/VendorService/checkin";
-    String url_roasterinfo="http://"+ipaddress+"/iNCRcredicabs_WS/VendorService/RoasterDetailsByEmpID";
+    String url = "http://"+ipaddress+"/NCAB/AndroidService/checkin";
+    String url_roasterinfo="http://"+ipaddress+"/NCAB/AndroidService/RoasterDetailsByEmpID";
     JsonObjectRequest jsonObjRequest=null;
     JsonObjectRequest jsonObjRequest2=null;
     @Override

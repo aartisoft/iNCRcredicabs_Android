@@ -32,9 +32,8 @@ public class CheckIn extends AppCompatActivity {
     String Route_No = null;
     String Pickup_Time = null;
     String Start_Time = null;
-    String ipaddress = "ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080";
-    String url = "http://" + ipaddress + "/NCAB/VendorService/checkin";
-    String url_roasterinfo = "http://" + ipaddress + "/NCAB/VendorService/RoasterDetailsByEmpID";
+    String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/checkin";
+    String url_roasterinfo = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/RoasterDetailsByEmpID";
     String Emp_Qlid;
     String Check_In=null;
     private static final String MY_PREFERENCES = "MyPrefs_login";
@@ -43,6 +42,7 @@ public class CheckIn extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         openScanner();
+
         Emp_Qlid = getEmployeeQlid();
         JSONObject jsonBodyRequest = new JSONObject();
         try {
@@ -50,10 +50,8 @@ public class CheckIn extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST,
-                url_roasterinfo,
-                jsonBodyRequest,
-                new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, url_roasterinfo,
+                jsonBodyRequest, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {

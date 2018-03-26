@@ -34,9 +34,8 @@ public class CheckOut extends AppCompatActivity {
     SQLiteDatabase mSqLiteDatabase;
     NcabSQLiteHelper ncabSQLiteHelper;
     private ZXingScannerView scannerView;
-    String ipaddress="ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080";
-    String url = "http://"+ipaddress+"/NCAB/VendorService/checkout";
-    String url_roasterinfo="http://"+ipaddress+"/NCAB/VendorService/RoasterDetailsByEmpID";
+    String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/checkout";
+    String url_roasterinfo="http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/RoasterDetailsByEmpID";
     String Route_No=null;
     String Pickup_Time=null;
     String Start_Time=null;

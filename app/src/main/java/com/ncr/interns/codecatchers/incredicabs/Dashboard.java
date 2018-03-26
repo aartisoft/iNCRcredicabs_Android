@@ -33,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -43,6 +44,7 @@ import com.ncr.interns.codecatchers.incredicabs.Adapter.*;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ContactsContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeCabMatesDetails;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ShiftContract;
 
@@ -62,16 +64,20 @@ public class Dashboard extends AppCompatActivity
     NcabSQLiteHelper ncabSQLiteHelper;
     Cursor cursor;
     Button button_sos;
-    String number;
-    String Pickuptime;
+    String number,Pickuptime;
+    String Employee_Qlid;
+    String Employee_Name;
+    String Employee_HomeAddress;
+    String Employee_Contact_number;
+
     boolean checkCon;
-    String mainUrl = " "; // TODO: 3/24/2018 Get the URL from abhishek
+    String mainUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/RoasterDetailsByEmpID"; //
     SharedPreferences sharedPreferences;
     private static final String MY_PREFERENCES = "MyPrefs_login";
     Context context = this;
     private static final String TAG = "Dashboard Debugging";
     private static final int REQUEST_CALL = 1;
-
+    TextView Emp_QLID_textView,Emp_Name_textView,Emp_HomeAddress_textView,Emp_ContactNum_textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +85,19 @@ public class Dashboard extends AppCompatActivity
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         ncabSQLiteHelper = new NcabSQLiteHelper(this);
         mSqLiteDatabase = ncabSQLiteHelper.getWritableDatabase();
         getIdofComponents();
+        getEmployeeData();
+        Emp_QLID_textView = findViewById(R.id.Emp_QLid);
+        Emp_Name_textView = findViewById(R.id.Emp_Name);
+        Emp_HomeAddress_textView = findViewById(R.id.Emp_homeAddress);
+        Emp_ContactNum_textView = findViewById(R.id.Emp_contactNumber);
+        Emp_QLID_textView.setText(String.format("Emp.ID%s", Employee_Qlid));
+        Emp_Name_textView.setText(String.format("Emp Name: %s", Employee_Name));
+        Emp_HomeAddress_textView.setText(String.format("Current Address : %s", Employee_HomeAddress));
+        Emp_ContactNum_textView.setText(String.format("Contact Number:- %s", Employee_Contact_number));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         CabMatesAdapter adapter = new CabMatesAdapter(getCabMatesDetails(), this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -90,13 +106,14 @@ public class Dashboard extends AppCompatActivity
         mRecyclerView.setAdapter(adapter);
         checkCon = checkConnection(Dashboard.this);
 
+
        /* cabMatesNotification();//Abhishek Alarm manager
         getCabMateShiftTimeNew();
 */
         checkIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkCon == true) {
+                if (checkCon) {
                     Intent checkIn_intent = new Intent(Dashboard.this, CheckIn.class);
                     startActivity(checkIn_intent);
                 } else {
@@ -119,7 +136,7 @@ public class Dashboard extends AppCompatActivity
         checkOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkCon == true) {
+                if (checkCon) {
                     Intent checkOut_intent = new Intent(Dashboard.this, CheckOut.class);
                     startActivity(checkOut_intent);
                 } else {
@@ -206,6 +223,7 @@ public class Dashboard extends AppCompatActivity
         }
         if(id == R.id.refresh){
             // TODO: 3/23/2018 Yet to implement
+
             Snackbar snackbar = Snackbar.make(linearLayout,"Refresh",Snackbar.LENGTH_LONG);
             snackbar.show();
         }
@@ -329,7 +347,6 @@ public class Dashboard extends AppCompatActivity
     }
     //</editor-fold>
 
-/*
     //<editor-fold desc="method CabmatesNotification">
     public void cabMatesNotification(String Pickuptim) {
         String cabMatesShiftTime = Pickuptim;
@@ -369,12 +386,13 @@ public class Dashboard extends AppCompatActivity
 
     //<editor-fold desc="gettingPickupTime">
     private void gettingPickuptime() {
-
+        final JSONObject[] js = new JSONObject[1];
         final String[] pickuptime = new String[1];
         JSONObject jsonBodynot = new JSONObject();
         try {
         String Emp_qlid = getEmployeeQlid();
-            jsonBodynot.put("Emp_QLID", Emp_qlid);
+            jsonBodynot.put("Emp_Qlid", Emp_qlid);
+            Log.d(TAG, "gettingPickuptime: Emp_QLID:- "+Emp_qlid);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -385,12 +403,18 @@ public class Dashboard extends AppCompatActivity
             public void onResponse(JSONObject response) {
                 Log.i("VOLLEY", "inside onResponse method:UnscheduledRequest");
                 Log.i("VOLLEY", response.toString());
+                try {
+                   js[0] = new JSONObject(response.getString("result"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 try {
-                    if (response.getString("status").equalsIgnoreCase("success")) {
-                        pickuptime[0] =response.getString("Pickup_Time");
+                    if ( js[0].getString("Pickup_Time")!=null) {
+                        pickuptime[0] =js[0].getString("Pickup_Time");
                         Pickuptime = pickuptime[0];
                         cabMatesNotification(Pickuptime);
+
                         // Toast.makeText(Dashboard.this, "Your request is Submitted", Toast.LENGTH_LONG).show();
                     } else {
                         //Toast.makeText(Dashboard.this, "Failed to make request", Toast.LENGTH_LONG).show();
@@ -417,7 +441,6 @@ public class Dashboard extends AppCompatActivity
 
     }
     //</editor-fold>
-*/
 
 
 
@@ -426,6 +449,21 @@ public class Dashboard extends AppCompatActivity
         String Employee_Qlid = sharedPreferences.getString("user_qlid","");
         return Employee_Qlid;
     }
+
+    //<editor-fold desc="Method to get the Current Employee data from the database to show in dashboard">
+    public void getEmployeeData(){
+        Cursor c = mSqLiteDatabase.rawQuery("SELECT * FROM " + EmployeeContract.DB_TABLE, null);
+        while (c.moveToNext()) {
+            Employee_Qlid = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_EMP_QLID));
+            Employee_Name = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_FIRST_NAME))
+                    + c.getString(c.getColumnIndex(EmployeeContract.COLUMN_LAST_NAME));
+            Employee_Contact_number = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_CONTACT_NUMBER));
+            Employee_HomeAddress = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_HOME_ADDRESS));
+            }
+        c.close();
+
+    }
+    //</editor-fold>
 
 
     public static boolean checkConnection(Context context) {

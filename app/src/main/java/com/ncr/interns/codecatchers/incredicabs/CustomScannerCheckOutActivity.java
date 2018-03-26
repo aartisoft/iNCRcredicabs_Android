@@ -35,7 +35,7 @@ public class CustomScannerCheckOutActivity extends AppCompatActivity  implements
     String Start_Time=null;
     String Emp_Qlid="AN250279";
     String ipaddress="192.168.43.45:8080";
-    String url = "http://"+ipaddress+"/iNCRcredicabs_WS/VendorService/checkout";
+    String url = "http://"+ipaddress+"/NCAB/AndroidService/checkout";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

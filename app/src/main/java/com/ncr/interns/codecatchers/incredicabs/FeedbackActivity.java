@@ -70,8 +70,8 @@ public class FeedbackActivity extends AppCompatActivity {
     EditText cabNumber;
     String Employee_Qlid;
     private static final String MY_PREFERENCES = "MyPrefs_login";
-    private String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/Cab_Managemnet/CBMang/complaint";
-    private String getShiftDetailsUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/Cab_Managemnet/CBMang/getCabShift";
+    private String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCR/RosterService/complaint";
+    private String getShiftDetailsUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCR/RosterService/getCabShift";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,14 +111,13 @@ public class FeedbackActivity extends AppCompatActivity {
         spinnerDropType = findViewById(R.id.options_drop);
         spinnerShiftType = findViewById(R.id.options_type);
 
-        final ArrayAdapter<String> shiftTypeSpinnerAdapter = new ArrayAdapter<String>(this, R.layout.custom_spinner, ShiftTypeSpinner);
+        final ArrayAdapter<String> shiftTypeSpinnerAdapter = new ArrayAdapter<>(this, R.layout.custom_spinner, ShiftTypeSpinner);
         shiftTypeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerShiftType.setAdapter(shiftTypeSpinnerAdapter);
         spinnerShiftType.setOnItemSelectedListener(new ShiftTypeSpinner());
 
         complaint_type_spinner = findViewById(R.id.options_spinner);
-        //complaint_type_spinner.setOnItemSelectedListener(this);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.custom_spinner, ComplaintsTypeSpinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.custom_spinner, ComplaintsTypeSpinner);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         complaint_type_spinner.setOnItemSelectedListener(new ComplaintsTypeSpinner());
         complaint_type_spinner.setAdapter(adapter);
@@ -169,10 +168,6 @@ public class FeedbackActivity extends AppCompatActivity {
                     }
                 }
         );
-
-        jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         RESTService.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
 
@@ -284,10 +279,6 @@ public class FeedbackActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    public boolean validation() {
-
-        return false;
-    }
 
     class ShiftTypeSpinner implements AdapterView.OnItemSelectedListener {
 
@@ -466,13 +457,13 @@ public class FeedbackActivity extends AppCompatActivity {
 
         ShiftTypeSpinner = new ArrayList<String>();
         ShiftTypeSpinner.add("Select");
-        ShiftTypeSpinner.add("scheduled");
+        ShiftTypeSpinner.add("Scheduled");
         ShiftTypeSpinner.add("Unscheduled");
 
     }
 
     public void sendfeedback() {
-        Log.d("send feed back: ", "inside send feed back ");
+        Log.d("Send feed back: ", "inside send feed back ");
 
         if (spinnerDropType.getSelectedItem().toString() == "Select" ||
                 complaint_type_spinner.getSelectedItem().toString() == "Select" ||
