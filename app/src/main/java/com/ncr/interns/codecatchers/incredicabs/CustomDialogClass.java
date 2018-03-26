@@ -40,6 +40,7 @@ public class CustomDialogClass extends Dialog implements
     private int currentNum;
     private int numLength;
     Context mContext,appContext;
+    String sosUrl = "";
     MediaPlayer mp = MediaPlayer.create(getContext(),R.raw.alert);
 
     public CustomDialogClass(Activity a) {

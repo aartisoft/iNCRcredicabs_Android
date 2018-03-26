@@ -468,8 +468,12 @@ public class Dashboard extends AppCompatActivity
     //<editor-fold desc="OnStart">
     @Override
     protected void onStart() {
-        gettingPickuptime();
+        if(getSharedPreferences(null,MODE_PRIVATE).getBoolean("alarm",true))
+            gettingPickuptime();
+        else
+            getSharedPreferences(null,MODE_PRIVATE).edit().putBoolean("alarm",false).apply();
         super.onStart();
+
     }
     //</editor-fold>
 

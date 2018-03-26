@@ -321,15 +321,15 @@ public class FeedbackActivity extends AppCompatActivity {
                 }
             }
             if (i == 2) {
-                Log.d("Unschedule: ", "inside Unschedule");
-                selectType = "Unschedule";
+                Log.d("Unscheduled: ", "inside Unscheduled");
+                selectType = "Unscheduled";
                 try {
                     if(cabshift.length()>0&&
-                            cabshift.getJSONObject(0).getString("shift").contains("Unscheduled"))
+                            cabshift.getJSONObject(0).getString("shift").contains("UnScheduled"))
                     {
                         shiftTiming.setText(cabshift.getJSONObject(0).getString("shift"));
                         cabNumber.setText(cabshift.getJSONObject(0).getString("cabno"));
-                        Log.d("Unschedule: ", "inside Unschedule 1");
+                        Log.d("Unscheduled: ", "inside Unscheduled 1");
                     }
                     else if(cabshift.length()>1&&
                             cabshift.getJSONObject(1).getString("shift").contains("Unscheduled"))
