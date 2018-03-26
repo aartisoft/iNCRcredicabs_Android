@@ -1,7 +1,9 @@
 package com.ncr.interns.codecatchers.incredicabs;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -476,9 +478,19 @@ public class FeedbackActivity extends AppCompatActivity {
         }
 
         if (isvalid()) {
-            Toast.makeText(this, "Submitted", Toast.LENGTH_SHORT).show();
-            Snackbar snackbar = Snackbar.make(mylayout,"Submitted",Snackbar.LENGTH_LONG);
-            snackbar.show();
+            final AlertDialog alertDialog = new AlertDialog.Builder(FeedbackActivity.this).create();
+            alertDialog.setTitle("Alert!!");
+            alertDialog.setMessage("Your Request is Successfully Submitted");
+            alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+            alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    alertDialog.cancel();
+                    startActivity(new Intent(FeedbackActivity.this,Dashboard.class));
+
+                }
+            });
+            alertDialog.show();
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override

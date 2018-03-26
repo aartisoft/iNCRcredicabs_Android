@@ -115,7 +115,7 @@ public class CustomScannerCheckOutActivity extends AppCompatActivity  implements
 
                                     Log.i("VOLLEY", "inside onResponse method:doLogin");
                                     Log.i("VOLLEY", response.toString());
-                                    Toast.makeText(CustomScannerCheckOutActivity.this, ""+response.toString(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(CustomScannerCheckOutActivity.this, "CheckOut Successfull", Toast.LENGTH_SHORT).show();
 
 
                                 }
@@ -125,6 +125,7 @@ public class CustomScannerCheckOutActivity extends AppCompatActivity  implements
                                 public void onErrorResponse(VolleyError error) {
                                     // Do something when error occurred
                                     Log.d("VOLLEY", "Something went wrong");
+                                    Toast.makeText(CustomScannerCheckOutActivity.this, "CheckOut UnSuccesfull", Toast.LENGTH_SHORT).show();
                                     error.printStackTrace();
                                 }
                             });

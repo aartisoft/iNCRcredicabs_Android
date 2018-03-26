@@ -128,7 +128,7 @@ public class Dashboard extends AppCompatActivity
             c.moveToNext();
         }
         //</editor-fold>
-        String currentShift = "Current Shift is "+Start_Time+" to "+End_Time;
+        String currentShift = "Current Shift is " + Start_Time + " to " + End_Time;
         Current_shift = findViewById(R.id.textView_currentShift);
         Current_shift.setText(currentShift);
        /* cabMatesNotification();//Abhishek Alarm manager
@@ -138,18 +138,17 @@ public class Dashboard extends AppCompatActivity
             @Override
             public void onClick(View v) {
 
-                if (Start_Time == null)
-                {
-                    Snackbar snackbar = Snackbar.make(linearLayout,"Server Error",Snackbar.LENGTH_LONG);
+                if (Start_Time == null) {
+                    Snackbar snackbar = Snackbar.make(linearLayout, "Server Error", Snackbar.LENGTH_LONG);
                     snackbar.show();
                     return;
                 }
 
                 if (checkCon) {
                     Intent checkIn_intent = new Intent(Dashboard.this, CheckIn.class);
-                    checkIn_intent.putExtra("pickup",Pickup_Time);
-                    checkIn_intent.putExtra("start_time",Start_Time);
-                    checkIn_intent.putExtra("route_no",Route_No);
+                    checkIn_intent.putExtra("pickup", Pickup_Time);
+                    checkIn_intent.putExtra("start_time", Start_Time);
+                    checkIn_intent.putExtra("route_no", Route_No);
                     startActivity(checkIn_intent);
                 } else {
                     final AlertDialog alertDialog = new AlertDialog.Builder(Dashboard.this).create();
@@ -172,9 +171,8 @@ public class Dashboard extends AppCompatActivity
             @Override
             public void onClick(View v) {
 
-                if (Start_Time == null)
-                {
-                    Snackbar snackbar = Snackbar.make(linearLayout,"Server Error",Snackbar.LENGTH_LONG);
+                if (Start_Time == null) {
+                    Snackbar snackbar = Snackbar.make(linearLayout, "Server Error", Snackbar.LENGTH_LONG);
                     snackbar.show();
                     return;
                 }
@@ -222,7 +220,7 @@ public class Dashboard extends AppCompatActivity
                 if (ContextCompat.checkSelfPermission(Dashboard.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(Dashboard.this, new String[]{android.Manifest.permission.CALL_PHONE}, CustomDialogClass.REQUEST_CALL);
                 } else {
-                    CustomDialogClass cdd = new CustomDialogClass(Dashboard.this,context);
+                    CustomDialogClass cdd = new CustomDialogClass(Dashboard.this, context);
                     cdd.show();
                     cdd.start();
                 }
@@ -265,16 +263,16 @@ public class Dashboard extends AppCompatActivity
             makePhoneCall(number);
         }
         if (id == R.id.refresh) {
-            String shared_pref_userName = sharedPreferences.getString("user_qlid", "");
-            String shared_pref_password = sharedPreferences.getString("user_password", "");
+/*
+            sharedPreferences = getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
+            String userQlid = sharedPreferences.getString("user_qlid", "");
+            String userPassword = sharedPreferences.getString("user_password", "");
             try {
-                jsonObject.put("qlid", shared_pref_userName);
-                jsonObject.put("password", shared_pref_password);
+                jsonObject.put("qlid", userQlid);
+                jsonObject.put("password", userPassword);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
             JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, loginUrl, jsonObject,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -288,8 +286,8 @@ public class Dashboard extends AppCompatActivity
                                     mSqLiteDatabase.execSQL("DELETE FROM " + CabMatesContract.DB_TABLE);
                                     parseJSON(response);
                                     Toast.makeText(context, "Refresh Done", Toast.LENGTH_SHORT).show();
-                                    /*adapter = new CabMatesAdapter(getCabMatesDetails(), Dashboard.this);
-                                    adapter.notifyDataSetChanged();*/
+                                    adapter = new CabMatesAdapter(getCabMatesDetails(), Dashboard.this);
+                                    adapter.notifyDataSetChanged();
                                     // TODO: 3/26/2018 Handel the refresh button
                                 }
                             } catch (JSONException e) {
@@ -308,11 +306,11 @@ public class Dashboard extends AppCompatActivity
                     });
 
             RESTService.getInstance(Dashboard.this).addToRequestQueue(jsonObjRequest);
+*/
         }
 
         return super.onOptionsItemSelected(item);
     }
-
 
     private void parseJSON(JSONObject response) {
 
@@ -346,7 +344,7 @@ public class Dashboard extends AppCompatActivity
 
                     Log.d(TAG, "parseJSON: Data Inserted to Cabmate Table row :- " + i);
                 }
-                Log.d(TAG, "parseJSON: Data Inserted to Cabmate Table row :- " + i);
+
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -503,10 +501,10 @@ public class Dashboard extends AppCompatActivity
     //<editor-fold desc="OnStart">
     @Override
     protected void onStart() {
-        if(getSharedPreferences(null,MODE_PRIVATE).getBoolean("alarm",true))
+        if (getSharedPreferences(null, MODE_PRIVATE).getBoolean("alarm", true))
             gettingPickuptime();
         else
-            getSharedPreferences(null,MODE_PRIVATE).edit().putBoolean("alarm",false).apply();
+            getSharedPreferences(null, MODE_PRIVATE).edit().putBoolean("alarm", false).apply();
         super.onStart();
 
     }
