@@ -3,12 +3,11 @@
  */
 
 package com.ncr.interns.codecatchers.incredicabs;
-
-import android.*;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,10 +22,16 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
-import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ContactsContract;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
-import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ContactsContract;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class CustomDialogClass extends Dialog implements
         android.view.View.OnClickListener {
@@ -39,20 +44,24 @@ public class CustomDialogClass extends Dialog implements
     private Button no;
     private int currentNum;
     private int numLength;
+    String EmpQlid;
+    String RosterId;
+    String CabNo;
+    SharedPreferences sharedPreferences;
+    SQLiteDatabase mSqLiteDatabase;
+    NcabSQLiteHelper ncabSQLiteHelper;
+    private static final String MY_PREFERENCES = "MyPrefs_login";
     Context mContext,appContext;
     String sosUrl = "";
+    String Url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/" +
+            "NCAB/EmployeeService/sos-trigger-android";
     MediaPlayer mp = MediaPlayer.create(getContext(),R.raw.alert);
 
-    public CustomDialogClass(Activity a) {
+    public CustomDialogClass(Activity a,Context context) {
         super(a);
         this.c = a;
-    }
-
-/*
-    public CustomDialogClass(Context context) {
         mContext = context;
     }
-*/
 
     public static final int REQUEST_CALL =1;
     @Override
@@ -62,25 +71,8 @@ public class CustomDialogClass extends Dialog implements
         setContentView(R.layout.custom_dialogue);
 
         currentNum = 0;
-
-//        NcabSQLiteHelper sqLiteHelper = new NcabSQLiteHelper(getContext());
-//        SQLiteDatabase sqLiteDatabase = sqLiteHelper.getWritableDatabase();
-//        Cursor cur = sqLiteDatabase.rawQuery(
-//                "SELECT ContactNumber FROM Contacts WHERE ContactSos != '0' " +
-//                        "ORDER BY (ContactSosPriority)", null);
-//        cur.moveToFirst();
-//
-//        numLength = cur.getCount();
-//
-//        numbers = new String[numLength];
-//        for(int i=0; i<numLength; ++i){
-//            numbers[i] = cur.getString(0);
-//            cur.moveToNext();
-//        }
         text = findViewById(R.id.txt_dia);
-//       yes = (Button) findViewById(R.id.btn_yes);
         no = findViewById(R.id.btn_no);
-//      yes.setOnClickListener(this);
         no.setOnClickListener(this);
 
     }
@@ -88,11 +80,6 @@ public class CustomDialogClass extends Dialog implements
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.btn_yes:
-//                text.setText("Kon Hai?");
-//                this.start();
-//                c.finish();
-//                break;
             case R.id.btn_no:
                 this.cancel();
                 countDownTimer.cancel();
@@ -103,14 +90,11 @@ public class CustomDialogClass extends Dialog implements
             default:
                 break;
         }
-//        dismiss();
     }
 
 
     public void start() {
         text.setText("15");
-
-
 
         countDownTimer = new CountDownTimer(15  * 1000, 1000) {
 
@@ -126,8 +110,6 @@ public class CustomDialogClass extends Dialog implements
             @Override
             public void onFinish() {
                 text.setText("SOS Triggered");
-//                MainActivity mains = new MainActivity();
-//                mains.makePhoneCall();
                 NcabSQLiteHelper sqLiteHelper = new NcabSQLiteHelper(getContext());
                 SQLiteDatabase sqLiteDatabase = sqLiteHelper.getWritableDatabase();
                 Cursor cur = sqLiteDatabase.rawQuery(
@@ -143,7 +125,42 @@ public class CustomDialogClass extends Dialog implements
                     cur.moveToNext();
                 }
 
-                // TODO: 3/26/2018 call API of Harshit
+                EmpQlid = getEmployeeQlid();
+                ncabSQLiteHelper = new NcabSQLiteHelper(c);
+                sqLiteDatabase = ncabSQLiteHelper.getWritableDatabase();
+                final String query = "select a.cabmatepickuptime, a.routenumber, a.roasterid, a.shiftid, b.starttime, b.endtime  from CabMatesDetails a, ShiftTable b where a.CabMateQlid = ? and a.shiftid = b.shiftid";
+                Cursor c = mSqLiteDatabase.rawQuery(query, new String[]{EmpQlid.toUpperCase()});
+                c.moveToFirst();
+                while (!c.isAfterLast()) {
+                    RosterId = c.getString(c.getColumnIndex(CabMatesContract.COLUMN_CABMATE_ROASTER_Id));
+                    CabNo = c.getString(c.getColumnIndex(CabMatesContract.COLUMN_CABMATE_CAB_NUMBER));
+                    c.moveToNext();
+                }
+
+                JSONObject jsonBodyRequest = new JSONObject();
+                try {
+                    jsonBodyRequest.put("empQlid",EmpQlid);
+                    jsonBodyRequest.put("rosterId",RosterId);
+                    jsonBodyRequest.put("cabLicensePlateNo",CabNo);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Url, null,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        });
+                RESTService.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
 
                 if(ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions((Activity) getContext(), new String[] {android.Manifest.permission.CALL_PHONE},CustomDialogClass.REQUEST_CALL);
@@ -177,6 +194,12 @@ public class CustomDialogClass extends Dialog implements
         String num = numbers[currentNum];
         currentNum++;
         return num;
+    }
+
+    public String getEmployeeQlid(){
+        sharedPreferences = c.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+        String Employee_Qlid = sharedPreferences.getString("user_qlid","");
+        return Employee_Qlid;
     }
 
 }

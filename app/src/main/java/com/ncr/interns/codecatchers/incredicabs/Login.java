@@ -108,7 +108,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkCon=checkConnection(Login.this);
-                if(checkCon==true){
+                if(checkCon){
                     progressDialog = new ProgressDialog(Login.this,0);
                     progressDialog.setTitle("Logging in..");
                     progressDialog.setMessage("Please Wait");

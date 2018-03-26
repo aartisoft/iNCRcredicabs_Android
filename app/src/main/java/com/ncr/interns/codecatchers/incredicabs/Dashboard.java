@@ -112,8 +112,7 @@ public class Dashboard extends AppCompatActivity
         adapter = new CabMatesAdapter(getCabMatesDetails(), this);
 
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        mRecyclerView.addItemDecoration(new
-                DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(adapter);
         checkCon = checkConnection(Dashboard.this);
 
@@ -223,7 +222,7 @@ public class Dashboard extends AppCompatActivity
                 if (ContextCompat.checkSelfPermission(Dashboard.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(Dashboard.this, new String[]{android.Manifest.permission.CALL_PHONE}, CustomDialogClass.REQUEST_CALL);
                 } else {
-                    CustomDialogClass cdd = new CustomDialogClass(Dashboard.this);
+                    CustomDialogClass cdd = new CustomDialogClass(Dashboard.this,context);
                     cdd.show();
                     cdd.start();
                 }
