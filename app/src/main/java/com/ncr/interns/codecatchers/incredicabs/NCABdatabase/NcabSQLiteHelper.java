@@ -12,7 +12,7 @@ import android.util.Log;
 public class NcabSQLiteHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "NCABDatabase";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 4;
     Context ctx;
     SQLiteDatabase sqLiteDatabase;
     private static final String TAG = "NcabSQLiteHelper";
@@ -36,10 +36,15 @@ public class NcabSQLiteHelper extends SQLiteOpenHelper {
 
     private final String CREATE_CABMATE_TABLE_QUERY = "CREATE TABLE "+CabMatesContract.DB_TABLE+" ("+
             CabMatesContract._ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
-            CabMatesContract.COLUMN_CABMATE_QLID+" TEXT NOT NULL,"+
-            CabMatesContract.COLUMN_CABMATE_NAME+" TEXT NOT NULL,"+
-            CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER+" TEXT NOT NULL,"+
-            CabMatesContract.COLUMN_CABMATE_ADDRESS+" TEXT NOT NULL);";
+            CabMatesContract.COLUMN_CABMATE_QLID+" TEXT,"+
+            CabMatesContract.COLUMN_CABMATE_NAME+" TEXT,"+
+            CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER+" TEXT,"+
+            CabMatesContract.COLUMN_CABMATE_PICKUPTIME+" TEXT ,"+
+            CabMatesContract.COLUMN_CABMATE_ROUTE_NUMBER+" TEXT,"+
+            CabMatesContract.COLUMN_CABMATE_CAB_NUMBER+" TEXT,"+
+            CabMatesContract.COLUMN_CABMATE_ROASTER_Id+ " TEXT,"+
+            CabMatesContract.COLUMN_CABMATE_SHIFT_ID+" TEXT,"+
+            CabMatesContract.COLUMN_CABMATE_ADDRESS+" TEXT);";
 
     private static final String CREATE_SHIFT_TABLE_QUERY = "CREATE TABLE "+ShiftContract.DB_TABLE+" ("+
             ShiftContract._ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+

@@ -117,7 +117,7 @@ public class CustomDialogClass extends Dialog implements
             @Override
             public void onTick(long millisUntilFinished) {
                 AudioManager mgr = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
-                int valuess = 15;//range(0-15)
+                int valuess = 10;//range(0-15)
                 mgr.setStreamVolume(AudioManager.STREAM_MUSIC, valuess, 0);
                 text.setText("" + millisUntilFinished / 1000);          //Changing the text for Countdown.
                 mp.start();                                             //For playing alert sound
@@ -143,6 +143,7 @@ public class CustomDialogClass extends Dialog implements
                     cur.moveToNext();
                 }
 
+                // TODO: 3/26/2018 call API of Harshit
 
                 if(ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions((Activity) getContext(), new String[] {android.Manifest.permission.CALL_PHONE},CustomDialogClass.REQUEST_CALL);

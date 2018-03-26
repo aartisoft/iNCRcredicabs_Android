@@ -70,7 +70,7 @@ public class FeedbackActivity extends AppCompatActivity {
     EditText cabNumber;
     String Employee_Qlid;
     private static final String MY_PREFERENCES = "MyPrefs_login";
-    private String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCR/RosterService/complaint";
+    private String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/RosterService/complaint";
     private String getShiftDetailsUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/RosterService/getCabShift";
 
     @Override

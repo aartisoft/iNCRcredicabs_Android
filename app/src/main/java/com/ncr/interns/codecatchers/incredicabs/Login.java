@@ -30,6 +30,7 @@ import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ContactsContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ShiftContract;
 import com.ncr.interns.codecatchers.incredicabs.notification.DeleteFirebaseTokenService;
 
 import org.json.JSONArray;
@@ -89,7 +90,7 @@ public class Login extends AppCompatActivity {
         String copyStr = getResources().getString(R.string.login_copy);
         TextView copyTV = findViewById(R.id.copy_text);
 
-        copyTV.setText(Html.fromHtml(copyStr, 0));
+        //copyTV.setText(Html.fromHtml(copyStr, 0));
 
         user = findViewById(R.id.editText_Qlid);
         pass = findViewById(R.id.editText_password);
@@ -194,20 +195,29 @@ public class Login extends AppCompatActivity {
                     String CabMate_name = cabMateJSON.getString("f_name")+" "+cabMateJSON.getString("l_name");
                     String CabMate_contactNumber = cabMateJSON.getString("e_mob");
                     String CabMate_address = cabMateJSON.getString("p_a");
-//                    String CabMate_pickupTime = cabMateJSON.getString("pickup_time");
+                    String CabMate_cabNumbr = cabMateJSON.getString("Cab_number");
+                    String CabMate_roasterId = "";//cabMateJSON.getString("roster_id");
+                    String CabMate_routeNumber = cabMateJSON.getString("Route_number");
+                    String CabMate_pickupTime = cabMateJSON.getString("pickup_time");
+                    String CabMate_shiftId = cabMateJSON.getString("shift_id");
                     ContentValues cabMateValues = new ContentValues();
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_QLID,CabMate_Qlid);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_NAME,CabMate_name);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER,CabMate_contactNumber);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_ADDRESS,CabMate_address);
-  //                  cabMateValues.put(CabMatesContract.COLUMN_CABMATE_PICKUPTIME,CabMate_pickupTime);
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_PICKUPTIME,CabMate_pickupTime);
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_CAB_NUMBER,CabMate_cabNumbr);
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_ROUTE_NUMBER,CabMate_routeNumber);
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_SHIFT_ID,CabMate_shiftId);
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_ROASTER_Id,CabMate_roasterId);
+
                     mSqLiteDatabase.insert(CabMatesContract.DB_TABLE,null,cabMateValues);
                 } catch (JSONException e) {
                     e.printStackTrace();
 
                     Log.d(TAG, "parseJSON: Data Inserted to Cabmate Table row :- "+i);
                 }
-                Log.d(TAG, "parseJSON: Data Inserted to Cabmate Table row :- "+i);
+
             }
 
 
@@ -231,7 +241,27 @@ public class Login extends AppCompatActivity {
                 contactValues.put(ContactsContract.COLUMN_CONTACT_NUMBER,contactNumber);
                 contactValues.put(ContactsContract.COLUMN_CONTACT_ROLE,contactRole);
                 mSqLiteDatabase.insert(ContactsContract.DB_TABLE,null,contactValues);
+    }
+
+            JSONArray shiftInfo = response.getJSONArray("shiftInfo");
+
+            for (int i  =0;i<shiftInfo.length();i++){
+                JSONObject shiftTableInfo = shiftInfo.getJSONObject(i);
+                int shiftId =  shiftTableInfo.getInt("shiftId");
+                String shiftName = shiftTableInfo.getString("shiftName");
+                String startTime = shiftTableInfo.getString("startTime");
+                String endTime = shiftTableInfo.getString("endTime");
+                String ShiftName = shiftTableInfo.getString("shiftName");
+                ContentValues shiftInfoValues = new ContentValues();
+                // TODO: 3/22/2018 Add values to teh database
+                shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_ID,shiftId);
+                shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_NAME,shiftName);
+                shiftInfoValues.put(ShiftContract.COLUMN_START_TIME,startTime);
+                shiftInfoValues.put(ShiftContract.COLUMN_END_TIME,endTime);
+                shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_NAME,ShiftName);
+                 mSqLiteDatabase.insert(ShiftContract.DB_TABLE,null,shiftInfoValues);
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
