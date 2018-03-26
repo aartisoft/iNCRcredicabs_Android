@@ -35,10 +35,10 @@ public class CheckOut extends AppCompatActivity {
     NcabSQLiteHelper ncabSQLiteHelper;
     private ZXingScannerView scannerView;
     String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/checkout";
-    String url_roasterinfo="http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/RoasterDetailsByEmpID";
-    String Route_No=null;
-    String Pickup_Time=null;
-    String Start_Time=null;
+    // String url_roasterinfo="http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/RoasterDetailsByEmpID";
+    String Route_No;
+    String Pickup_Time;
+    String Start_Time;
     String Emp_Qlid;
     SharedPreferences sharedPreferences;
     JSONObject jsonBodyRequest = new JSONObject();
@@ -46,54 +46,16 @@ public class CheckOut extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-       ncabSQLiteHelper = new NcabSQLiteHelper(this);
-       mSqLiteDatabase = ncabSQLiteHelper.getReadableDatabase();
-
-
+        Emp_Qlid=getEmployeeQlid();
+        ncabSQLiteHelper = new NcabSQLiteHelper(this);
+        mSqLiteDatabase = ncabSQLiteHelper.getReadableDatabase();
         openScanner();
-        try
-        {
-            jsonBodyRequest.put("Emp_Qlid", Emp_Qlid);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
-        JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST,
-                url_roasterinfo,
-                jsonBodyRequest,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONObject js=new JSONObject(response.getString("result"));
-                            Pickup_Time=js.getString("Pickup_Time");
-                            Start_Time=js.getString("Start_Time");
-                        }
-                        catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(),"Server Error",Toast.LENGTH_LONG).show();
-                            Intent Dashboard_intent= new Intent(getApplicationContext(),Dashboard.class);
-                            startActivity(Dashboard_intent);
-                        }
-                        Log.i("VOLLEY", "inside onResponse method:doLogin");
-                        Log.i("VOLLEY", response.toString());
-
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Do something when error occurred
-                        Log.d("VOLLEY", "Something went wrong");
-                        Toast.makeText(getApplicationContext(),"No Network Connection",Toast.LENGTH_LONG).show();
-                        /*Intent Dashboard_intent= new Intent(getApplicationContext(),Dashboard.class);
-                        startActivity(Dashboard_intent);*/
-                        finish();
-                        error.printStackTrace();                            }
-                });
-        RESTService.getInstance(getApplicationContext()).addToRequestQueue(jsonObjRequest);
+        Intent intent = getIntent();
+        Pickup_Time = intent.getStringExtra("pickup");
+        Start_Time = intent.getStringExtra("start_time");
+        Route_No = intent.getStringExtra("route_no");
+        Emp_Qlid = getEmployeeQlid();
 
 
     }
@@ -113,8 +75,6 @@ public class CheckOut extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, intent);
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         /*As an example in order to get the content of what is scanned you can do the following*/
-
-
         if (scanningResult.getContents() != null) {
             if(Pickup_Time!=null && Start_Time!=null)
             {
@@ -152,7 +112,7 @@ public class CheckOut extends AppCompatActivity {
 
                                 Log.i("VOLLEY", "inside onResponse method:doLogin");
                                 Log.i("VOLLEY", response.toString());
-
+                                Toast.makeText(CheckOut.this, "CheckOut Sucessful", Toast.LENGTH_SHORT).show();
 
                             }
                         },
@@ -179,7 +139,7 @@ public class CheckOut extends AppCompatActivity {
 
             finish();
         }
-   }
+    }
     public String getEmployeeQlid(){
         sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         String Employee_Qlid = sharedPreferences.getString("user_qlid","");

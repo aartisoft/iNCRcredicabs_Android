@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +17,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeContract;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ShiftContract;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,53 +39,26 @@ public class CheckIn extends AppCompatActivity {
     String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/checkin";
     String url_roasterinfo = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/RoasterDetailsByEmpID";
     String Emp_Qlid;
+    SharedPreferences.Editor editor;
     String Check_In=null;
     private static final String MY_PREFERENCES = "MyPrefs_login";
     SharedPreferences sharedPreferences;
+    SQLiteDatabase sqLiteDatabase;
+    NcabSQLiteHelper ncabSQLiteHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         openScanner();
 
+        Intent intent = getIntent();
+        Pickup_Time = intent.getStringExtra("pickup");
+        Start_Time = intent.getStringExtra("start_time");
+        Route_No = intent.getStringExtra("route_no");
+
+        ncabSQLiteHelper = new NcabSQLiteHelper(this);
+        sqLiteDatabase = ncabSQLiteHelper.getWritableDatabase();
         Emp_Qlid = getEmployeeQlid();
-        JSONObject jsonBodyRequest = new JSONObject();
-        try {
-            jsonBodyRequest.put("Emp_Qlid", Emp_Qlid);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, url_roasterinfo,
-                jsonBodyRequest, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONObject js = new JSONObject(response.getString("result"));
-                            Route_No = js.getString("Route_No");
-                            Pickup_Time = js.getString("Pickup_Time");
-                            Start_Time = js.getString("Start_Time");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Server Error", Toast.LENGTH_LONG).show();
-                            Intent Dashboard_intent = new Intent(getApplicationContext(), Dashboard.class);
-                            startActivity(Dashboard_intent);
-                        }
-                        Log.i("VOLLEY", "inside onResponse method:doLogin");
-                        Log.i("VOLLEY", response.toString());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Do something when error occurred
-                        Log.d("VOLLEY", "Something went wrong");
-                        Toast.makeText(getApplicationContext(), "No Network Connection", Toast.LENGTH_LONG).show();
-                        /*Intent Dashboard_intent = new Intent(getApplicationContext(), Dashboard.class);
-                        startActivity(Dashboard_intent);*/
-                        error.printStackTrace();
-                        finish();
-                    }
-                });
-        RESTService.getInstance(getApplicationContext()).addToRequestQueue(jsonObjRequest);
 
     }
 
@@ -189,5 +166,19 @@ public class CheckIn extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         String Employee_Qlid = sharedPreferences.getString("user_qlid","");
         return Employee_Qlid;
+    }
+    public void putEmployeeDetails()
+    {
+//        sharedPreferences=getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
+//        editor = sharedPreferences.edit();
+////                              editor.putString("user_qlid",user.getText().toString());
+//        editor.putString("user_name",
+//                response.getString("empFName")+" "+
+//                        response.getString("empMName")+" "+
+//                        response.getString("empLName"));
+//        editor.putString("user_qlid",qlid);
+//        editor.putString("user_password",pass.getText().toString());
+//        editor.apply();
+
     }
 }

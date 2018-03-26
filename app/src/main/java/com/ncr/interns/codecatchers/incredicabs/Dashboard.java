@@ -72,6 +72,11 @@ public class Dashboard extends AppCompatActivity
     String Employee_HomeAddress;
     String Employee_Contact_number;
     CabMatesAdapter adapter;
+    JSONObject jsonObject;
+    String Route_No = null;
+    String Pickup_Time = null;
+    String Start_Time = null;
+    String End_Time = null;
 
     boolean checkCon;
     String mainUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/RoasterDetailsByEmpID"; //
@@ -82,6 +87,7 @@ public class Dashboard extends AppCompatActivity
     private static final String TAG = "Dashboard Debugging";
     private static final int REQUEST_CALL = 1;
     TextView Emp_QLID_textView, Emp_Name_textView, Emp_HomeAddress_textView, Emp_ContactNum_textView;
+    TextView Current_shift;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +95,6 @@ public class Dashboard extends AppCompatActivity
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         ncabSQLiteHelper = new NcabSQLiteHelper(this);
         mSqLiteDatabase = ncabSQLiteHelper.getWritableDatabase();
         getIdofComponents();
@@ -98,7 +103,7 @@ public class Dashboard extends AppCompatActivity
         Emp_Name_textView = findViewById(R.id.Emp_Name);
         Emp_HomeAddress_textView = findViewById(R.id.Emp_homeAddress);
         Emp_ContactNum_textView = findViewById(R.id.Emp_contactNumber);
-        Emp_QLID_textView.setText(String.format("Emp.ID%s", Employee_Qlid));
+        Emp_QLID_textView.setText(String.format("Emp.ID: %s", Employee_Qlid));
         Emp_Name_textView.setText(String.format("Emp Name: %s", Employee_Name));
         Emp_HomeAddress_textView.setText(String.format("Current Address : %s", Employee_HomeAddress));
         Emp_ContactNum_textView.setText(String.format("Contact Number:- %s", Employee_Contact_number));
@@ -112,15 +117,40 @@ public class Dashboard extends AppCompatActivity
         mRecyclerView.setAdapter(adapter);
         checkCon = checkConnection(Dashboard.this);
 
-
+        //<editor-fold desc="Get teh data from database">
+        final String query = "select a.cabmatepickuptime, a.routenumber, a.roasterid, a.shiftid, b.starttime, b.endtime  from CabMatesDetails a, ShiftTable b where a.CabMateQlid = ? and a.shiftid = b.shiftid";
+        Cursor c = mSqLiteDatabase.rawQuery(query, new String[]{Employee_Qlid.toUpperCase()});
+        c.moveToFirst();
+        while (!c.isAfterLast()) {
+            Pickup_Time = c.getString(c.getColumnIndex(CabMatesContract.COLUMN_CABMATE_PICKUPTIME));
+            Start_Time = c.getString(c.getColumnIndex(ShiftContract.COLUMN_START_TIME));
+            Route_No = c.getString(c.getColumnIndex(CabMatesContract.COLUMN_CABMATE_ROUTE_NUMBER));
+            End_Time = c.getString(c.getColumnIndex(ShiftContract.COLUMN_END_TIME));
+            c.moveToNext();
+        }
+        //</editor-fold>
+        String currentShift = "Current Shift is "+Start_Time+" to "+End_Time;
+        Current_shift = findViewById(R.id.textView_currentShift);
+        Current_shift.setText(currentShift);
        /* cabMatesNotification();//Abhishek Alarm manager
         getCabMateShiftTimeNew();
 */
         checkIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (Start_Time == null)
+                {
+                    Snackbar snackbar = Snackbar.make(linearLayout,"Server Error",Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    return;
+                }
+
                 if (checkCon) {
                     Intent checkIn_intent = new Intent(Dashboard.this, CheckIn.class);
+                    checkIn_intent.putExtra("pickup",Pickup_Time);
+                    checkIn_intent.putExtra("start_time",Start_Time);
+                    checkIn_intent.putExtra("route_no",Route_No);
                     startActivity(checkIn_intent);
                 } else {
                     final AlertDialog alertDialog = new AlertDialog.Builder(Dashboard.this).create();
@@ -142,6 +172,14 @@ public class Dashboard extends AppCompatActivity
         checkOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (Start_Time == null)
+                {
+                    Snackbar snackbar = Snackbar.make(linearLayout,"Server Error",Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    return;
+                }
+
                 if (checkCon) {
                     Intent checkOut_intent = new Intent(Dashboard.this, CheckOut.class);
                     startActivity(checkOut_intent);
@@ -228,9 +266,6 @@ public class Dashboard extends AppCompatActivity
             makePhoneCall(number);
         }
         if (id == R.id.refresh) {
-            // TODO: 3/23/2018 Yet to implement
-
-            JSONObject jsonObject = new JSONObject();
             String shared_pref_userName = sharedPreferences.getString("user_qlid", "");
             String shared_pref_password = sharedPreferences.getString("user_password", "");
             try {
@@ -256,6 +291,7 @@ public class Dashboard extends AppCompatActivity
                                     Toast.makeText(context, "Refresh Done", Toast.LENGTH_SHORT).show();
                                     /*adapter = new CabMatesAdapter(getCabMatesDetails(), Dashboard.this);
                                     adapter.notifyDataSetChanged();*/
+                                    // TODO: 3/26/2018 Handel the refresh button
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -351,7 +387,7 @@ public class Dashboard extends AppCompatActivity
 
             Intent intent = new Intent(this, Login.class);
             mSqLiteDatabase.execSQL("DELETE FROM " + CabMatesContract.DB_TABLE);
-            //mSqLiteDatabase.execSQL("DELETE FROM " + ShiftContract.DB_TABLE);
+            mSqLiteDatabase.execSQL("DELETE FROM " + ShiftContract.DB_TABLE);
             mSqLiteDatabase.execSQL("DELETE FROM " + ContactsContract.DB_TABLE);
             sharedPreferences = context.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();

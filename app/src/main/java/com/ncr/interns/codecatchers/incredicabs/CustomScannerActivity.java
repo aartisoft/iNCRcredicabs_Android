@@ -2,6 +2,9 @@ package com.ncr.interns.codecatchers.incredicabs;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.app.Activity;
@@ -22,6 +25,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ShiftContract;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,33 +41,38 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
 
     private CaptureManager capture;
     int torch_flag=0;
-    String Check_In=null;
+    String Check_In="";
+    private static final String MY_PREFERENCES = "MyPrefs_login";
+    SharedPreferences sharedPreferences;
     private DecoratedBarcodeView barcodeScannerView;
     private ImageButton switchFlashlightButton;
     private  Button manualEntryButton;
     String Route_No=null;
     String Pickup_Time=null;
     String Start_Time=null;
-    String Emp_Qlid;
-    String ipaddress="http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080";
-    String url = "http://"+ipaddress+"/NCAB/AndroidService/checkin";
-    String url_roasterinfo="http://"+ipaddress+"/NCAB/AndroidService/RoasterDetailsByEmpID";
+    String Emp_Qlid=null;
+    SQLiteDatabase mSqLiteDatabase;
+    NcabSQLiteHelper ncabSQLiteHelper;
+
+    String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/checkin";
     JsonObjectRequest jsonObjRequest=null;
-    private static final String MY_PREFERENCES = "MyPrefs_login";
-    SharedPreferences sharedPreferences;
     JsonObjectRequest jsonObjRequest2=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_scanner);
 
-        barcodeScannerView = (DecoratedBarcodeView)findViewById(R.id.zxing_barcode_scanner);
+
+        ncabSQLiteHelper = new NcabSQLiteHelper(CustomScannerActivity.this);
+        mSqLiteDatabase = ncabSQLiteHelper.getReadableDatabase();
+        /*Emp_Qlid = getEmployeeQlid();*/
+
+        barcodeScannerView = findViewById(R.id.zxing_barcode_scanner);
         barcodeScannerView.setTorchListener(this);
 
-        switchFlashlightButton = (ImageButton)findViewById(R.id.switch_flashlight);
+        switchFlashlightButton = findViewById(R.id.switch_flashlight);
         manualEntryButton= findViewById(R.id.manualButton);
-        // if the device does not have flashlight in its camera,
-        // then remove the switch flashlight button...
+
 
         if (!hasFlash()) {
             switchFlashlightButton.setVisibility(View.GONE);
@@ -69,10 +80,17 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
         manualEntryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Emp_Qlid = getEmployeeQlid();
-                Start_Time="10:00:00";
-                Pickup_Time="8:00";
-                Route_No="001";
+                sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+                Emp_Qlid=sharedPreferences.getString("user_qlid","");
+                final String query = "select a.cabmatepickuptime, a.routenumber, a.roasterid, a.shiftid, b.starttime, b.endtime  from CabMatesDetails a, ShiftTable b where a.CabMateQlid = ? and a.shiftid = b.shiftid";
+               Cursor c = mSqLiteDatabase.rawQuery(query, new String[]{getEmployeeQlid().toUpperCase()});
+                c.moveToFirst();
+                while (!c.isAfterLast()) {
+                    Pickup_Time = c.getString(c.getColumnIndex(CabMatesContract.COLUMN_CABMATE_PICKUPTIME));
+                    Start_Time = c.getString(c.getColumnIndex(ShiftContract.COLUMN_START_TIME));
+                    Route_No = c.getString(c.getColumnIndex(CabMatesContract.COLUMN_CABMATE_ROUTE_NUMBER));
+                    c.moveToNext();
+                }
                 if(Pickup_Time!=null && Start_Time!=null && Route_No!=null) {
                     JSONObject jsonBodyRequest = new JSONObject();
                     try {
@@ -106,8 +124,16 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
                             url,
                             jsonBodyRequest,
                             new Response.Listener<JSONObject>() {
+                                JSONObject js = null;
                                 @Override
                                 public void onResponse(JSONObject response) {
+                                    try {
+                                        js = new JSONObject(response.getString("result"));
+                                        Check_In = js.getString("Check_In");
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
 //                                        Toast.makeText(getApplicationContext(),"Successful Checkin",Toast.LENGTH_LONG).show();
                                     if(Check_In.equals("Done"))
                                     {

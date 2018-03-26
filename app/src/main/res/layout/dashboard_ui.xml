@@ -22,157 +22,140 @@
         android:elevation="8dp"
         app:cardCornerRadius="5dp">
 
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:layout_margin="1dp"
+         android:orientation="vertical"
+         android:weightSum="10"
+         android:padding="4dp">
+
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="0dp"
+             android:orientation="vertical"
+             android:layout_weight="3">
+             <TextView
+                 android:id="@+id/textView_currentShift"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:layout_margin="4dp"
+                 android:gravity="center"
+                 android:text="Your Current Shift is 10AM - 7PM"
+                 android:textSize="22sp"
+                 android:textStyle="bold" />
+         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="1dp"
-            android:orientation="vertical"
-            android:padding="4dp"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="4"
             android:weightSum="4">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/Emp_QLid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:paddingLeft="5dp"
+                    android:text="EMP Id: GS265369"
+                    />
+                <TextView
+                    android:id="@+id/Emp_Name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:paddingLeft="5dp"
+                    android:text="EMP Id: Mridul Upadhayaya"
+                    />
+                <TextView
+                    android:id="@+id/Emp_homeAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:paddingLeft="5dp"
+                    android:text="Current Address: sector 48,Gurgaon"
+                    />
+                <TextView
+                    android:id="@+id/Emp_contactNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:paddingLeft="5dp"
+                    android:text="Phone No: 78343225684"
+                    />
+
+            </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="3"
-                android:orientation="horizontal"
-                android:weightSum="4">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:orientation="vertical"
-                    android:weightSum="3">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:gravity="center"
-                        android:text="Your Current Shift is 10AM - 7PM"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="4dp"
-                        android:gravity="center"
-                        android:visibility="visible"
-                        android:text="Shift starts in 1 HOUR"
-                        android:textSize="20sp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        >
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:background="@mipmap/ic_launcher_ncr"
-                            />
-                        <LinearLayout
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_gravity="center"
-
-                            >
-                            <TextView
-                                android:id="@+id/Emp_QLid"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="2dp"
-                                android:paddingLeft="5dp"
-                                android:text="EMP Id: GS265369"
-                                />
-                            <TextView
-                                android:id="@+id/Emp_Name"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="2dp"
-                                android:paddingLeft="5dp"
-                                android:text="EMP Id: Mridul "
-                                />
-                            <TextView
-                                android:id="@+id/Emp_homeAddress"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="2dp"
-                                android:paddingLeft="5dp"
-                                android:text="Current Address: sector 48,Gurgaon"
-                                />
-                            <TextView
-                                android:id="@+id/Emp_contactNumber"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="2dp"
-                                android:paddingLeft="5dp"
-                                android:text="Phone No: 78343225684"
-                                />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                </LinearLayout>
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
                 <Button
                     android:id="@+id/button_sos"
-                    android:layout_width="0dp"
-                    android:layout_marginTop="22dp"
-                    android:layout_height="80dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:layout_margin="10dp"
                     android:elevation="5dp"
                     android:textSize="30sp"
                     android:background="@drawable/sos_icon"
-                     />
-
+                    />
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:padding="5dp"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <Button
-                    android:id="@+id/button_checkIn"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_dashboard"
-                    android:gravity="center_vertical"
-                    android:textColor="#ffffff"
-                    android:paddingStart="10dp"
-                    android:textSize="20sp"
-                    android:drawableStart="@drawable/checkin"
-                    android:text= " CHECK IN" />
-
-                <Button
-                    android:id="@+id/button_checkOut"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1"
-                    android:textSize="20sp"
-                    android:gravity="center_vertical"
-                    android:paddingStart="10dp"
-                    android:drawableStart="@drawable/checkout"
-                    android:background="@drawable/button_dashboard"
-
-                    android:textColor="#ffffff"
-                    android:text=" CHECK OUT" />
-
-            </LinearLayout>
-
-
         </LinearLayout>
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="0dp"
+             android:orientation="horizontal"
+             android:layout_weight="3"
+             android:layout_marginTop="25dp"
+             android:layout_marginBottom="25dp"
+             >
+             <Button
+                 android:id="@+id/button_checkIn"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:layout_marginLeft="10dp"
+                 android:layout_marginRight="10dp"
+                 android:layout_weight="1"
+                 android:layout_marginTop="10dp"
+                 android:layout_marginBottom="5dp"
+                 android:background="@drawable/button_dashboard"
+                 android:gravity="center_vertical"
+                 android:textColor="#ffffff"
+                 android:paddingStart="10dp"
+                 android:textSize="20sp"
+                 android:drawableStart="@drawable/checkin"
+                 android:text= " CHECK IN" />
+
+             <Button
+                 android:id="@+id/button_checkOut"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:layout_marginLeft="10dp"
+                 android:layout_marginRight="10dp"
+                 android:layout_marginBottom="5dp"
+                 android:layout_weight="1"
+                 android:textSize="20sp"
+                 android:layout_marginTop="10dp"
+                 android:gravity="center_vertical"
+                 android:paddingStart="10dp"
+                 android:drawableStart="@drawable/checkout"
+                 android:background="@drawable/button_dashboard"
+                 android:textColor="#ffffff"
+                 android:text=" CHECK OUT" />
+
+         </LinearLayout>
+     </LinearLayout>
+
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView

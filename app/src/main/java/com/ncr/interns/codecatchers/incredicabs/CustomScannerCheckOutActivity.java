@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -18,6 +21,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
+import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ShiftContract;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,12 +41,14 @@ public class CustomScannerCheckOutActivity extends AppCompatActivity  implements
     int torch_flag=0;
     String Pickup_Time=null;
     String Start_Time=null;
-    String Emp_Qlid;
-    String ipaddress="http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080";
+    String Emp_Qlid=null;
     private static final String MY_PREFERENCES = "MyPrefs_login";
     SharedPreferences sharedPreferences;
-    String url = "http://"+ipaddress+"/NCAB/AndroidService/checkout";
+    SQLiteDatabase mSqLiteDatabase;
+    NcabSQLiteHelper ncabSQLiteHelper;
 
+    // String ipaddress="192.168.43.45:8080";
+    String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/checkout";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +56,12 @@ public class CustomScannerCheckOutActivity extends AppCompatActivity  implements
         setContentView(R.layout.activity_custom_scanner_check_out);
         barcodeScannerView = (DecoratedBarcodeView)findViewById(R.id.zxing_barcode_scanner);
         barcodeScannerView.setTorchListener(this);
-        Emp_Qlid = getEmployeeQlid();
+
+        ncabSQLiteHelper = new NcabSQLiteHelper(CustomScannerCheckOutActivity.this);
+        mSqLiteDatabase = ncabSQLiteHelper.getReadableDatabase();
+
+
+
         switchFlashlightButton = (ImageButton)findViewById(R.id.switch_flashlight);
         manualEntryButton= findViewById(R.id.manualButton);
         // if the device does not have flashlight in its camera,
@@ -59,8 +72,17 @@ public class CustomScannerCheckOutActivity extends AppCompatActivity  implements
         manualEntryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Pickup_Time="8:00";
-                Start_Time="10:00:00";
+                sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+                Emp_Qlid=sharedPreferences.getString("user_qlid","");
+                final String query = "select a.cabmatepickuptime, a.routenumber, a.roasterid, a.shiftid, b.starttime, b.endtime  from CabMatesDetails a, ShiftTable b where a.CabMateQlid = ? and a.shiftid = b.shiftid";
+                Cursor c = mSqLiteDatabase.rawQuery(query, new String[]{Emp_Qlid.toUpperCase()});
+                c.moveToFirst();
+                while (!c.isAfterLast()) {
+                    Pickup_Time = c.getString(c.getColumnIndex(CabMatesContract.COLUMN_CABMATE_PICKUPTIME));
+                    Start_Time = c.getString(c.getColumnIndex(ShiftContract.COLUMN_START_TIME));
+                    Route_No = c.getString(c.getColumnIndex(CabMatesContract.COLUMN_CABMATE_ROUTE_NUMBER));
+                    c.moveToNext();
+                }
                 if (Pickup_Time != null && Start_Time != null) {
                     JSONObject jsonBodyRequest = new JSONObject();
                     try {
@@ -93,6 +115,7 @@ public class CustomScannerCheckOutActivity extends AppCompatActivity  implements
 
                                     Log.i("VOLLEY", "inside onResponse method:doLogin");
                                     Log.i("VOLLEY", response.toString());
+                                    Toast.makeText(CustomScannerCheckOutActivity.this, ""+response.toString(), Toast.LENGTH_SHORT).show();
 
 
                                 }
@@ -179,12 +202,6 @@ public class CustomScannerCheckOutActivity extends AppCompatActivity  implements
     @Override
     public void onTorchOff() {
         //switchFlashlightButton.setText(R.string.turn_on_flashlight);
-    }
-
-    public String getEmployeeQlid(){
-        sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
-        String Employee_Qlid = sharedPreferences.getString("user_qlid","");
-        return Employee_Qlid;
     }
 }
 
