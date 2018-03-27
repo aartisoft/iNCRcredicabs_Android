@@ -155,7 +155,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
                 //Submit Button Logic Start
                 if (selectPick == 3) {
-                    displayDropLocation_textView.setText("");
+                 //   displayDropLocation_textView.setText("");
                     sourceAddress = editText_otherPickUp.getText().toString();
                 } else
                     sourceAddress = displayPickupLocation_textView.getText().toString();

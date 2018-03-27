@@ -486,6 +486,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     alertDialog.cancel();
+                    finish();
                     startActivity(new Intent(FeedbackActivity.this,Dashboard.class));
 
                 }

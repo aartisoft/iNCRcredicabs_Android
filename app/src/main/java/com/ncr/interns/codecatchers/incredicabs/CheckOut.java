@@ -47,15 +47,18 @@ public class CheckOut extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Emp_Qlid=getEmployeeQlid();
-        ncabSQLiteHelper = new NcabSQLiteHelper(this);
-        mSqLiteDatabase = ncabSQLiteHelper.getReadableDatabase();
-        openScanner();
+
 
         Intent intent = getIntent();
         Pickup_Time = intent.getStringExtra("pickup");
         Start_Time = intent.getStringExtra("start_time");
         Route_No = intent.getStringExtra("route_no");
+        ncabSQLiteHelper = new NcabSQLiteHelper(this);
+        mSqLiteDatabase = ncabSQLiteHelper.getReadableDatabase();
         Emp_Qlid = getEmployeeQlid();
+
+        openScanner();
+
 
 
     }
@@ -68,6 +71,8 @@ public class CheckOut extends AppCompatActivity {
         scanIntegrator.setBarcodeImageEnabled(true);
         scanIntegrator.setCaptureActivity(CustomScannerCheckOutActivity.class);
         scanIntegrator.initiateScan();
+
+
     }
 
     @Override
@@ -145,9 +150,5 @@ public class CheckOut extends AppCompatActivity {
         String Employee_Qlid = sharedPreferences.getString("user_qlid","");
         return Employee_Qlid;
     }
-    @Override
-    protected void onPause() {
-        super.onPause();
-        finish();
-    }
+
 }

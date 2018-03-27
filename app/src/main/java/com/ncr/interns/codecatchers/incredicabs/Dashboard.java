@@ -179,6 +179,9 @@ public class Dashboard extends AppCompatActivity
 
                 if (checkCon) {
                     Intent checkOut_intent = new Intent(Dashboard.this, CheckOut.class);
+                    checkOut_intent.putExtra("pickup", Pickup_Time);
+                    checkOut_intent.putExtra("start_time", Start_Time);
+                    checkOut_intent.putExtra("route_no", Route_No);
                     startActivity(checkOut_intent);
                 } else {
                     final AlertDialog alertDialog = new AlertDialog.Builder(Dashboard.this).create();
@@ -502,9 +505,10 @@ public class Dashboard extends AppCompatActivity
     @Override
     protected void onStart() {
         if (getSharedPreferences(null, MODE_PRIVATE).getBoolean("alarm", true))
-            gettingPickuptime();
-        else
-            getSharedPreferences(null, MODE_PRIVATE).edit().putBoolean("alarm", false).apply();
+        { gettingPickuptime();
+            getSharedPreferences(null, MODE_PRIVATE).edit().putBoolean("alarm", false).apply();}
+
+
         super.onStart();
 
     }

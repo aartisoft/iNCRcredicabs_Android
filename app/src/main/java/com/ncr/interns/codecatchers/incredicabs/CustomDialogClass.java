@@ -125,7 +125,7 @@ public class CustomDialogClass extends Dialog implements
                     cur.moveToNext();
                 }
 
-                EmpQlid = getEmployeeQlid();
+               /* EmpQlid = getEmployeeQlid();
                 ncabSQLiteHelper = new NcabSQLiteHelper(c);
                 sqLiteDatabase = ncabSQLiteHelper.getWritableDatabase();
                 final String query = "select a.cabmatepickuptime, a.routenumber, a.roasterid, a.shiftid, b.starttime, b.endtime  from CabMatesDetails a, ShiftTable b where a.CabMateQlid = ? and a.shiftid = b.shiftid";
@@ -160,8 +160,7 @@ public class CustomDialogClass extends Dialog implements
                             }
                         });
                 RESTService.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
-
-
+*/
                 if(ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions((Activity) getContext(), new String[] {android.Manifest.permission.CALL_PHONE},CustomDialogClass.REQUEST_CALL);
                 }else{
