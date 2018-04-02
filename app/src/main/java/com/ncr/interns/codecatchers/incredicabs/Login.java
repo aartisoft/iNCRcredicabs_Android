@@ -109,25 +109,30 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 checkCon=checkConnection(Login.this);
                 if(checkCon){
-                    progressDialog = new ProgressDialog(Login.this,0);
-                    progressDialog.setTitle("Logging in..");
-                    progressDialog.setMessage("Please Wait");
-                    progressDialog.setCanceledOnTouchOutside(false);
-                    progressDialog.show();
-                    qlid = user.getText().toString();
-                    //json for request
-                    jsonBodyRequest = new JSONObject();
-                    try {
-                        String userIdtoSend = user.getText().toString().trim();
-                        String passwordToSend = pass.getText().toString().trim();
-                        jsonBodyRequest.put("qlid",user.getText().toString());
-                        jsonBodyRequest.put("password", pass.getText().toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    //if condition to validate if the input is
+                    // entered or not and internet connection is avalible
+                    if (validate(user.getText().toString(),pass.getText().toString())) {
+                        progressDialog = new ProgressDialog(Login.this,0);
+                        progressDialog.setTitle("Logging in..");
+                        progressDialog.setMessage("Please Wait");
+                        progressDialog.setCanceledOnTouchOutside(false);
+                        progressDialog.show();
+                        qlid = user.getText().toString();
+                        //json for request
+                        jsonBodyRequest = new JSONObject();
+                        try {
+
+                            jsonBodyRequest.put("qlid",user.getText().toString());
+                            jsonBodyRequest.put("password", pass.getText().toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        firebaseToken = FirebaseInstanceId.getInstance().getToken();
+                        Log.d(TAG, "firebase Token:- "+firebaseToken);
+                        doLogin(jsonBodyRequest);
+                    } else {
+
                     }
-                    firebaseToken = FirebaseInstanceId.getInstance().getToken();
-                    Log.d(TAG, "firebase Token:- "+firebaseToken);
-                    doLogin(jsonBodyRequest);
                 }
                 else
                 {
@@ -303,8 +308,17 @@ public class Login extends AppCompatActivity {
                                 snackbar.show();
                             } else {
                                 progressDialog.cancel();
-                                Snackbar snackbar = Snackbar.make(relativeLayout,"Invalid Credentials",Snackbar.LENGTH_SHORT);
-                                snackbar.show();
+                                final AlertDialog alertDialog = new AlertDialog.Builder(Login.this).create();
+                                alertDialog.setTitle("Alert");
+                                alertDialog.setMessage("Invalid Credentials.");
+                                alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+                                alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        alertDialog.cancel();
+                                    }
+                                });
+                                alertDialog.show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -347,6 +361,24 @@ public class Login extends AppCompatActivity {
             }
         }
         return false;
+    }
+    public boolean validate(String username,String password){
+        if(username.isEmpty() || password.isEmpty()){
+            final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("Alert");
+            alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+            alertDialog.setMessage("Enter Credentials");
+            alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    alertDialog.cancel();
+                }
+            });
+            alertDialog.show();
+            return false;
+        }
+        else
+            return true;
     }
 
 
