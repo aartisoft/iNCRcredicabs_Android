@@ -87,7 +87,7 @@ public class Dashboard extends AppCompatActivity
     private static final String TAG = "Dashboard Debugging";
     private static final int REQUEST_CALL = 1;
     TextView Emp_QLID_textView, Emp_Name_textView, Emp_HomeAddress_textView, Emp_ContactNum_textView;
-    TextView Current_shift;
+    TextView Current_shift,textView_NOcabs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +101,7 @@ public class Dashboard extends AppCompatActivity
         getEmployeeData();
         Emp_QLID_textView = findViewById(R.id.Emp_QLid);
         Emp_Name_textView = findViewById(R.id.Emp_Name);
+        textView_NOcabs = findViewById(R.id.textView_NOcabs);
         Emp_HomeAddress_textView = findViewById(R.id.Emp_homeAddress);
         Emp_ContactNum_textView = findViewById(R.id.Emp_contactNumber);
         Emp_QLID_textView.setText(String.format("Emp.ID: %s", Employee_Qlid));
@@ -109,11 +110,21 @@ public class Dashboard extends AppCompatActivity
         Emp_ContactNum_textView.setText(String.format("Contact Number:- %s", Employee_Contact_number));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 
-        adapter = new CabMatesAdapter(getCabMatesDetails(), this);
+        Cursor cursor = getCabMatesDetails();
+        if (!cursor.moveToPosition(1)) {
 
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        mRecyclerView.setAdapter(adapter);
+            Toast.makeText(this, "No Data is recycler view", Toast.LENGTH_SHORT).show();
+            textView_NOcabs.setVisibility(View.VISIBLE);
+
+        } else {
+            textView_NOcabs.setVisibility(View.GONE);
+            adapter = new CabMatesAdapter(getCabMatesDetails(), this);
+            mRecyclerView.setLayoutManager(linearLayoutManager);
+            mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+            mRecyclerView.setAdapter(adapter);
+
+        }
+
         checkCon = checkConnection(Dashboard.this);
 
         //<editor-fold desc="Get teh data from database">
@@ -127,10 +138,21 @@ public class Dashboard extends AppCompatActivity
             End_Time = c.getString(c.getColumnIndex(ShiftContract.COLUMN_END_TIME));
             c.moveToNext();
         }
-        //</editor-fold>
-        String currentShift = "Current Shift is " + Start_Time + " to " + End_Time;
+/*
+        if(Start_Time.isEmpty() && End_Time.isEmpty()){
+            Current_shift.setText(R.string.notinanyCabs);
+        }*/
         Current_shift = findViewById(R.id.textView_currentShift);
-        Current_shift.setText(currentShift);
+        if (Start_Time == null) {
+            Current_shift.setText("You're not in any Cabs");
+        } else {
+            String currentShift = "Current Shift is " + Start_Time + " to " + End_Time;
+            Current_shift.setText(currentShift);
+        }
+
+        //</editor-fold>
+       /* String currentShift = "Current Shift is " + Start_Time + " to " + End_Time;
+        Current_shift.setText(currentShift);*/
        /* cabMatesNotification();//Abhishek Alarm manager
         getCabMateShiftTimeNew();
 */
@@ -504,9 +526,10 @@ public class Dashboard extends AppCompatActivity
     //<editor-fold desc="OnStart">
     @Override
     protected void onStart() {
-        if (getSharedPreferences(null, MODE_PRIVATE).getBoolean("alarm", true))
-        { gettingPickuptime();
-            getSharedPreferences(null, MODE_PRIVATE).edit().putBoolean("alarm", false).apply();}
+        if (getSharedPreferences(null, MODE_PRIVATE).getBoolean("alarm", true)) {
+            gettingPickuptime();
+            getSharedPreferences(null, MODE_PRIVATE).edit().putBoolean("alarm", false).apply();
+        }
 
 
         super.onStart();

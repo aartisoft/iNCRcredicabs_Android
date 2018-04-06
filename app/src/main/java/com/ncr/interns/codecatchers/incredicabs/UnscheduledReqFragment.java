@@ -3,6 +3,7 @@ package com.ncr.interns.codecatchers.incredicabs;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -598,7 +599,9 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         alertDialog.cancel();
-                                                        startActivity(new Intent(ctx,Dashboard.class));
+
+
+
 
                                                     }
                                                 });
