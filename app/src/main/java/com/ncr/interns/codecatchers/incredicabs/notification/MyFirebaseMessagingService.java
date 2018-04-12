@@ -75,7 +75,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
          reqSubString = msg.substring(++ind1,ind2);
 
         Log.d(TAG, "onMessageReceived: request ID "+reqSubString);
-
+//
         //<editor-fold desc="Putting reqId in shared Preferences">
         SharedPreferences sharedPreferences = getSharedPreferences(MY_PREFERENCES,MODE_PRIVATE);
         sharedPreferences.edit().putString("reqId",reqSubString).commit();
