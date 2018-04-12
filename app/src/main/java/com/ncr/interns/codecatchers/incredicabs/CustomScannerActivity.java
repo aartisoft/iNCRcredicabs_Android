@@ -83,7 +83,7 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
                 sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
                 Emp_Qlid=sharedPreferences.getString("user_qlid","");
                 final String query = "select a.cabmatepickuptime, a.routenumber, a.roasterid, a.shiftid, b.starttime, b.endtime  from CabMatesDetails a, ShiftTable b where a.CabMateQlid = ? and a.shiftid = b.shiftid";
-               Cursor c = mSqLiteDatabase.rawQuery(query, new String[]{getEmployeeQlid().toUpperCase()});
+                Cursor c = mSqLiteDatabase.rawQuery(query, new String[]{getEmployeeQlid().toUpperCase()});
                 c.moveToFirst();
                 while (!c.isAfterLast()) {
                     Pickup_Time = c.getString(c.getColumnIndex(CabMatesContract.COLUMN_CABMATE_PICKUPTIME));
@@ -111,6 +111,7 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
                         jsonBodyRequest.put("Trip_Date", date_format.format(rightNow.getTime()));
                         jsonBodyRequest.put("Check_in_Time", time_format.format(rightNow.getTime()));
                         jsonBodyRequest.put("Cab_Type","manual");
+                        jsonBodyRequest.put("QRcode","null");
                         if (Hour >= Pick_hour && Hour <= Start_Time_Hour) {
                             jsonBodyRequest.put("Trip_Type", "Pick");
                         } else {

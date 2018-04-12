@@ -98,6 +98,7 @@ public class CustomScannerCheckOutActivity extends AppCompatActivity  implements
                         jsonBodyRequest.put("Emp_Qlid", Emp_Qlid);
                         jsonBodyRequest.put("Trip_Date", date_format.format(rightNow.getTime()));
                         jsonBodyRequest.put("Check_out_Time", date.format(rightNow.getTime()));
+                        jsonBodyRequest.put("QRcode","null");
                         if (Hour >= Pick_hour && Hour < (Start_Time_Hour + 1)) {
                             jsonBodyRequest.put("Trip_Type", "Pick");
                         } else {
@@ -112,10 +113,26 @@ public class CustomScannerCheckOutActivity extends AppCompatActivity  implements
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
+                                    JSONObject js = null;
+                                    String Check_In=" ";
+                                    try {
+                                        js = new JSONObject(response.getString("result"));
+                                        Check_In = js.getString("Check_out");
+                                        if(Check_In.equals("Done"))
+                                        {
+                                            Toast.makeText(getApplicationContext(), "Successful Checkout", Toast.LENGTH_LONG).show();
+                                        }
+                                        else
+                                        {
+                                            Toast.makeText(getApplicationContext(), "Already Checkedout", Toast.LENGTH_LONG).show();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
 
                                     Log.i("VOLLEY", "inside onResponse method:doLogin");
                                     Log.i("VOLLEY", response.toString());
-                                    Toast.makeText(CustomScannerCheckOutActivity.this, "CheckOut Successfull", Toast.LENGTH_SHORT).show();
+                                    //  Toast.makeText(CustomScannerCheckOutActivity.this, "CheckOut Successfull", Toast.LENGTH_SHORT).show();
 
 
                                 }

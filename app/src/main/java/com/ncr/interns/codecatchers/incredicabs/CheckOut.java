@@ -100,6 +100,7 @@ public class CheckOut extends AppCompatActivity {
                     jsonBodyRequest.put("Emp_Qlid", Emp_Qlid);
                     jsonBodyRequest.put("Trip_Date", date_format.format(rightNow.getTime()));
                     jsonBodyRequest.put("Check_out_Time", date.format(rightNow.getTime()));
+                    jsonBodyRequest.put("QRcode",scanContent);
                     if(Hour>=Pick_hour && Hour<(Start_Time_Hour+1)) {
                         jsonBodyRequest.put("Trip_Type", "Pick");
                     }
@@ -114,10 +115,32 @@ public class CheckOut extends AppCompatActivity {
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
+                                JSONObject js = null;
+                                try {
+                                    String Check_out;
+                                    js = new JSONObject(response.getString("result"));
+                                    Check_out = js.getString("Check_out");
+                                    if(Check_out.equals("Done"))
+                                    {
+
+                                        Toast.makeText(getApplicationContext(), "Successful Checkout", Toast.LENGTH_LONG).show();
+                                    }
+                                    else if(Check_out.equals("INCORRECT QRcode"))
+                                    {
+                                        Toast.makeText(getApplicationContext(), "INCORRECT QRcode", Toast.LENGTH_LONG).show();
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(getApplicationContext(), "Already Checked out", Toast.LENGTH_LONG).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
 
                                 Log.i("VOLLEY", "inside onResponse method:doLogin");
                                 Log.i("VOLLEY", response.toString());
-                                Toast.makeText(CheckOut.this, "CheckOut Sucessful", Toast.LENGTH_SHORT).show();
+                                //   Toast.makeText(CheckOut.this, "CheckOut Sucessful", Toast.LENGTH_SHORT).show();
 
                             }
                         },

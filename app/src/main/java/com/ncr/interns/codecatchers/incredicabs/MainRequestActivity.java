@@ -5,15 +5,18 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 ;
 
 public class MainRequestActivity extends AppCompatActivity {
+
+    private static final String TAG = "MAIN_REQUEST_ACTIVITY_";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_request);
-
+        Log.d(TAG, "onCreate: inside on create");
         ViewPager viewPager = findViewById(R.id.viewPager);
         FragmentRequestAdapter fragmentRequestAdapter = new FragmentRequestAdapter(getSupportFragmentManager());
         viewPager.setAdapter(fragmentRequestAdapter);
@@ -24,5 +27,19 @@ public class MainRequestActivity extends AppCompatActivity {
 
 //        TabLayout tabLayout = findViewById(R.id.slider_view);
 //        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: inside onpause");
+        finish();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: inside onStop");
     }
 }

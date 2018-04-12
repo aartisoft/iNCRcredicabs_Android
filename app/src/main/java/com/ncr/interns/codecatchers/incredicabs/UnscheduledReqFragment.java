@@ -156,7 +156,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
                 //Submit Button Logic Start
                 if (selectPick == 3) {
-                 //   displayDropLocation_textView.setText("");
+                    //   displayDropLocation_textView.setText("");
                     sourceAddress = editText_otherPickUp.getText().toString();
                 } else
                     sourceAddress = displayPickupLocation_textView.getText().toString();
@@ -328,8 +328,8 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                         timePicker.setText("" + hourOfDay + ":" + minute);
                         startTime = "" + hourOfDay + ":" + minute;
                     }
-                    //</editor-fold>
-                 }}}
+                        //</editor-fold>
+                    }}}
         }, mHour, mMinute, false);
         timePickerDialog.show();
     }
@@ -402,30 +402,30 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 editText_otherPickUp.setVisibility(View.GONE);
             }
             if (position == 1) {
-               // destination_entry_source = "HOME TO ";
+                // destination_entry_source = "HOME TO ";
                 from_address = "HOME";
                 displayPickupLocation_textView.setText("");
                 displayPickupLocation_textView.setText(Employee_HomeAddress);
                 displayPickupLocation_textView.setVisibility(View.VISIBLE);
-                textView_selectTime.setText(R.string.field_drop_time);
+                //textView_selectTime.setText(R.string.field_drop_time);
                 editText_otherPickUp.setVisibility(View.GONE);
 
             }
             if (position == 2) {
-             //   destination_entry_source = "OFFICE TO ";
+                //   destination_entry_source = "OFFICE TO ";
                 from_address = "OFFICE";
                 displayPickupLocation_textView.setText("");
                 displayPickupLocation_textView.setText(Employee_OfficeAddress);
                 displayPickupLocation_textView.setVisibility(View.VISIBLE);
                 editText_otherPickUp.setVisibility(View.GONE);
-                textView_selectTime.setText(R.string.field_pickup_time);
+                //textView_selectTime.setText(R.string.field_pickup_time);
             }
 
 
             if (position == 3) {
-               // destination_entry_source = "OTHERS TO ";
+                // destination_entry_source = "OTHERS TO ";
                 from_address = "OTHERS";
-                textView_selectTime.setText("Pickup Time");
+                // textView_selectTime.setText("Pickup Time");
                 displayPickupLocation_textView.setText("");
                 displayPickupLocation_textView.setVisibility(View.GONE);
                 editText_otherPickUp.setVisibility(View.VISIBLE);
@@ -452,6 +452,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             if (position == 0) {
                 displayDropLocation_textView.setText("");
                 destination_entry_source = "";
+                textView_selectTime.setText(R.string.field_pickup_time);
                 displayDropLocation_textView.setVisibility(View.GONE);
                 editText_otherDrop.setVisibility(View.GONE);
 
@@ -460,12 +461,14 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 displayDropLocation_textView.setVisibility(View.VISIBLE);
                 editText_otherDrop.setVisibility(View.GONE);
                 destination_entry_to = "HOME";
+                textView_selectTime.setText(R.string.field_pickup_time);
                 displayDropLocation_textView.setText(Employee_HomeAddress);
 
             }
             if (position == 2) {
                 destination_entry_to = "OFFICE";
                 displayDropLocation_textView.setVisibility(View.VISIBLE);
+                textView_selectTime.setText(R.string.field_drop_time);
                 editText_otherDrop.setVisibility(View.GONE);
                 displayDropLocation_textView.setText("");
                 displayDropLocation_textView.setText(Employee_OfficeAddress);
@@ -475,6 +478,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                 destination_entry_to = "OTHERS";
                 displayDropLocation_textView.setVisibility(View.GONE);
                 displayDropLocation_textView.setText("");
+                textView_selectTime.setText(R.string.field_pickup_time);
                 editText_otherDrop.setVisibility(View.VISIBLE);
                 editText_otherDrop.getText();
             }
@@ -588,9 +592,9 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                         Log.i("VOLLEY", "inside onResponse method:UnscheduledRequest");
                                         Log.i("VOLLEY", response.toString());
 
-                                         try {
+                                        try {
                                             if (response.getString("status").equalsIgnoreCase("success")) {
-                                               // Toast.makeText(getActivity(), "Your request is Submitted", Toast.LENGTH_LONG).show();
+                                                // Toast.makeText(getActivity(), "Your request is Submitted", Toast.LENGTH_LONG).show();
                                                 final AlertDialog alertDialog = new AlertDialog.Builder(ctx).create();
                                                 alertDialog.setTitle("Alert!!");
                                                 alertDialog.setMessage("Your Request is Successfully Submitted");

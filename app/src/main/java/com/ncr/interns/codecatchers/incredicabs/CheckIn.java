@@ -89,7 +89,6 @@ public class CheckIn extends AppCompatActivity {
                     String split1[] = Start_Time.split(":");
                     int Pick_hour = Integer.parseInt(split[0]);
                     int Start_Time_Hour = Integer.parseInt(split1[0]);
-
                     Calendar rightNow = Calendar.getInstance();
                     System.out.println(rightNow);
                     int Hour = rightNow.get(Calendar.HOUR_OF_DAY);
@@ -100,6 +99,7 @@ public class CheckIn extends AppCompatActivity {
                     jsonBodyRequest.put("Trip_Date", date_format.format(rightNow.getTime()));
                     jsonBodyRequest.put("Check_in_Time", time_format.format(rightNow.getTime()));
                     jsonBodyRequest.put("Cab_Type", "auto");
+                    jsonBodyRequest.put("QRcode",scanContent);
                     if (Hour >= Pick_hour && Hour <= Start_Time_Hour) {
                         jsonBodyRequest.put("Trip_Type", "Pick");
                     } else {
@@ -123,6 +123,10 @@ public class CheckIn extends AppCompatActivity {
 
                                         Toast.makeText(getApplicationContext(), "Successful Checkin", Toast.LENGTH_LONG).show();
                                     }
+                                    else if(Check_In.equals("INCORRECT QRcode"))
+                                    {
+                                        Toast.makeText(getApplicationContext(), "INCORRECT QRcode", Toast.LENGTH_LONG).show();
+                                    }
                                     else
                                     {
                                         Toast.makeText(getApplicationContext(), "Already Checkedin", Toast.LENGTH_LONG).show();
@@ -130,7 +134,7 @@ public class CheckIn extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                Log.i("VOLLEY", "inside onResponse method:doLogin");
+                                Log.i("VOLLEY", "inside onResponse method:Checkin");
                                 Log.i("VOLLEY", response.toString());
 
 
