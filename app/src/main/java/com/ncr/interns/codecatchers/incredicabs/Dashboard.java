@@ -161,7 +161,7 @@ public class Dashboard extends AppCompatActivity
             public void onClick(View v) {
 
                 if (Start_Time == null) {
-                    Snackbar snackbar = Snackbar.make(linearLayout, "Server Error", Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(linearLayout, "You Cannnot CheckIn You don't have a ride Scheduled", Snackbar.LENGTH_LONG);
                     snackbar.show();
                     return;
                 }
@@ -194,7 +194,7 @@ public class Dashboard extends AppCompatActivity
             public void onClick(View v) {
 
                 if (Start_Time == null) {
-                    Snackbar snackbar = Snackbar.make(linearLayout, "Server Error", Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(linearLayout, "You Cannnot CheckOut You don't have a ride Scheduled", Snackbar.LENGTH_LONG);
                     snackbar.show();
                     return;
                 }
@@ -570,7 +570,7 @@ public class Dashboard extends AppCompatActivity
 
                         // Toast.makeText(Dashboard.this, "Your request is Submitted", Toast.LENGTH_LONG).show();
                     } else {
-                        cabMatesNotification("14:30");
+                        cabMatesNotification("8:30");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

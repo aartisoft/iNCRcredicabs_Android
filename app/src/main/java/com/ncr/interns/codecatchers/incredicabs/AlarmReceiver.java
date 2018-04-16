@@ -39,7 +39,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(
-                context).setSmallIcon(R.drawable.ic_launcher_foreground)
+                context).setSmallIcon(R.drawable.ic_car_notification)
                 .setContentTitle("Pickup Alert ")
                 .setContentText("Get Ready for your Pickup, 30mins to go").setSound(alarmSound)
                 .setAutoCancel(true).setWhen(when)
