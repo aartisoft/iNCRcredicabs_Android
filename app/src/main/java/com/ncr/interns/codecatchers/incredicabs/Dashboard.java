@@ -2,6 +2,7 @@ package com.ncr.interns.codecatchers.incredicabs;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
@@ -18,6 +19,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -87,7 +90,7 @@ public class Dashboard extends AppCompatActivity
     private static final String TAG = "Dashboard Debugging";
     private static final int REQUEST_CALL = 1;
     TextView Emp_QLID_textView, Emp_Name_textView, Emp_HomeAddress_textView, Emp_ContactNum_textView;
-    TextView Current_shift,textView_NOcabs;
+    TextView Current_shift, textView_NOcabs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +116,7 @@ public class Dashboard extends AppCompatActivity
         Cursor cursor = getCabMatesDetails();
         if (!cursor.moveToPosition(1)) {
 
-        //    Toast.makeText(this, "No Data is recycler view", Toast.LENGTH_SHORT).show();
+            //    Toast.makeText(this, "No Data is recycler view", Toast.LENGTH_SHORT).show();
             textView_NOcabs.setVisibility(View.VISIBLE);
 
         } else {
@@ -236,6 +239,18 @@ public class Dashboard extends AppCompatActivity
                 Intent intent = new Intent(Dashboard.this, MainRequestActivity.class);
                 startActivity(intent);
 
+/*
+                UnscheduledReqFragment fragment = new UnscheduledReqFragment();
+                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().
+                        setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                        .show(fragment)
+                        .commit();
+                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(fragment, "Unscheduled req fragment");
+                fragmentTransaction.commit();
+*/
             }
         });
 
@@ -290,7 +305,7 @@ public class Dashboard extends AppCompatActivity
             makePhoneCall(number);
         }
         if (id == R.id.refresh) {
-            sharedPreferences = getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
+            sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
             String userQlid = sharedPreferences.getString("user_qlid", "");
             String userPassword = sharedPreferences.getString("user_password", "");
             try {
@@ -359,7 +374,7 @@ public class Dashboard extends AppCompatActivity
                     ContentValues cabMateValues = new ContentValues();
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_QLID, CabMate_Qlid);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_NAME, CabMate_name);
-                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_PICKUPTIME,CabMate_pickupTime);
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_PICKUPTIME, CabMate_pickupTime);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER, CabMate_contactNumber);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_ADDRESS, CabMate_address);
                     //                  cabMateValues.put(CabMatesContract.COLUMN_CABMATE_PICKUPTIME,CabMate_pickupTime);
@@ -611,7 +626,7 @@ public class Dashboard extends AppCompatActivity
         Cursor c = mSqLiteDatabase.rawQuery("SELECT * FROM " + EmployeeContract.DB_TABLE, null);
         while (c.moveToNext()) {
             Employee_Qlid = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_EMP_QLID));
-            Employee_Name = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_FIRST_NAME))
+            Employee_Name = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_FIRST_NAME)) + " "
                     + c.getString(c.getColumnIndex(EmployeeContract.COLUMN_LAST_NAME));
             Employee_Contact_number = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_CONTACT_NUMBER));
             Employee_HomeAddress = c.getString(c.getColumnIndex(EmployeeContract.COLUMN_HOME_ADDRESS));

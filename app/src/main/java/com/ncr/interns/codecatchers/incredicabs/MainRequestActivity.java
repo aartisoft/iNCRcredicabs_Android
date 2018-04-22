@@ -1,5 +1,6 @@
 package com.ncr.interns.codecatchers.incredicabs;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,13 +18,21 @@ public class MainRequestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_request);
         Log.d(TAG, "onCreate: inside on create");
-        ViewPager viewPager = findViewById(R.id.viewPager);
+       /* ViewPager viewPager = findViewById(R.id.viewPager);
         FragmentRequestAdapter fragmentRequestAdapter = new FragmentRequestAdapter(getSupportFragmentManager());
         viewPager.setAdapter(fragmentRequestAdapter);
+       */
         Toolbar toolbar = findViewById(R.id.my_Toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        UnscheduledReqFragment fragment = new UnscheduledReqFragment();
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+       // fragmentTransaction.add(fragment,"Unscheduled req fragment");
+        fragmentTransaction.add(R.id.viewPager,fragment);
+        fragmentTransaction.commit();
 
 //        TabLayout tabLayout = findViewById(R.id.slider_view);
 //        tabLayout.setupWithViewPager(viewPager);

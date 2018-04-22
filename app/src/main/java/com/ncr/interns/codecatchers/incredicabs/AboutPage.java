@@ -29,11 +29,10 @@ public class AboutPage extends AppCompatActivity {
                         setDescription(description)
 
                 .addItem(new Element().setTitle("Developed by iNCRedible Interns 2018 batch."))
-                .addItem(new Element().setTitle("Version 1.0"))
+                .addItem(new Element().setTitle("Version 1.1"))
                 .addItem(adsElement)
                 .addGroup("Connect With us").addEmail("Gaurav.sati@ncr.com")
-                .addGitHub("Gauti_neo")
-                .addWebsite("bit.ly/iNCRedicabs")
+                .addWebsite("http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080")
                 .addItem(getCopyRightElement())
                 .create();
 
