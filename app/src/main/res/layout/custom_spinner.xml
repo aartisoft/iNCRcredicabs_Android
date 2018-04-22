@@ -3,9 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceListItemSmall"
     android:gravity="center_vertical"
     android:padding="6dp"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:drawableRight="@drawable/ic_expand_more_black_24dp" /><!--your custom icon-->
+    /><!--your custom icon-->
 

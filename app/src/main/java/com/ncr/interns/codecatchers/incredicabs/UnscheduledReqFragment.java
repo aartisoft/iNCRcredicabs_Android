@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.support.v7.app.*;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -61,7 +62,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     String dateToCheck, dateFromCheck, day_st, from_address;;
     EditText fromDate, toDate, reasonForRequest, timePicker, editText_otherPickUp, editText_otherDrop;
     TextView managerQLid_textField, displayDropLocation_textView, textView_selectTime, displayPickupLocation_textView;
-    NestedScrollView nsv;
+    ScrollView nsv;
     String startDate, endDate, startTime, destination_entry_source, sourceAddress, dropAddress;
     String destination_entry_to;
     Button submit;
@@ -97,7 +98,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.content_request, container, false);
+        rootView = inflater.inflate(R.layout.new_demo, container, false);
 
         getComponentsId();
 
@@ -201,7 +202,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 dateSelection.set(year, monthOfYear, dayOfMonth);
-                String dateFormat = "YYYY-MM-dd";
+                String dateFormat = "yyyy-MM-dd";
 //                datePicker.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 //                datePicker.setText();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.US);
@@ -261,7 +262,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 dateSelection.set(year, monthOfYear, dayOfMonth);
-                String dateFormat = "YYYY-MM-dd";
+                String dateFormat = "yyyy-MM-dd";
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.US);
                 String date = simpleDateFormat.format(new Date(year - 1900, monthOfYear, dayOfMonth));
 
@@ -517,22 +518,22 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     }
 
     public void getComponentsId() {
-        managerQLid_textField = rootView.findViewById(R.id.TextView_managerQLID);
-        displayPickupLocation_textView = rootView.findViewById(R.id.display_location_spinner);
-        displayDropLocation_textView = rootView.findViewById(R.id.text_dropLocation);
-        submit = rootView.findViewById(R.id.btn_submit); //Submit Button
-        fromDate = rootView.findViewById(R.id.text_fromDate);
-        toDate = rootView.findViewById(R.id.text_ToDate);
-        timePicker = rootView.findViewById(R.id.time_picker);
-        reasonForRequest = rootView.findViewById(R.id.text_reasonForRequest);
-        nsv = rootView.findViewById(R.id.nestedsv);
-        textView_selectTime = rootView.findViewById(R.id.textView_selectTime);
-        spinner_dropLocation = rootView.findViewById(R.id.spinner_other);
-        editText_otherPickUp = rootView.findViewById(R.id.toOtherPickupLocation);
-        editText_otherDrop = rootView.findViewById(R.id.otherDropLocation);
+        managerQLid_textField = (TextView) rootView.findViewById(R.id.TextView_managerQLID);
+        displayPickupLocation_textView = (TextView)rootView.findViewById(R.id.display_location_spinner);
+        displayDropLocation_textView = (TextView)rootView.findViewById(R.id.text_dropLocation);
+        submit = (Button) rootView.findViewById(R.id.btn_submit); //Submit Button
+        fromDate = (EditText) rootView.findViewById(R.id.text_fromDate);
+        toDate = (EditText) rootView.findViewById(R.id.text_ToDate);
+        timePicker = (EditText)rootView.findViewById(R.id.time_picker);
+        reasonForRequest = (EditText)rootView.findViewById(R.id.text_reasonForRequest);
+        nsv = (ScrollView) rootView.findViewById(R.id.nestedsv);
+        textView_selectTime = (TextView) rootView.findViewById(R.id.textView_selectTime);
+        spinner_dropLocation = (Spinner) rootView.findViewById(R.id.spinner_other);
+        editText_otherPickUp = (EditText) rootView.findViewById(R.id.toOtherPickupLocation);
+        editText_otherDrop = (EditText) rootView.findViewById(R.id.otherDropLocation);
 
-        spinner_location = rootView.findViewById(R.id.spinner_location);
-        managerQLid = rootView.findViewById(R.id.text_managerQLID);
+        spinner_location = (Spinner) rootView.findViewById(R.id.spinner_location);
+        managerQLid = (Spinner) rootView.findViewById(R.id.text_managerQLID);
         spinner_location.setOnItemSelectedListener(new PickupLocationSpinner());
         managerQLid.setOnItemSelectedListener(new ApprovalManagerQlid());
 
@@ -575,7 +576,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                     jsonBody.put("Counter", Counter);
                                     jsonBody.put("Source", sourceAddress);
                                     jsonBody.put("Destination", dropAddress);
-                                    jsonBody.put("Level2_mgr", Employee_Manager_2_Qlid);
+                                    jsonBody.put("Mgr_QLID_Level2", Employee_Manager_2_Qlid);
                                     jsonBody.put("Employee_Manager_2_Name", Employee_Manager_2_Name);
                                     jsonBody.put("Other_Addr", destination_entry_source);
                                     jsonBody.put("Reason", reasonForRequest.getText().toString());
@@ -597,7 +598,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                                 // Toast.makeText(getActivity(), "Your request is Submitted", Toast.LENGTH_LONG).show();
                                                 final AlertDialog alertDialog = new AlertDialog.Builder(ctx).create();
                                                 alertDialog.setTitle("Alert!!");
-                                                alertDialog.setMessage("Your Request is Successfully Submitted");
+                                                alertDialog.setMessage(getString(R.string.alert_request_submitted));
                                                 alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
                                                 alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
                                                     @Override
@@ -626,11 +627,11 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                         // Do something when error occurred
                                         Log.d("VOLLEY", "Something went wrong");
                                         //  Toast.makeText(getActivity(), "Oops..Something Went wrong", Toast.LENGTH_SHORT).show();
-                                        Snackbar snackbar = Snackbar.make(nsv, "Oops Something Went Wrong Failed To submit Request", Snackbar.LENGTH_LONG);
+                                        Snackbar snackbar = Snackbar.make(nsv, "Oops Something Went Wrong Failed To Submit your Request", Snackbar.LENGTH_LONG);
                                         snackbar.setAction("Retry", new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
-                                                //sendRequest();
+                                                sendRequest();
                                             }
                                         });
                                         snackbar.show();

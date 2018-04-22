@@ -252,7 +252,7 @@ public class FeedbackActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 dateSelection.set(year, monthOfYear, dayOfMonth);
-                String dateFormat = "YYYY/MM/dd";
+                String dateFormat = "yyyy/MM/dd";
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.US);
                 String date = simpleDateFormat.format(new Date(year - 1900, monthOfYear, dayOfMonth));
 
@@ -487,7 +487,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     alertDialog.cancel();
                     finish();
-                    startActivity(new Intent(FeedbackActivity.this,Dashboard.class));
+                   // startActivity(new Intent(FeedbackActivity.this,Dashboard.class));
 
                 }
             });

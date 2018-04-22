@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:focusableInTouchMode="true"
-    android:focusable="true"
-    android:id="@+id/nestedsv"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
         <ScrollView
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fillViewport="false">
+            android:layout_height="match_parent"
+            android:id="@+id/nestedsv"
+           >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -35,7 +24,7 @@
                         android:layout_margin="@dimen/horizontal_linear_layout_margin"
                         android:layout_weight="1"
                         android:orientation="horizontal"
-                        android:weightSum="10">
+                        >
 
                         <TextView
                             android:layout_width="0dp"
@@ -58,6 +47,7 @@
                             android:background="@drawable/background_edittext"
                             android:drawableRight="@drawable/ic_date_ca"
                             android:ems="10"
+                            android:editable="false"
                             android:focusable="false"
                             android:padding="@dimen/edittxt_padding" />
 
@@ -91,9 +81,9 @@
                             android:layout_margin="2dp"
                             android:layout_weight="6"
                             android:background="@drawable/background_edittext"
-                            android:drawableRight="@drawable/ic_date_ca"
                             android:editable="false"
-                            android:drawablePadding="5dp"
+                            android:ems="10"
+                            android:drawableRight="@drawable/ic_date_ca"
                             android:focusable="false"
                             android:padding="@dimen/edittxt_padding" />
 
@@ -247,6 +237,7 @@
                         android:layout_margin="2dp"
                         android:layout_weight="6"
                         android:background="@drawable/background_edittext"
+                        android:drawableEnd="@drawable/ic_time_new"
                         android:focusable="false"
                         android:padding="@dimen/edittxt_padding" />
 
@@ -360,8 +351,7 @@
             </LinearLayout>
 
         </ScrollView>
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+
 
 
 

@@ -113,7 +113,7 @@ public class Dashboard extends AppCompatActivity
         Cursor cursor = getCabMatesDetails();
         if (!cursor.moveToPosition(1)) {
 
-            Toast.makeText(this, "No Data is recycler view", Toast.LENGTH_SHORT).show();
+        //    Toast.makeText(this, "No Data is recycler view", Toast.LENGTH_SHORT).show();
             textView_NOcabs.setVisibility(View.VISIBLE);
 
         } else {
@@ -226,6 +226,7 @@ public class Dashboard extends AppCompatActivity
             public void onClick(View v) {
                 Intent intent = new Intent(Dashboard.this, FeedbackActivity.class);
                 startActivity(intent);
+
             }
         });
 
@@ -283,12 +284,12 @@ public class Dashboard extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        jsonObject = new JSONObject();
         if (id == R.id.call_transport) {
-            number = "9998764636";
+            number = "9953122087";
             makePhoneCall(number);
         }
         if (id == R.id.refresh) {
-/*
             sharedPreferences = getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
             String userQlid = sharedPreferences.getString("user_qlid", "");
             String userPassword = sharedPreferences.getString("user_password", "");
@@ -309,11 +310,13 @@ public class Dashboard extends AppCompatActivity
                             try {
                                 if (response.getString("success").equalsIgnoreCase("true")) {
                                     mSqLiteDatabase.execSQL("DELETE FROM " + CabMatesContract.DB_TABLE);
+                                    Log.d(TAG, "onResponse: Data deleted from Sqlite");
                                     parseJSON(response);
-                                    Toast.makeText(context, "Refresh Done", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "Cab Mates Details Updated", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, "onResponse: Refresh Done");
                                     adapter = new CabMatesAdapter(getCabMatesDetails(), Dashboard.this);
                                     adapter.notifyDataSetChanged();
-                                    // TODO: 3/26/2018 Handel the refresh button
+
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -331,7 +334,6 @@ public class Dashboard extends AppCompatActivity
                     });
 
             RESTService.getInstance(Dashboard.this).addToRequestQueue(jsonObjRequest);
-*/
         }
 
         return super.onOptionsItemSelected(item);
@@ -352,10 +354,12 @@ public class Dashboard extends AppCompatActivity
                     String CabMate_name = cabMateJSON.getString("f_name") + " " + cabMateJSON.getString("l_name");
                     String CabMate_contactNumber = cabMateJSON.getString("e_mob");
                     String CabMate_address = cabMateJSON.getString("p_a");
+                    String CabMate_pickupTime = cabMateJSON.getString("pickup_time");
 //                    String CabMate_pickupTime = cabMateJSON.getString("pickup_time");
                     ContentValues cabMateValues = new ContentValues();
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_QLID, CabMate_Qlid);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_NAME, CabMate_name);
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_PICKUPTIME,CabMate_pickupTime);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER, CabMate_contactNumber);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_ADDRESS, CabMate_address);
                     //                  cabMateValues.put(CabMatesContract.COLUMN_CABMATE_PICKUPTIME,CabMate_pickupTime);
@@ -384,22 +388,22 @@ public class Dashboard extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_call_transport_one) {
-            number = "9998764636";
+            number = "9953122087";
             makePhoneCall(number);
             // FIXME: 3/22/2018 Get the real number from DB
 
         } else if (id == R.id.nav_call_transport_two) {
-            number = "7864648383";
+            number = "9953695187";
             makePhoneCall(number);
 
         } else if (id == R.id.nav_app_feedback) {
             //<editor-fold desc="Implementation Hidden">
-            Intent intent = new Intent(Intent.ACTION_SEND);
+          /*  Intent intent = new Intent(Intent.ACTION_SEND);
             intent.putExtra(Intent.EXTRA_EMAIL, "gs250365@ncr.com");
             intent.putExtra(Intent.EXTRA_SUBJECT, "Test");
             intent.putExtra(Intent.EXTRA_TEXT, " Test Test");
             intent.setType("message/rfc822");
-            startActivity(Intent.createChooser(intent, "Choose an email client"));
+            startActivity(Intent.createChooser(intent, "Choose an email client"));*/
             //</editor-fold>
 
         } else if (id == R.id.nav_about_developers) {

@@ -59,4 +59,5 @@
     <string name="copy_right">Copyright</string>
     <string name="sos_cancelled">SOS cancelled</string>
     <string name="notinanyCabs">Currently you\'re not in any Cabs</string>
+    <string name="alert_request_submitted">Request Successfully Submitted, Ride will be Scheduled soon. </string>
 </resources>
