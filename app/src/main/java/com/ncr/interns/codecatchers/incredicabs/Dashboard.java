@@ -426,16 +426,34 @@ public class Dashboard extends AppCompatActivity
 
         } else if (id == R.id.LogOut) {
 
-            Intent intent = new Intent(this, Login.class);
-            mSqLiteDatabase.execSQL("DELETE FROM " + CabMatesContract.DB_TABLE);
-            mSqLiteDatabase.execSQL("DELETE FROM " + ShiftContract.DB_TABLE);
-            mSqLiteDatabase.execSQL("DELETE FROM " + ContactsContract.DB_TABLE);
-            sharedPreferences = context.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
-            editor.apply();
-            startActivity(intent);
-            finish();
+            final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("Alert");
+            alertDialog.setMessage("Do You Want to LogOut?");
+            alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+            alertDialog.setCancelable(false);
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(context, Login.class);
+                    mSqLiteDatabase.execSQL("DELETE FROM " + CabMatesContract.DB_TABLE);
+                    mSqLiteDatabase.execSQL("DELETE FROM " + ShiftContract.DB_TABLE);
+                    mSqLiteDatabase.execSQL("DELETE FROM " + ContactsContract.DB_TABLE);
+                    sharedPreferences = context.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.clear();
+                    editor.apply();
+                    startActivity(intent);
+                    finish();
+                }
+            });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    alertDialog.cancel();
+                }
+            });
+            alertDialog.show();
+
         }
 
 

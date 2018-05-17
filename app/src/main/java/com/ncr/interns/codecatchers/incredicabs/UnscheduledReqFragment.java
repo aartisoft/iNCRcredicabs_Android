@@ -604,11 +604,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         alertDialog.cancel();
-
-
-
-
-                                                    }
+}
                                                 });
                                                 alertDialog.show();
 
