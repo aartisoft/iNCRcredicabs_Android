@@ -258,7 +258,7 @@ public class Login extends AppCompatActivity {
                 String endTime = shiftTableInfo.getString("endTime");
                 String ShiftName = shiftTableInfo.getString("shiftName");
                 ContentValues shiftInfoValues = new ContentValues();
-                // TODO: 3/22/2018 Add values to teh database
+
                 shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_ID,shiftId);
                 shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_NAME,shiftName);
                 shiftInfoValues.put(ShiftContract.COLUMN_START_TIME,startTime);

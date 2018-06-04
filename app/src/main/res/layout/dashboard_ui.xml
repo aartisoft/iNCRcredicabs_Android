@@ -170,11 +170,13 @@
             android:id="@+id/textView_NOcabs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Oops..Such Empty No Cabmates details for you.."
+            android:text="No Cab Mates Details as you're not in any Cabs"
             android:textStyle="bold"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:padding="5dp"
             android:layout_margin="5dp"
-            android:textSize="26sp"
+            android:textSize="22sp"
             android:visibility="gone"/>
 
         <android.support.v7.widget.RecyclerView

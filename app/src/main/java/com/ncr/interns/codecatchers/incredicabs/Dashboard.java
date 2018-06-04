@@ -82,6 +82,7 @@ public class Dashboard extends AppCompatActivity
     String End_Time = null;
 
     boolean checkCon;
+    String query = "select a.cabmatepickuptime, a.routenumber, a.roasterid, a.shiftid, b.starttime, b.endtime  from CabMatesDetails a, ShiftTable b where a.CabMateQlid = ? and a.shiftid = b.shiftid";
     String mainUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/RoasterDetailsByEmpID"; //
     String loginUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/EmployeeService/login-android";
     SharedPreferences sharedPreferences;
@@ -102,6 +103,7 @@ public class Dashboard extends AppCompatActivity
         mSqLiteDatabase = ncabSQLiteHelper.getWritableDatabase();
         getIdofComponents();
         getEmployeeData();
+        Current_shift = findViewById(R.id.textView_currentShift);
         Emp_QLID_textView = findViewById(R.id.Emp_QLid);
         Emp_Name_textView = findViewById(R.id.Emp_Name);
         textView_NOcabs = findViewById(R.id.textView_NOcabs);
@@ -130,8 +132,8 @@ public class Dashboard extends AppCompatActivity
 
         checkCon = checkConnection(Dashboard.this);
 
-        //<editor-fold desc="Get teh data from database">
-        final String query = "select a.cabmatepickuptime, a.routenumber, a.roasterid, a.shiftid, b.starttime, b.endtime  from CabMatesDetails a, ShiftTable b where a.CabMateQlid = ? and a.shiftid = b.shiftid";
+        //<editor-fold desc="Get teh data from SQLite database">
+        // final String query = "select a.cabmatepickuptime, a.routenumber, a.roasterid, a.shiftid, b.starttime, b.endtime  from CabMatesDetails a, ShiftTable b where a.CabMateQlid = ? and a.shiftid = b.shiftid";
         Cursor c = mSqLiteDatabase.rawQuery(query, new String[]{Employee_Qlid.toUpperCase()});
         c.moveToFirst();
         while (!c.isAfterLast()) {
@@ -141,11 +143,8 @@ public class Dashboard extends AppCompatActivity
             End_Time = c.getString(c.getColumnIndex(ShiftContract.COLUMN_END_TIME));
             c.moveToNext();
         }
-/*
-        if(Start_Time.isEmpty() && End_Time.isEmpty()){
-            Current_shift.setText(R.string.notinanyCabs);
-        }*/
-        Current_shift = findViewById(R.id.textView_currentShift);
+
+
         if (Start_Time == null) {
             Current_shift.setText("You're not in any Cabs");
         } else {
@@ -153,16 +152,11 @@ public class Dashboard extends AppCompatActivity
             Current_shift.setText(currentShift);
         }
 
-        //</editor-fold>
-       /* String currentShift = "Current Shift is " + Start_Time + " to " + End_Time;
-        Current_shift.setText(currentShift);*/
-       /* cabMatesNotification();//Abhishek Alarm manager
-        getCabMateShiftTimeNew();
-*/
+
         checkIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //<editor-fold desc="Code to CheckIn">
                 if (Start_Time == null) {
                     Snackbar snackbar = Snackbar.make(linearLayout, "You Cannnot CheckIn You don't have a ride Scheduled", Snackbar.LENGTH_LONG);
                     snackbar.show();
@@ -188,7 +182,7 @@ public class Dashboard extends AppCompatActivity
                     });
                     alertDialog.show();
                 }
-
+                //</editor-fold>
             }
         });
 
@@ -196,6 +190,7 @@ public class Dashboard extends AppCompatActivity
             @Override
             public void onClick(View v) {
 
+                //<editor-fold desc="Code to CheckOut">
                 if (Start_Time == null) {
                     Snackbar snackbar = Snackbar.make(linearLayout, "You Cannnot CheckOut You don't have a ride Scheduled", Snackbar.LENGTH_LONG);
                     snackbar.show();
@@ -221,6 +216,7 @@ public class Dashboard extends AppCompatActivity
                     });
                     alertDialog.show();
                 }
+                //</editor-fold>
             }
         });
 
@@ -305,6 +301,11 @@ public class Dashboard extends AppCompatActivity
             makePhoneCall(number);
         }
         if (id == R.id.refresh) {
+            //<editor-fold desc="Refresh Button">
+            /**
+             * Getting the User's QLid and password from shared Preferences for hitting the LogIn APi and getting
+             * the Appropriate DATA
+             */
             sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
             String userQlid = sharedPreferences.getString("user_qlid", "");
             String userPassword = sharedPreferences.getString("user_password", "");
@@ -318,20 +319,57 @@ public class Dashboard extends AppCompatActivity
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-
-                            Log.i("VOLLEY", "inside onResponse method: Login");
-                            Log.i("VOLLEY", response.toString());
-
+                            //                          Log.i("VOLLEY", "inside onResponse method: Login");
+//                            Log.i("VOLLEY", response.toString());
                             try {
                                 if (response.getString("success").equalsIgnoreCase("true")) {
+                                   // Code for Changing the existing view of Dashboard
                                     mSqLiteDatabase.execSQL("DELETE FROM " + CabMatesContract.DB_TABLE);
+                                    mSqLiteDatabase.execSQL("DELETE FROM "+ShiftContract.DB_TABLE);
+                                    Log.d(TAG, "Gaurav >>>> onResponse: StartTime:- " +Start_Time);
                                     Log.d(TAG, "onResponse: Data deleted from Sqlite");
                                     parseJSON(response);
+                                    //     Updating the details of users Cabmates
+                                    //     adapter = new CabMatesAdapter(getCabMatesDetails(), Dashboard.this);
+                                    //     adapter.notifyDataSetChanged();
+                                    // TODO: 6/4/2018 Update the Shift timings too
+                                    Start_Time = null;
+                                    End_Time = null;
+                                    Cursor c = mSqLiteDatabase.rawQuery(query, new String[]{Employee_Qlid.toUpperCase()});
+                                    c.moveToFirst();
+                                    while (!c.isAfterLast()) {
+                                        Pickup_Time = c.getString(c.getColumnIndex(CabMatesContract.COLUMN_CABMATE_PICKUPTIME));
+                                        Start_Time = c.getString(c.getColumnIndex(ShiftContract.COLUMN_START_TIME));
+                                        Route_No = c.getString(c.getColumnIndex(CabMatesContract.COLUMN_CABMATE_ROUTE_NUMBER));
+                                        End_Time = c.getString(c.getColumnIndex(ShiftContract.COLUMN_END_TIME));
+                                        c.moveToNext();
+                                    }
+
+                                    if (Start_Time == null) {
+                                        Current_shift.setText("You're not in any Cabs");
+                                    } else {
+                                        String currentShift = "Current Shift is " + Start_Time + " to " + End_Time;
+                                        Current_shift.setText(currentShift);
+                                    }
+                                    Cursor cursor = getCabMatesDetails();
+                                    if (!cursor.moveToPosition(1)) {
+
+                                        //    Toast.makeText(this, "No Data is recycler view", Toast.LENGTH_SHORT).show();
+                                        textView_NOcabs.setVisibility(View.VISIBLE);
+                                        mRecyclerView.setVisibility(View.GONE);
+
+                                    } else {
+                                        textView_NOcabs.setVisibility(View.GONE);
+                                        mRecyclerView.setVisibility(View.VISIBLE);
+                                        adapter = new CabMatesAdapter(getCabMatesDetails(), Dashboard.this);
+                                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(Dashboard.this);
+                                        mRecyclerView.setLayoutManager(linearLayoutManager);
+                                        mRecyclerView.addItemDecoration(new DividerItemDecoration(Dashboard.this, DividerItemDecoration.VERTICAL));
+                                        mRecyclerView.setAdapter(adapter);
+
+                                    }
                                     Toast.makeText(context, "Cab Mates Details Updated", Toast.LENGTH_SHORT).show();
                                     Log.d(TAG, "onResponse: Refresh Done");
-                                    adapter = new CabMatesAdapter(getCabMatesDetails(), Dashboard.this);
-                                    adapter.notifyDataSetChanged();
-
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -344,11 +382,13 @@ public class Dashboard extends AppCompatActivity
                         public void onErrorResponse(VolleyError error) {
                             // Do something when error occurred
                             Log.d("VOLLEY", "Something went wrong");
+                            Toast.makeText(context, "Something Went Wrong", Toast.LENGTH_SHORT).show();
                             error.printStackTrace();
                         }
                     });
 
             RESTService.getInstance(Dashboard.this).addToRequestQueue(jsonObjRequest);
+            //</editor-fold>
         }
 
         return super.onOptionsItemSelected(item);
@@ -359,7 +399,28 @@ public class Dashboard extends AppCompatActivity
         Log.d(TAG, "parseJSON: Response:- " + response);
 
         try {
-            //<editor-fold desc="Yet to Implement">
+            //<editor-fold desc="Parse JSON method">
+
+            JSONArray shiftInfo = response.getJSONArray("shiftInfo");
+
+            for (int i  =0;i<shiftInfo.length();i++){
+                JSONObject shiftTableInfo = shiftInfo.getJSONObject(i);
+                int shiftId =  shiftTableInfo.getInt("shiftId");
+                String shiftName = shiftTableInfo.getString("shiftName");
+                String startTime = shiftTableInfo.getString("startTime");
+                String endTime = shiftTableInfo.getString("endTime");
+                String ShiftName = shiftTableInfo.getString("shiftName");
+                ContentValues shiftInfoValues = new ContentValues();
+
+                shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_ID,shiftId);
+                shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_NAME,shiftName);
+                shiftInfoValues.put(ShiftContract.COLUMN_START_TIME,startTime);
+                shiftInfoValues.put(ShiftContract.COLUMN_END_TIME,endTime);
+                shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_NAME,ShiftName);
+                mSqLiteDatabase.insert(ShiftContract.DB_TABLE,null,shiftInfoValues);
+            }
+
+
             JSONArray cabMates = response.getJSONArray("rosterInfo");
             for (int i = 0; i < cabMates.length(); i++) {
 
@@ -369,18 +430,20 @@ public class Dashboard extends AppCompatActivity
                     String CabMate_name = cabMateJSON.getString("f_name") + " " + cabMateJSON.getString("l_name");
                     String CabMate_contactNumber = cabMateJSON.getString("e_mob");
                     String CabMate_address = cabMateJSON.getString("p_a");
+                    String CabMate_shiftId = cabMateJSON.getString("shift_id");
+                    String CabMate_routeNumber = cabMateJSON.getString("Route_number");
                     String CabMate_pickupTime = cabMateJSON.getString("pickup_time");
-//                    String CabMate_pickupTime = cabMateJSON.getString("pickup_time");
+//
                     ContentValues cabMateValues = new ContentValues();
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_QLID, CabMate_Qlid);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_NAME, CabMate_name);
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_SHIFT_ID, CabMate_shiftId);
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_ROUTE_NUMBER,CabMate_routeNumber);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_PICKUPTIME, CabMate_pickupTime);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER, CabMate_contactNumber);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_ADDRESS, CabMate_address);
-                    //                  cabMateValues.put(CabMatesContract.COLUMN_CABMATE_PICKUPTIME,CabMate_pickupTime);
                     mSqLiteDatabase.insert(CabMatesContract.DB_TABLE, null, cabMateValues);
                     adapter = new CabMatesAdapter(getCabMatesDetails(), Dashboard.this);
-
                     mRecyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
