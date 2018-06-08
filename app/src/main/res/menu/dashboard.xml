@@ -4,7 +4,7 @@
     <item
         android:id="@+id/call_transport"
         android:title="Call Transport Authority"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:icon="@drawable/abu_hanif_transport"
         android:tooltipText="Call Transport Authority"/>
 
@@ -14,4 +14,13 @@
         android:icon="@drawable/ic_refresh_black_24dp"
         app:showAsAction="always"
         android:tooltipText="Refresh"/>
+
+    <item
+        android:id="@+id/call_driver"
+        android:title="Call Driver"
+        android:icon="@drawable/ic_call_driver"
+        app:showAsAction="always"
+        android:tooltipText="Call Driver"/>
+
+
 </menu>

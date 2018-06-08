@@ -63,7 +63,6 @@ public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     LinearLayout linearLayout;
     RecyclerView mRecyclerView;
-    ArrayList<EmployeeCabMatesDetails> mList;
     Button checkIn, checkOut, Complaints, request;
     SQLiteDatabase mSqLiteDatabase;
     NcabSQLiteHelper ncabSQLiteHelper;
@@ -72,7 +71,7 @@ public class Dashboard extends AppCompatActivity
     String number, Pickuptime = "14:10";
     String Employee_Qlid;
     String Employee_Name;
-    String Employee_HomeAddress;
+    String Employee_HomeAddress,DriverName,DriverContactNumber;
     String Employee_Contact_number;
     CabMatesAdapter adapter;
     JSONObject jsonObject;
@@ -103,6 +102,7 @@ public class Dashboard extends AppCompatActivity
         mSqLiteDatabase = ncabSQLiteHelper.getWritableDatabase();
         getIdofComponents();
         getEmployeeData();
+        getDriverDetails();
         Current_shift = findViewById(R.id.textView_currentShift);
         Emp_QLID_textView = findViewById(R.id.Emp_QLid);
         Emp_Name_textView = findViewById(R.id.Emp_Name);
@@ -235,18 +235,6 @@ public class Dashboard extends AppCompatActivity
                 Intent intent = new Intent(Dashboard.this, MainRequestActivity.class);
                 startActivity(intent);
 
-/*
-                UnscheduledReqFragment fragment = new UnscheduledReqFragment();
-                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().
-                        setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                        .show(fragment)
-                        .commit();
-                android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(fragment, "Unscheduled req fragment");
-                fragmentTransaction.commit();
-*/
             }
         });
 
@@ -296,6 +284,16 @@ public class Dashboard extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         jsonObject = new JSONObject();
+        if (id == R.id.call_driver){
+            Toast.makeText(context, "Calling Driver Now", Toast.LENGTH_SHORT).show();
+            // TODO: 6/4/2018 implement driver calling feature
+            if(DriverContactNumber.isEmpty()){
+                Toast.makeText(context, "Driver's Contact number is not Available", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                makePhoneCall(DriverContactNumber);
+            }
+        }
         if (id == R.id.call_transport) {
             number = "9953122087";
             makePhoneCall(number);
@@ -426,7 +424,7 @@ public class Dashboard extends AppCompatActivity
 
                 try {
                     JSONObject cabMateJSON = cabMates.getJSONObject(i);
-                    String CabMate_Qlid = cabMateJSON.getString("Qlid");
+                    String CabMate_Qlid = cabMateJSON.getString("Qlid").toUpperCase();
                     String CabMate_name = cabMateJSON.getString("f_name") + " " + cabMateJSON.getString("l_name");
                     String CabMate_contactNumber = cabMateJSON.getString("e_mob");
                     String CabMate_address = cabMateJSON.getString("p_a");
@@ -491,13 +489,14 @@ public class Dashboard extends AppCompatActivity
 
             final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
             alertDialog.setTitle("Alert");
-            alertDialog.setMessage("Do You Want to LogOut?");
+            alertDialog.setMessage("Do You Want to Log Out?");
             alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
             alertDialog.setCancelable(false);
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(context, Login.class);
+                    mSqLiteDatabase.execSQL("DELETE FROM "+EmployeeContract.DB_TABLE);
                     mSqLiteDatabase.execSQL("DELETE FROM " + CabMatesContract.DB_TABLE);
                     mSqLiteDatabase.execSQL("DELETE FROM " + ShiftContract.DB_TABLE);
                     mSqLiteDatabase.execSQL("DELETE FROM " + ContactsContract.DB_TABLE);
@@ -702,6 +701,12 @@ public class Dashboard extends AppCompatActivity
         return Employee_Qlid;
     }
 
+    public void getDriverDetails(){
+        sharedPreferences = getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
+        DriverName = sharedPreferences.getString("DRIVERNAME","");
+        DriverContactNumber = sharedPreferences.getString("DRIVERCONTACTNUMBER","");
+    }
+
     //<editor-fold desc="Method to get the Current Employee data from the database to show in dashboard">
     public void getEmployeeData() {
         Cursor c = mSqLiteDatabase.rawQuery("SELECT * FROM " + EmployeeContract.DB_TABLE, null);
@@ -718,6 +723,7 @@ public class Dashboard extends AppCompatActivity
     //</editor-fold>
 
 
+    //<editor-fold desc="Check Internet Connection">
     public static boolean checkConnection(Context context) {
         final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -736,6 +742,7 @@ public class Dashboard extends AppCompatActivity
         }
         return false;
     }
+    //</editor-fold>
 
     @Override
     protected void onPause() {

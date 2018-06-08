@@ -159,7 +159,28 @@ public class Login extends AppCompatActivity {
         Log.d(TAG, "parseJSON: Response:- "+response);
 
         try {
-            EmployeeQlID = response.getString("empQlid");
+
+            //<editor-fold desc="Get Driver details">
+            JSONObject driverDetails = response.getJSONObject("driverDetails");
+            if(driverDetails.length() == 0){
+                // TODO: 6/4/2018 Yet to think that what to do
+                sharedPreferences = context.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.putString("DRIVERNAME", " ");
+                editor.putString("DRIVERCONTACTNUMBER","");
+                editor.apply();
+            }else {
+                String driverName = driverDetails.getString("driverName");
+                String driverContactNumber = driverDetails.getString("driverContact");
+                sharedPreferences = context.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.putString("DRIVERNAME", driverName);
+                editor.putString("DRIVERCONTACTNUMBER", driverContactNumber);
+                editor.apply();
+            }
+
+            //</editor-fold>
+            EmployeeQlID = response.getString("empQlid").toUpperCase();
             EmployeeFirstName = response.getString("empFName");
             EmployeeLastName = response.getString("empLName");
             Level1ManagerQlid = response.getString("empMgrQlid1");
@@ -196,7 +217,7 @@ public class Login extends AppCompatActivity {
 
                 try {
                     JSONObject cabMateJSON = cabMates.getJSONObject(i);
-                    String CabMate_Qlid = cabMateJSON.getString("Qlid");
+                    String CabMate_Qlid = cabMateJSON.getString("Qlid").toUpperCase();
                     String CabMate_name = cabMateJSON.getString("f_name")+" "+cabMateJSON.getString("l_name");
                     String CabMate_contactNumber = cabMateJSON.getString("e_mob");
                     String CabMate_address = cabMateJSON.getString("p_a");

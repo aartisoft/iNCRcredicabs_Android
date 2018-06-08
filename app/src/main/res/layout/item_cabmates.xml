@@ -38,10 +38,10 @@
                     android:layout_weight="7"
                     android:gravity="left"
                     android:textStyle="bold"
-                    android:paddingLeft="16dp"
+                    android:paddingLeft="4dp"
                     android:layout_height="match_parent"
                     android:text="Gaurav Sati"
-                    android:textSize="20sp"/>
+                    android:textSize="@dimen/cabmate_name_textsize"/>
 
                 <TextView
                     android:id="@+id/emp_pickupTime"
@@ -50,15 +50,17 @@
                     android:layout_weight="3"
                     android:gravity="right"
                     android:text="8:00AM"
-                    android:textSize="22sp" />
+                    android:textSize="@dimen/cabmate_pickuptime_textsize" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/Emp_pickupAddress"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:paddingLeft="4dp"
                 android:layout_weight="1"
                 android:gravity="bottom"
+                android:textSize="@dimen/cabmate_address_textsize"
                 android:text="NCR Corporation, Vipul Plaza, Sunciity Sector 54,Gurgaon"/>
 
          </LinearLayout>

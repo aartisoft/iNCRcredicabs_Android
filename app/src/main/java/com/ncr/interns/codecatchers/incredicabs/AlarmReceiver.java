@@ -40,8 +40,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(
                 context).setSmallIcon(R.drawable.ic_car_notification)
-                .setContentTitle("Pickup Alert ")
-                .setContentText("Get Ready for your Pickup, 30mins to go").setSound(alarmSound)
+                .setContentTitle("iNCRediCabs")
+                .setContentText("Welcome to NCR's internal Cab System").setSound(alarmSound)
                 .setAutoCancel(true).setWhen(when)
                 .setContentIntent(pendingIntent)
                 .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});

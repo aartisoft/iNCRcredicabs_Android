@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="linear_parentlayout_padding">4dp</dimen>
+    <dimen name="sos_button_text_size">30sp</dimen>
+    <dimen name="shift_time_text_size">14sp</dimen>
+    <dimen name="shift_time_text_margin">4dp</dimen>
+    <dimen name="employee_details_text_size">10sp</dimen>
+
+    <dimen name="ci_co_parent_margin_top">15dp</dimen>
+    <dimen name="ci_co_parent_margin_bottom">15dp</dimen>
+
+    <dimen name="checkin_btn_padding_left">10dp</dimen>
+    <dimen name="checkin_btn_marginRight">10dp</dimen>
+    <dimen name="checkin_btn_margintop">5dp</dimen>
+    <dimen name="checkin_btn_marginbottom">5dp</dimen>
+    <dimen name="checkIn_btn_size">16sp</dimen>
+
+    <dimen name="checkout_btn_margin_left">10dp</dimen>
+    <dimen name="checkout_btn_margin_right">10dp</dimen>
+    <dimen name="checkout_btn_margin_bottom">5dp</dimen>
+    <dimen name="checkout_btn_size">16sp</dimen>
+    <dimen name="checkout_btn_margin_top">5dp</dimen>
+    <dimen name="checkout_btn_padding_left">10dp</dimen>
+
+    <dimen name="complaints_btn_padding_left">5dp</dimen>
+    <dimen name="complaints_btn_size">14sp</dimen>
+    <dimen name="request_btn_padding_left">5dp</dimen>
+    <dimen name="request_btn_size">14sp</dimen>
+    <dimen name="cabmate_name_textsize">12sp</dimen>
+    <dimen name="cabmate_pickuptime_textsize">14sp</dimen>
+    <dimen name="cabmate_address_textsize">10sp</dimen>
+</resources>
