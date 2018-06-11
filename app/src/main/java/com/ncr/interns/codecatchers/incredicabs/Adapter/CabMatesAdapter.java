@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ public class CabMatesAdapter extends Adapter<CabMatesAdapter.cabMatesViewHolder>
     Context ctx;
     private static final int REQUEST_CALL = 1;
     String mobNum;
+    private final static String TAG = "CABMATESADAPTER";
 
     public CabMatesAdapter(Cursor c,Context context) {
         cursor = c;
@@ -80,18 +82,17 @@ public class CabMatesAdapter extends Adapter<CabMatesAdapter.cabMatesViewHolder>
         String emp_name = cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_NAME));
         String emp_address = cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_ADDRESS));
         String emp_pickupTime = cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_PICKUPTIME));
+       // String emp_cabNumber = cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_CAB_NUMBER));
         final String emp_contact_number=cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER));
         holder.name.setText(emp_name);
         holder.address.setText(emp_address);
         holder.pickupTime.setText(emp_pickupTime);
+        //Log.d(TAG, "onBindViewHolder: "+emp_cabNumber);
         holder.contactNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mobNum = emp_contact_number;
                 makePhoneCall();
-                //Toast.makeText(ctx, " "+mobNum, Toast.LENGTH_SHORT).show();
-                /*Dashboard dashboard = new Dashboard();
-                dashboard.makePhoneCall(mobNum);*/
 
             }
         });

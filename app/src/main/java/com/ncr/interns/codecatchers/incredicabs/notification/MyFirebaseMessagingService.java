@@ -27,38 +27,25 @@ import java.util.Random;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
+    public String reqSubString;
     private static final String NOTIFICATION_ID_EXTRA = "notificationId";
     private static final String IMAGE_URL_EXTRA = "imageUrl";
     private static final String ADMIN_CHANNEL_ID ="admin_channel";
     private static final String TAG = "MyFirebaseInstanceClass";
     private NotificationManager notificationManager;
-    public static final String ACTION1 = "Approve";
-    public String reqSubString;
     private static final String MY_PREFERENCES = "MyPrefs";
+    public static final String ACTION1 = "Approve";
     public static final String ACTION2 = "Reject";
 
     @Override public void onMessageReceived(RemoteMessage remoteMessage) {
 
         Intent notificationIntent;
 
+        Intent action1Intent = new Intent(this, Approve.class).setAction(ACTION1);
+        Intent action2Intent = new Intent(this, Reject.class).setAction(ACTION2);
+        PendingIntent action1PendingIntent = PendingIntent.getBroadcast(this, 0, action1Intent, PendingIntent.FLAG_ONE_SHOT);
 
-       //     notificationIntent = new Intent(this, Request.class);
-
-        Intent action1Intent = new Intent(this, Approve.class)
-                .setAction(ACTION1);
-        Intent action2Intent = new Intent(this, Reject.class)
-                .setAction(ACTION2);
-        PendingIntent action1PendingIntent = PendingIntent.getBroadcast(this, 0,
-                action1Intent, PendingIntent.FLAG_ONE_SHOT);
-
-        PendingIntent action2PendingIntent = PendingIntent.getBroadcast(this, 0,
-                action2Intent, PendingIntent.FLAG_ONE_SHOT);
-       // notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-
-        //final PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 ,notificationIntent,0);
-
-
+        PendingIntent action2PendingIntent = PendingIntent.getBroadcast(this, 0, action2Intent, PendingIntent.FLAG_ONE_SHOT);
 
     notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -68,8 +55,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
     int notificationId = new Random().nextInt(60000);
     String msg=remoteMessage.getData().get("message");
-        //String[] msgArray = new String[] {msg};
-         //String[] msgarray= msg.split("\n");
            int ind1= msg.indexOf(":");
            int ind2 = msg.indexOf("\n");
          reqSubString = msg.substring(++ind1,ind2);
@@ -78,7 +63,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         //<editor-fold desc="Putting reqId in shared Preferences">
         SharedPreferences sharedPreferences = getSharedPreferences(MY_PREFERENCES,MODE_PRIVATE);
-        sharedPreferences.edit().putString("reqId",reqSubString).commit();
+        sharedPreferences.edit().putString("reqId",reqSubString).putString("notificationId",""+notificationId+"").apply();
         //</editor-fold>
      if(!remoteMessage.getData().get("title").equals("Cab Request Status")){
     Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -86,38 +71,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .setSmallIcon(R.drawable.ic_car_notification)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                     .setContentTitle(remoteMessage.getData().get("title")) //the "title" value you sent in your notification
-                    //.setContentText(remoteMessage.getData().get("message")) //ditto
-                    .setAutoCancel(false)  //dismisses the notification on click
                     .setSound(defaultSoundUri)
-
-                    //.setContentIntent()
-
+                    .setOngoing(true)
                     .addAction(new NotificationCompat.Action(R.drawable.ic_check_black_24dp, "Approve", action1PendingIntent))
                     .addAction(new NotificationCompat.Action(R.drawable.ic_clear_black_24dp, "Reject", action2PendingIntent));
-            //.setFullScreenIntent(this,true)
-
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
             notificationManager.notify(notificationId /* ID of notification */, notificationBuilder.build());
+            //notificationManager.cancel(notificationId);
         }else{
-
 
          Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
          NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, ADMIN_CHANNEL_ID)
                  .setSmallIcon(R.drawable.ic_car_notification)
                  .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
+                 .setAutoCancel(true)
                  .setContentTitle(remoteMessage.getData().get("title")) //the "title" value you sent in your notification
-                 //.setContentText(remoteMessage.getData().get("message")) //ditto
-                 //dismisses the notification on click
                  .setSound(defaultSoundUri);
-                 //.setContentIntent()
-
-                 //.setFullScreenIntent(this,true)
-
 
          NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
          notificationManager.notify(notificationId /* ID of notification */, notificationBuilder.build());
 
 
@@ -131,7 +103,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String adminChannelDescription = getString(R.string.notifications_admin_channel_description);
 
         NotificationChannel adminChannel;
-        adminChannel = new NotificationChannel(ADMIN_CHANNEL_ID, adminChannelName, NotificationManager.IMPORTANCE_LOW);
+        adminChannel = new NotificationChannel(ADMIN_CHANNEL_ID, adminChannelName, NotificationManager.IMPORTANCE_HIGH);
         adminChannel.setDescription(adminChannelDescription);
         adminChannel.enableLights(true);
         adminChannel.setLightColor(Color.RED);

@@ -163,7 +163,6 @@ public class Login extends AppCompatActivity {
             //<editor-fold desc="Get Driver details">
             JSONObject driverDetails = response.getJSONObject("driverDetails");
             if(driverDetails.length() == 0){
-                // TODO: 6/4/2018 Yet to think that what to do
                 sharedPreferences = context.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
                 editor = sharedPreferences.edit();
                 editor.putString("DRIVERNAME", " ");

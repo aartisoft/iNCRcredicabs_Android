@@ -1,6 +1,7 @@
 package com.ncr.interns.codecatchers.incredicabs.notification;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,6 +18,8 @@ import com.ncr.interns.codecatchers.incredicabs.RESTService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.security.acl.NotOwnerException;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -36,8 +39,10 @@ public class Approve extends BroadcastReceiver {
 
         sharedPreferences = context.getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
         reqId = sharedPreferences.getString("reqId",null);
+        String notificationId = sharedPreferences.getString("notificationId","");
+        int notifiID = Integer.parseInt(notificationId);
         Log.d(TAG, "onReceive:  Request id "+reqId);
-        Toast.makeText(context, "Processing for Request ID "+reqId, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Processing CabRequest for Request ID "+reqId, Toast.LENGTH_SHORT).show();
 
         JSONObject jsonBodyRequest = new JSONObject();
         try {
@@ -59,40 +64,10 @@ public class Approve extends BroadcastReceiver {
 
                         try {
                             if (response.getString("status").equalsIgnoreCase("success")) {
-                                /*AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-                                alertDialog.setTitle("Response");
-                                alertDialog.setMessage("Your response is Submitted");
-                                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                alertDialog.show();*/
-                                Toast.makeText(context, "Your response is Submitted", Toast.LENGTH_LONG).show();
+                             Toast.makeText(context, "Unscheduled Cab request APPROVED", Toast.LENGTH_LONG).show();
                             } else {if (response.getString("status").equalsIgnoreCase("Already")) {
-                                /*AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-                                alertDialog.setTitle("Response");
-                                alertDialog.setMessage("Response is Already Submitted");
-                                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                alertDialog.show();*/
-                                Toast.makeText(context, "Response is Already Submitted", Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "Unscheduled Cab request APPROVED", Toast.LENGTH_LONG).show();
                             }else{
-                                /*AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-                                alertDialog.setTitle("Response");
-                                alertDialog.setMessage("Response is Already Submitted");
-                                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                alertDialog.show();*/
                                 Toast.makeText(context, "Failed to submit", Toast.LENGTH_LONG).show();
                             }}
                         } catch (JSONException e) {
@@ -110,6 +85,10 @@ public class Approve extends BroadcastReceiver {
                 });
 
         RESTService.getInstance(context).addToRequestQueue(jsonObjRequest);
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(notifiID);
+
 
     }
 

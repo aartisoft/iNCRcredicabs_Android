@@ -69,10 +69,9 @@ public class Dashboard extends AppCompatActivity
     Cursor cursor;
     Button button_sos;
     String number, Pickuptime = "14:10";
-    String Employee_Qlid;
-    String Employee_Name;
+    String Employee_Qlid,Employee_Name,Employee_Contact_number;
+    String Cab_number;
     String Employee_HomeAddress,DriverName,DriverContactNumber;
-    String Employee_Contact_number;
     CabMatesAdapter adapter;
     JSONObject jsonObject;
     String Route_No = null;
@@ -103,6 +102,7 @@ public class Dashboard extends AppCompatActivity
         getIdofComponents();
         getEmployeeData();
         getDriverDetails();
+        getCabNumber();
         Current_shift = findViewById(R.id.textView_currentShift);
         Emp_QLID_textView = findViewById(R.id.Emp_QLid);
         Emp_Name_textView = findViewById(R.id.Emp_Name);
@@ -721,6 +721,13 @@ public class Dashboard extends AppCompatActivity
 
     }
     //</editor-fold>
+    public void getCabNumber(){
+        Cursor c = mSqLiteDatabase.rawQuery("SELECT * FROM " + CabMatesContract.DB_TABLE, null);
+        while(c.moveToNext()){
+            Cab_number = c.getString(c.getColumnIndex(CabMatesContract.COLUMN_CABMATE_CAB_NUMBER));
+            Log.d(TAG, "getCabNumber: "+Cab_number);
+        }
+    }
 
 
     //<editor-fold desc="Check Internet Connection">

@@ -73,4 +73,5 @@
     <dimen name="cabmate_name_textsize">18sp</dimen>
     <dimen name="cabmate_pickuptime_textsize">20sp</dimen>
     <dimen name="cabmate_address_textsize">12sp</dimen>
+    <dimen name="request_lable_text_size">14sp</dimen>
 </resources>

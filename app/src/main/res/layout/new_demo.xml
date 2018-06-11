@@ -35,7 +35,7 @@
                             android:padding="7dp"
                             android:text="@string/FromDate"
                             android:textColor="#000000"
-                            android:textSize="18sp"
+                            android:textSize="@dimen/request_lable_text_size"
                             android:textStyle="bold" />
 
                         <EditText
@@ -70,7 +70,7 @@
                             android:padding="7dp"
                             android:text="@string/ToDate"
                             android:textColor="#000000"
-                            android:textSize="18sp"
+                            android:textSize="@dimen/request_lable_text_size"
                             android:textStyle="bold" />
 
 
@@ -116,7 +116,7 @@
                             android:padding="7dp"
                             android:text="@string/PickupLocation"
                             android:textColor="#000000"
-                            android:textSize="18sp"
+                            android:textSize="@dimen/request_lable_text_size"
                             android:textStyle="bold" />
 
                         <Spinner
@@ -174,7 +174,7 @@
                             android:padding="7dp"
                             android:text="@string/DropLocation"
                             android:textColor="#000000"
-                            android:textSize="18sp"
+                            android:textSize="@dimen/request_lable_text_size"
                             android:textStyle="bold" />
 
 
@@ -227,7 +227,7 @@
                         android:padding="7dp"
                         android:text="@string/PickTime"
                         android:textColor="#000000"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/request_lable_text_size"
                         android:textStyle="bold" />
 
                     <EditText
@@ -237,7 +237,7 @@
                         android:layout_margin="2dp"
                         android:layout_weight="6"
                         android:background="@drawable/background_edittext"
-                        android:drawableEnd="@drawable/ic_time_new"
+                        android:drawableRight="@drawable/ic_time_new"
                         android:focusable="false"
                         android:padding="@dimen/edittxt_padding" />
 
@@ -268,7 +268,7 @@
                             android:padding="7dp"
                             android:text="Approver"
                             android:textColor="#000000"
-                            android:textSize="18sp"
+                            android:textSize="@dimen/request_lable_text_size"
                             android:textStyle="bold" />
 
                         <Spinner
@@ -316,7 +316,7 @@
                         android:padding="5dp"
                         android:text="Reason for Request"
                         android:textColor="#000000"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/request_lable_text_size"
                         android:textStyle="bold" />
 
                     <EditText

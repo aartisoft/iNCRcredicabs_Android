@@ -171,18 +171,5 @@ public class CheckIn extends AppCompatActivity {
         String Employee_Qlid = sharedPreferences.getString("user_qlid","");
         return Employee_Qlid;
     }
-    public void putEmployeeDetails()
-    {
-//        sharedPreferences=getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
-//        editor = sharedPreferences.edit();
-////                              editor.putString("user_qlid",user.getText().toString());
-//        editor.putString("user_name",
-//                response.getString("empFName")+" "+
-//                        response.getString("empMName")+" "+
-//                        response.getString("empLName"));
-//        editor.putString("user_qlid",qlid);
-//        editor.putString("user_password",pass.getText().toString());
-//        editor.apply();
 
-    }
 }
