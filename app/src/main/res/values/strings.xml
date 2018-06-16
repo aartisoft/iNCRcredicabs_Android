@@ -60,4 +60,8 @@
     <string name="sos_cancelled">SOS cancelled</string>
     <string name="notinanyCabs">Currently you\'re not in any Cabs</string>
     <string name="alert_request_submitted">Request Successfully Submitted, Ride will be Scheduled soon. </string>
+    <string name="title_activity_request_notifications">RequestNotifications</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

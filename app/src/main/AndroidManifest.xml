@@ -59,7 +59,7 @@
                 <action android:name="Reject" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".AlarmReceiver"/>
+        <receiver android:name=".AlarmReceiver" />
 
         <activity
             android:name=".FeedbackActivity"
@@ -71,9 +71,13 @@
         <activity android:name=".CustomScannerActivity" />
         <activity android:name=".CustomScannerCheckOutActivity" />
         <activity android:name=".AboutPage" />
-        <activity android:name=".Splash"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            ></activity>
+        <activity
+            android:name=".Splash"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".RequestNotifications"
+            android:label="@string/title_activity_request_notifications"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -485,7 +485,10 @@ public class Dashboard extends AppCompatActivity
         } else if (id == R.id.nav_about_developers) {
             startActivity(new Intent(Dashboard.this, AboutPage.class));
 
-        } else if (id == R.id.LogOut) {
+        }else if(id == R.id.nav_requests){
+            startActivity(new Intent(Dashboard.this,RequestNotifications.class));;
+        }
+        else if (id == R.id.LogOut) {
 
             final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
             alertDialog.setTitle("Alert");
