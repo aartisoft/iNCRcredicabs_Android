@@ -21,9 +21,9 @@
         <item>Lvl 2 Manager</item>
     </string-array>
 
-    <string name="app_description">iNCRediCabs is a Product fully developed by interns 2018 batch
+    <string name="app_description">iNCRediCabs is a Product fully developed by interns 2018 batch,
                                     this app and website is made to make the handling of the transport
-                                    department easier.</string>
+                                    department easier and making your cab rides easier.</string>
     <string name="login_login_top_label">User Login</string>
     <string name="login_qlid_text_hint">QLID</string>
     <string name="login_password_text_hint">Password</string>
@@ -65,4 +65,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="all_you_re_unscheduled_cab_requests">All you\'re Unscheduled Cab Requests show up here,currently You haven\'t made any request yet.</string>
+    <string name="communicate">Communicate</string>
+    <string name="call_transport_admin_1">Call Transport Admin 1</string>
+    <string name="call_transport_admin_2">Call Transport Admin 2</string>
 </resources>

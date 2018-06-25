@@ -9,13 +9,27 @@
         android:left="5dp"
         android:right="5dp"
         android:top="5dp" />
-   <!-- <gradient
-        android:startColor="#5CC550"
-        android:endColor="#05A4CB"
-        android:type="linear"
-        android:centerColor="#00A77E"
-        android:gradientRadius="500"
-        />
--->
 
 </shape>
+<!--
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#3bb351">
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+            <solid android:color="#3bb351" />
+            <corners android:radius="30dp" />
+        </shape>
+    </item>
+
+    <item android:id="@android:id/background">
+        <shape android:shape="rectangle">
+            <corners android:radius="30dp" />
+            <solid android:color="#aa64dd17" />
+            <padding
+                android:bottom="5dp"
+                android:left="5dp"
+                android:right="5dp"
+                android:top="5dp" />
+        </shape>
+    </item>
+</ripple>-->

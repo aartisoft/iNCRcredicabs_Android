@@ -136,6 +136,7 @@
                     android:layout_marginRight="@dimen/checkin_btn_marginRight"
                     android:layout_marginTop="@dimen/checkin_btn_margintop"
                     android:layout_weight="1"
+                    android:hapticFeedbackEnabled="true"
                     android:background="@drawable/button_dashboard"
                     android:drawableLeft="@drawable/checkin"
                     android:gravity="center_vertical"
@@ -228,6 +229,7 @@
                 android:drawableLeft="@drawable/complaints"
                 android:paddingLeft="@dimen/complaints_btn_padding_left"
                 android:text="  COMPLAINTS"
+                android:hapticFeedbackEnabled="true"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/complaints_btn_size"
                 android:textStyle="bold" />
@@ -242,6 +244,7 @@
                 android:layout_marginLeft="1dp"
                 android:layout_marginTop="2dp"
                 android:layout_weight="1"
+                android:hapticFeedbackEnabled="true"
                 android:background="@drawable/button_dashboard"
                 android:gravity="center_vertical"
                 android:text="  REQUEST CAB"

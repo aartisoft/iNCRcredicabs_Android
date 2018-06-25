@@ -28,7 +28,7 @@ public class AboutPage extends AppCompatActivity {
                         setDescription(description)
 
                 .addItem(new Element().setTitle("Developed by iNCRedible Interns 2018 batch."))
-                .addItem(new Element().setTitle("Version 1.1"))
+                .addItem(new Element().setTitle("Version 2.0"))
                 .addItem(adsElement)
                 .addGroup("Connect With us").addEmail("Gaurav.sati@ncr.com")
                 .addWebsite("http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080")
