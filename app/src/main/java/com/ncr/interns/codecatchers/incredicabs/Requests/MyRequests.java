@@ -114,7 +114,7 @@ public class MyRequests extends Fragment {
                     } else if (response.getString("status").equals("fail")) {
                         // TODO: 6/25/2018 Handel the case when there are no requests.
                         progressDialog.dismiss();
-                        Toast.makeText(context, "No request Data Available", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(context, "No request Data Available", Toast.LENGTH_SHORT).show();
                         NoRequestsCard.setVisibility(View.VISIBLE);
                         recyclerView.setVisibility(View.GONE);
 

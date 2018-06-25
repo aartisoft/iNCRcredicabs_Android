@@ -2,6 +2,7 @@ package com.ncr.interns.codecatchers.incredicabs.Dashboard;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
@@ -74,9 +75,9 @@ public class Dashboard extends AppCompatActivity
     Cursor cursor;
     Button button_sos;
     String number, Pickuptime = "14:10";
-    String Employee_Qlid,Employee_Name,Employee_Contact_number;
+    String Employee_Qlid, Employee_Name, Employee_Contact_number;
     String Cab_number;
-    String Employee_HomeAddress,DriverName,DriverContactNumber;
+    String Employee_HomeAddress, DriverName, DriverContactNumber;
     CabMatesAdapter adapter;
     JSONObject jsonObject;
     String Route_No = null;
@@ -291,9 +292,9 @@ public class Dashboard extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         jsonObject = new JSONObject();
+      /*  //<editor-fold desc="Old Driver Calling Method">
         if (id == R.id.call_driver){
             Toast.makeText(context, "Calling Driver Now", Toast.LENGTH_SHORT).show();
-            // TODO: 6/4/2018 implement driver calling feature
             if(DriverContactNumber.isEmpty()){
                 Toast.makeText(context, "Driver's Contact number is not Available", Toast.LENGTH_SHORT).show();
             }
@@ -301,6 +302,11 @@ public class Dashboard extends AppCompatActivity
                 makePhoneCall(DriverContactNumber);
             }
         }
+        //</editor-fold>*/
+        if (id == R.id.call_driver) {
+            showDriverDetailsDialogBox();
+        }
+
         if (id == R.id.call_transport) {
             number = "9953122087";
             makePhoneCall(number);
@@ -328,10 +334,10 @@ public class Dashboard extends AppCompatActivity
 //                            Log.i("VOLLEY", response.toString());
                             try {
                                 if (response.getString("success").equalsIgnoreCase("true")) {
-                                   // Code for Changing the existing view of Dashboard
+                                    // Code for Changing the existing view of Dashboard
                                     mSqLiteDatabase.execSQL("DELETE FROM " + CabMatesContract.DB_TABLE);
-                                    mSqLiteDatabase.execSQL("DELETE FROM "+ShiftContract.DB_TABLE);
-                                    Log.d(TAG, "Gaurav >>>> onResponse: StartTime:- " +Start_Time);
+                                    mSqLiteDatabase.execSQL("DELETE FROM " + ShiftContract.DB_TABLE);
+                                    Log.d(TAG, "Gaurav >>>> onResponse: StartTime:- " + Start_Time);
                                     Log.d(TAG, "onResponse: Data deleted from Sqlite");
                                     parseJSON(response);
                                     //     Updating the details of users Cabmates
@@ -408,21 +414,21 @@ public class Dashboard extends AppCompatActivity
 
             JSONArray shiftInfo = response.getJSONArray("shiftInfo");
 
-            for (int i  =0;i<shiftInfo.length();i++){
+            for (int i = 0; i < shiftInfo.length(); i++) {
                 JSONObject shiftTableInfo = shiftInfo.getJSONObject(i);
-                int shiftId =  shiftTableInfo.getInt("shiftId");
+                int shiftId = shiftTableInfo.getInt("shiftId");
                 String shiftName = shiftTableInfo.getString("shiftName");
                 String startTime = shiftTableInfo.getString("startTime");
                 String endTime = shiftTableInfo.getString("endTime");
                 String ShiftName = shiftTableInfo.getString("shiftName");
                 ContentValues shiftInfoValues = new ContentValues();
 
-                shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_ID,shiftId);
-                shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_NAME,shiftName);
-                shiftInfoValues.put(ShiftContract.COLUMN_START_TIME,startTime);
-                shiftInfoValues.put(ShiftContract.COLUMN_END_TIME,endTime);
-                shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_NAME,ShiftName);
-                mSqLiteDatabase.insert(ShiftContract.DB_TABLE,null,shiftInfoValues);
+                shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_ID, shiftId);
+                shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_NAME, shiftName);
+                shiftInfoValues.put(ShiftContract.COLUMN_START_TIME, startTime);
+                shiftInfoValues.put(ShiftContract.COLUMN_END_TIME, endTime);
+                shiftInfoValues.put(ShiftContract.COLUMN_SHIFT_NAME, ShiftName);
+                mSqLiteDatabase.insert(ShiftContract.DB_TABLE, null, shiftInfoValues);
             }
 
 
@@ -443,7 +449,7 @@ public class Dashboard extends AppCompatActivity
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_QLID, CabMate_Qlid);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_NAME, CabMate_name);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_SHIFT_ID, CabMate_shiftId);
-                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_ROUTE_NUMBER,CabMate_routeNumber);
+                    cabMateValues.put(CabMatesContract.COLUMN_CABMATE_ROUTE_NUMBER, CabMate_routeNumber);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_PICKUPTIME, CabMate_pickupTime);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_CONTACT_NUMBER, CabMate_contactNumber);
                     cabMateValues.put(CabMatesContract.COLUMN_CABMATE_ADDRESS, CabMate_address);
@@ -492,10 +498,10 @@ public class Dashboard extends AppCompatActivity
         } else if (id == R.id.nav_about_developers) {
             startActivity(new Intent(Dashboard.this, AboutPage.class));
 
-        }else if(id == R.id.nav_requests){
-            startActivity(new Intent(Dashboard.this,RequestNotifications.class));;
-        }
-        else if (id == R.id.LogOut) {
+        } else if (id == R.id.nav_requests) {
+            startActivity(new Intent(Dashboard.this, RequestNotifications.class));
+            ;
+        } else if (id == R.id.LogOut) {
 
             final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
             alertDialog.setTitle("Alert");
@@ -506,7 +512,7 @@ public class Dashboard extends AppCompatActivity
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(context, Login.class);
-                    mSqLiteDatabase.execSQL("DELETE FROM "+EmployeeContract.DB_TABLE);
+                    mSqLiteDatabase.execSQL("DELETE FROM " + EmployeeContract.DB_TABLE);
                     mSqLiteDatabase.execSQL("DELETE FROM " + CabMatesContract.DB_TABLE);
                     mSqLiteDatabase.execSQL("DELETE FROM " + ShiftContract.DB_TABLE);
                     mSqLiteDatabase.execSQL("DELETE FROM " + ContactsContract.DB_TABLE);
@@ -631,8 +637,7 @@ public class Dashboard extends AppCompatActivity
     }
     //</editor-fold>
 
-
-    //<editor-fold desc="OnStart">
+    //<editor-fold desc="OnStart Method of Dashboard Activity">
     @Override
     protected void onStart() {
         if (getSharedPreferences(null, MODE_PRIVATE).getBoolean("alarm", true)) {
@@ -704,18 +709,21 @@ public class Dashboard extends AppCompatActivity
     }
     //</editor-fold>
 
-
+    //<editor-fold desc="Method to get Employeee Qlid">
     public String getEmployeeQlid() {
         sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         String Employee_Qlid = sharedPreferences.getString("user_qlid", "");
         return Employee_Qlid;
     }
+    //</editor-fold>
 
-    public void getDriverDetails(){
-        sharedPreferences = getSharedPreferences(MY_PREFERENCES,Context.MODE_PRIVATE);
-        DriverName = sharedPreferences.getString("DRIVERNAME","");
-        DriverContactNumber = sharedPreferences.getString("DRIVERCONTACTNUMBER","");
+    //<editor-fold desc="Method to get Driver Details">
+    public void getDriverDetails() {
+        sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+        DriverName = sharedPreferences.getString("DRIVERNAME", "");
+        DriverContactNumber = sharedPreferences.getString("DRIVERCONTACTNUMBER", "");
     }
+    //</editor-fold>
 
     //<editor-fold desc="Method to get the Current Employee data from the database to show in dashboard">
     public void getEmployeeData() {
@@ -730,15 +738,54 @@ public class Dashboard extends AppCompatActivity
         c.close();
 
     }
+
     //</editor-fold>
-    public void getCabNumber(){
+
+    //<editor-fold desc="Method to get Cab Number">
+    public void getCabNumber() {
         Cursor c = mSqLiteDatabase.rawQuery("SELECT * FROM " + CabMatesContract.DB_TABLE, null);
-        while(c.moveToNext()){
+        while (c.moveToNext()) {
             Cab_number = c.getString(c.getColumnIndex(CabMatesContract.COLUMN_CABMATE_CAB_NUMBER));
-            Log.d(TAG, "getCabNumber: "+Cab_number);
+            Log.d(TAG, "getCabNumber: " + Cab_number);
         }
     }
+    //</editor-fold>
 
+    //<editor-fold desc="ShowDriverDetailsDialogBox">
+    public void showDriverDetailsDialogBox() {
+
+        final Dialog dialog = new Dialog(Dashboard.this);
+        dialog.setContentView(R.layout.driver_details_dialogue);
+        dialog.setTitle("DRIVER DETAILS");
+        dialog.show();
+        TextView textView_driverName = dialog.findViewById(R.id.dialog_driver_name);
+        TextView textView_driverContactNumber = dialog.findViewById(R.id.dialog_driver_number);
+        LinearLayout driverDetailsLayout = dialog.findViewById(R.id.layout_driver_details);
+        TextView driverDetailsNotAvailble = dialog.findViewById(R.id.driver_details_not_available);
+        TextView textView_cabNumber = dialog.findViewById(R.id.dialog_cab_number);
+        driverDetailsLayout.setVisibility(View.GONE);
+        driverDetailsNotAvailble.setVisibility(View.GONE);
+
+        if (DriverName.isEmpty() || DriverContactNumber.isEmpty()) {
+            driverDetailsNotAvailble.setVisibility(View.VISIBLE);
+        } else {
+            driverDetailsLayout.setVisibility(View.VISIBLE);
+            textView_driverName.setText(DriverName);
+            textView_driverContactNumber.setText(DriverContactNumber);
+            textView_cabNumber.setText(Cab_number);
+        }
+        Button button_callDriver = dialog.findViewById(R.id.dialog_call_driver);
+        button_callDriver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makePhoneCall(DriverContactNumber);
+                dialog.dismiss();
+            }
+        });
+
+
+    }
+    //</editor-fold>
 
     //<editor-fold desc="Check Internet Connection">
     public static boolean checkConnection(Context context) {
@@ -761,8 +808,5 @@ public class Dashboard extends AppCompatActivity
     }
     //</editor-fold>
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
+
 }

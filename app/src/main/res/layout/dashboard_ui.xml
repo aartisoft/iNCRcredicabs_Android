@@ -42,6 +42,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/shift_time_text_margin"
                     android:gravity="center"
+                    android:textColor="#000"
                     android:text="Your Current Shift is 10AM - 7PM"
                     android:textSize="@dimen/shift_time_text_size"
                     android:textStyle="bold" />

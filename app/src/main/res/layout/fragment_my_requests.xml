@@ -24,7 +24,7 @@
         android:layout_marginRight="10dp"
         android:padding="5dp"
         android:elevation="20dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:cardCornerRadius="10dp">
 
         <TextView
