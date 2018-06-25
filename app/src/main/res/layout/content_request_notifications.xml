@@ -5,27 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".RequestNotifications"
+    tools:context=".Requests.RequestNotifications"
     tools:showIn="@layout/activity_request_notifications">
-
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="?attr/actionBarSize"-->
-        <!--android:id="@+id/my_Toolbar"-->
-        <!--android:elevation="4dp"-->
-        <!--app:titleTextColor="#FFFFFF"-->
-        <!--android:gravity="left"-->
-        <!--android:layout_gravity="left"-->
-        <!--android:background="@drawable/app_bar_gradient"-->
-        <!--android:theme="@style/AppTheme.AppBarOverlay"-->
-        <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"-->
-        <!--/>-->
 
     <FrameLayout
         android:id="@+id/request_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toTopOf="@+id/navigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigationView"

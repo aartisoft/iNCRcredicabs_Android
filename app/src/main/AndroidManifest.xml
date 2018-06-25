@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
-            android:name=".Login"
+            android:name=".Login.Login"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,14 +23,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Dashboard"
+            android:name=".Dashboard.Dashboard"
             android:label="@string/title_activity_dashboard"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MainRequestActivity"
+            android:name=".CabRequests.MainRequestActivity"
             android:label="@string/title_activity_unscheduled_request"
-            android:parentActivityName=".Dashboard"
+            android:parentActivityName=".Dashboard.Dashboard"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
@@ -59,24 +59,25 @@
                 <action android:name="Reject" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".AlarmReceiver" />
+        <receiver android:name=".Dashboard.AlarmReceiver" />
 
         <activity
-            android:name=".FeedbackActivity"
+            android:name=".Feedback.FeedbackActivity"
             android:label="@string/title_activity_feedback"
-            android:parentActivityName=".Dashboard"
+            android:parentActivityName=".Dashboard.Dashboard"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".CheckIn" />
-        <activity android:name=".CheckOut" />
-        <activity android:name=".CustomScannerActivity" />
-        <activity android:name=".CustomScannerCheckOutActivity" />
-        <activity android:name=".AboutPage" />
+        <activity android:name=".CheckinCheckOut.CheckIn" />
+        <activity android:name=".CheckinCheckOut.CheckOut" />
+        <activity android:name=".CheckinCheckOut.CustomScannerActivity" />
+        <activity android:name=".CheckinCheckOut.CustomScannerCheckOutActivity" />
+        <activity android:name=".Splash.AboutPage" />
         <activity
-            android:name=".Splash"
+            android:name=".Splash.Splash"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".RequestNotifications"
+            android:name=".Requests.RequestNotifications"
             android:label="@string/title_activity_request_notifications"
+            android:parentActivityName=".Dashboard.Dashboard"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 

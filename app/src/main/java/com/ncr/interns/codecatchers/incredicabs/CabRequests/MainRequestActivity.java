@@ -1,13 +1,11 @@
-package com.ncr.interns.codecatchers.incredicabs;
-import android.support.annotation.NonNull;
+package com.ncr.interns.codecatchers.incredicabs.CabRequests;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-;
+;import com.ncr.interns.codecatchers.incredicabs.R;
 
 public class MainRequestActivity extends AppCompatActivity {
 

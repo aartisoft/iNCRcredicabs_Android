@@ -1,24 +1,17 @@
-package com.ncr.interns.codecatchers.incredicabs;
+package com.ncr.interns.codecatchers.incredicabs.NCABUtils;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
-import com.ncr.interns.codecatchers.incredicabs.notification.MyFirebaseInstanceIDService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by ag250497 on 20-Mar-18.

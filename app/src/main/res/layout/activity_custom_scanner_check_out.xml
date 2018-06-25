@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ncr.interns.codecatchers.incredicabs.CustomScannerCheckOutActivity">
+    tools:context="com.ncr.interns.codecatchers.incredicabs.CheckinCheckOut.CustomScannerCheckOutActivity">
 
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/zxing_barcode_scanner"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login_background"
-    tools:context="com.ncr.interns.codecatchers.incredicabs.Splash">
+    tools:context="com.ncr.interns.codecatchers.incredicabs.Splash.Splash">
 
     <TextView
         android:id="@+id/textView2"

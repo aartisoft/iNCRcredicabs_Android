@@ -2,7 +2,7 @@
  * Created by gs250365 on 3/23/2018.
  */
 
-package com.ncr.interns.codecatchers.incredicabs;
+package com.ncr.interns.codecatchers.incredicabs.SOS;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -22,16 +22,9 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.ncr.interns.codecatchers.incredicabs.R;
 
 public class CustomDialogClass extends Dialog implements
         android.view.View.OnClickListener {
@@ -55,7 +48,7 @@ public class CustomDialogClass extends Dialog implements
     String sosUrl = "";
     String Url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/" +
             "NCAB/EmployeeService/sos-trigger-android";
-    MediaPlayer mp = MediaPlayer.create(getContext(),R.raw.alert);
+    MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.alert);
 
     public CustomDialogClass(Activity a,Context context) {
         super(a);

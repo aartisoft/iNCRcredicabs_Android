@@ -1,4 +1,4 @@
-package com.ncr.interns.codecatchers.incredicabs;
+package com.ncr.interns.codecatchers.incredicabs.Splash;
 
 import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
@@ -8,8 +8,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
 
-import java.util.Calendar;
-import java.util.StringTokenizer;
+import com.ncr.interns.codecatchers.incredicabs.R;
 
 import mehdi.sakout.aboutpage.Element;
 

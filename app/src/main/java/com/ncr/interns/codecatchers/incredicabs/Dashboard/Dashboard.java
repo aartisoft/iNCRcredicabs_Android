@@ -1,8 +1,7 @@
-package com.ncr.interns.codecatchers.incredicabs;
+package com.ncr.interns.codecatchers.incredicabs.Dashboard;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.FragmentManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
@@ -19,8 +18,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -45,18 +42,26 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.ncr.interns.codecatchers.incredicabs.Adapter.*;
+import com.ncr.interns.codecatchers.incredicabs.CabRequests.MainRequestActivity;
+import com.ncr.interns.codecatchers.incredicabs.CheckinCheckOut.CheckIn;
+import com.ncr.interns.codecatchers.incredicabs.CheckinCheckOut.CheckOut;
+import com.ncr.interns.codecatchers.incredicabs.Feedback.FeedbackActivity;
+import com.ncr.interns.codecatchers.incredicabs.Login.Login;
+import com.ncr.interns.codecatchers.incredicabs.NCABUtils.RESTService;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ContactsContract;
-import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeCabMatesDetails;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ShiftContract;
+import com.ncr.interns.codecatchers.incredicabs.R;
+import com.ncr.interns.codecatchers.incredicabs.Requests.RequestNotifications;
+import com.ncr.interns.codecatchers.incredicabs.SOS.CustomDialogClass;
+import com.ncr.interns.codecatchers.incredicabs.Splash.AboutPage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Dashboard extends AppCompatActivity
@@ -169,6 +174,7 @@ public class Dashboard extends AppCompatActivity
                     checkIn_intent.putExtra("start_time", Start_Time);
                     checkIn_intent.putExtra("route_no", Route_No);
                     startActivity(checkIn_intent);
+
                 } else {
                     final AlertDialog alertDialog = new AlertDialog.Builder(Dashboard.this).create();
                     alertDialog.setTitle("No Connection Available");
@@ -203,6 +209,7 @@ public class Dashboard extends AppCompatActivity
                     checkOut_intent.putExtra("start_time", Start_Time);
                     checkOut_intent.putExtra("route_no", Route_No);
                     startActivity(checkOut_intent);
+
                 } else {
                     final AlertDialog alertDialog = new AlertDialog.Builder(Dashboard.this).create();
                     alertDialog.setTitle("No Connection Available");

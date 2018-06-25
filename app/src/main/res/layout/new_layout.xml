@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="#7d8cbfe9"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".Dashboard"
+    tools:context=".Dashboard.Dashboard"
     android:orientation="vertical"
     tools:showIn="@layout/app_bar_dashboard">
 

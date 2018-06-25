@@ -1,4 +1,4 @@
-package com.ncr.interns.codecatchers.incredicabs;
+package com.ncr.interns.codecatchers.incredicabs.Dashboard;
 
 /**
  * Created by gs250365 on 3/21/2018.
@@ -16,7 +16,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
-import com.ncr.interns.codecatchers.incredicabs.Dashboard;
+import com.ncr.interns.codecatchers.incredicabs.Dashboard.Dashboard;
 import com.ncr.interns.codecatchers.incredicabs.R;
 
 

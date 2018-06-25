@@ -1,18 +1,23 @@
-package com.ncr.interns.codecatchers.incredicabs;
+package com.ncr.interns.codecatchers.incredicabs.Requests;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
+
+import com.ncr.interns.codecatchers.incredicabs.R;
 
 public class RequestNotifications extends AppCompatActivity {
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 
     BottomNavigationView bottomNavigationView;
 
@@ -20,20 +25,12 @@ public class RequestNotifications extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_notifications);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_requestnotification);
+        Toolbar toolbar =  findViewById(R.id.toolbar_requestnotification);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         toolbar.setTitle("Requests");
         setSupportActionBar(toolbar);
-        //<editor-fold desc="FAB">
-        //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-//
-        //</editor-fold>
         bottomNavigationView = findViewById(R.id.navigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -58,9 +55,6 @@ public class RequestNotifications extends AppCompatActivity {
         transaction.replace(R.id.request_frame, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
-
-
-
-    }
+ }
 
 }

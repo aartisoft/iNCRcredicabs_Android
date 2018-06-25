@@ -1,4 +1,4 @@
-package com.ncr.interns.codecatchers.incredicabs;
+package com.ncr.interns.codecatchers.incredicabs.Login;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -13,7 +13,6 @@ import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,11 +25,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.ncr.interns.codecatchers.incredicabs.Dashboard.Dashboard;
+import com.ncr.interns.codecatchers.incredicabs.NCABUtils.FirebaseTokenUtility;
+import com.ncr.interns.codecatchers.incredicabs.NCABUtils.RESTService;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ContactsContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ShiftContract;
+import com.ncr.interns.codecatchers.incredicabs.R;
 import com.ncr.interns.codecatchers.incredicabs.notification.DeleteFirebaseTokenService;
 
 import org.json.JSONArray;
@@ -41,14 +44,8 @@ public class Login extends AppCompatActivity {
 
     Button login;
     EditText user, pass;
-    String EmployeeQlID;
-    String EmployeeFirstName;
-    String EmployeeMiddleName;
-    String EmployeeLastName;
-    String Level1ManagerQlid;
-    String Level2ManagerQlid;
-    String Level1ManagerName;
-    String Level2ManagerName;
+    String EmployeeQlID,EmployeeFirstName,EmployeeMiddleName,EmployeeLastName;
+    String Level1ManagerQlid,Level2ManagerQlid,Level1ManagerName,Level2ManagerName;
     String HomeAddress;
     String OfficeAddress;
     String contactNumber;
@@ -112,6 +109,7 @@ public class Login extends AppCompatActivity {
                     //if condition to validate if the input is
                     // entered or not and internet connection is avalible
                     if (validate(user.getText().toString(),pass.getText().toString())) {
+                        // TODO: 6/25/2018
                         progressDialog = new ProgressDialog(Login.this,0);
                         progressDialog.setTitle("Logging in..");
                         progressDialog.setMessage("Please Wait");

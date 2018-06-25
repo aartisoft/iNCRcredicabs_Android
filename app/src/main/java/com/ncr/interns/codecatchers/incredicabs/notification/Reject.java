@@ -1,10 +1,8 @@
 package com.ncr.interns.codecatchers.incredicabs.notification;
 
-import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -14,7 +12,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.ncr.interns.codecatchers.incredicabs.RESTService;
+import com.ncr.interns.codecatchers.incredicabs.NCABUtils.RESTService;
 
 import org.json.JSONException;
 import org.json.JSONObject;

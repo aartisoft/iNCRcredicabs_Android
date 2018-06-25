@@ -1,4 +1,4 @@
-package com.ncr.interns.codecatchers.incredicabs;
+package com.ncr.interns.codecatchers.incredicabs.NCABUtils;
 
 import android.content.Context;
 

@@ -31,8 +31,8 @@
 
             <item
             android:id="@+id/nav_requests"
-            android:icon="@drawable/ic_info_about_developers"
-            android:title="Requests" />
+            android:icon="@drawable/ic_car_notification"
+            android:title="Cab Requests" />
 
             <item
                 android:id="@+id/LogOut"

@@ -3,10 +3,12 @@
 
     <item
         android:id="@+id/navigation_my_requests"
+        android:icon="@drawable/ic_person_white"
         android:title="My Requests"/>
 
     <item
         android:id="@+id/navigation_requests_to_approve"
+        android:icon="@drawable/ic_request_group_add"
         android:title="Pending Requests"/>
 
 

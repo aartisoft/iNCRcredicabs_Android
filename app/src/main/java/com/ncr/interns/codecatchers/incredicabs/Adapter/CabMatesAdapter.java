@@ -1,9 +1,5 @@
 package com.ncr.interns.codecatchers.incredicabs.Adapter;
 
-/**
- * Created by gs250365 on 3/15/2018.
- */
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -14,30 +10,17 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ncr.interns.codecatchers.incredicabs.Dashboard;
-
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
-import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeCabMatesDetails;
 import com.ncr.interns.codecatchers.incredicabs.R;
 
-import java.util.ArrayList;
-
-/**
- * Created by gs250365 on 3/15/2018.
- */
-
 public class CabMatesAdapter extends Adapter<CabMatesAdapter.cabMatesViewHolder> {
-
 
     Cursor cursor;
     Context ctx;
@@ -76,9 +59,8 @@ public class CabMatesAdapter extends Adapter<CabMatesAdapter.cabMatesViewHolder>
     @Override
     public void onBindViewHolder(CabMatesAdapter.cabMatesViewHolder holder, int position) {
 
-        if (!cursor.moveToPosition(position)) {
-            return;
-        }
+        if (!cursor.moveToPosition(position)) {return;}
+
         String emp_name = cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_NAME));
         String emp_address = cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_ADDRESS));
         String emp_pickupTime = cursor.getString(cursor.getColumnIndex(CabMatesContract.COLUMN_CABMATE_PICKUPTIME));
@@ -93,12 +75,9 @@ public class CabMatesAdapter extends Adapter<CabMatesAdapter.cabMatesViewHolder>
             public void onClick(View v) {
                 mobNum = emp_contact_number;
                 makePhoneCall();
-
             }
         });
-
     }
-
     @Override
     public int getItemCount() {
         return cursor.getCount();
@@ -119,11 +98,6 @@ public class CabMatesAdapter extends Adapter<CabMatesAdapter.cabMatesViewHolder>
         }else{
             Toast.makeText(ctx, "Phone Number not Specified", Toast.LENGTH_SHORT).show();
         }
-
     }
-
-
-
-
 }
 

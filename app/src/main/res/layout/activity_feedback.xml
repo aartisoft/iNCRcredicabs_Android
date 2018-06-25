@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:id="@+id/feedbacklayout"
     android:layout_height="match_parent"
-    tools:context="com.ncr.interns.codecatchers.incredicabs.FeedbackActivity">
+    tools:context="com.ncr.interns.codecatchers.incredicabs.Feedback.FeedbackActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
