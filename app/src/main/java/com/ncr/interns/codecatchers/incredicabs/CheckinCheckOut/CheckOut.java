@@ -15,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.ncr.interns.codecatchers.incredicabs.NCABUtils.Environment;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
 import com.ncr.interns.codecatchers.incredicabs.NCABUtils.RESTService;
 
@@ -32,7 +33,7 @@ public class CheckOut extends AppCompatActivity {
     SQLiteDatabase mSqLiteDatabase;
     NcabSQLiteHelper ncabSQLiteHelper;
     private ZXingScannerView scannerView;
-    String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/checkout";
+    String url = Environment.URL_CHECK_OUT;
     // String url_roasterinfo="http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/RoasterDetailsByEmpID";
     String Route_No;
     String Pickup_Time;

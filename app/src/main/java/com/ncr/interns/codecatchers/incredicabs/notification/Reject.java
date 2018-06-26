@@ -12,6 +12,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.ncr.interns.codecatchers.incredicabs.NCABUtils.Environment;
 import com.ncr.interns.codecatchers.incredicabs.NCABUtils.RESTService;
 
 import org.json.JSONException;
@@ -26,7 +27,7 @@ public class Reject extends BroadcastReceiver {
     String reqId;
     SharedPreferences sharedPreferences;
     private static final String MY_PREFERENCES = "MyPrefs";
-    String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/approval";
+    String url = Environment.URL_REQUEST_REJECT;
     @Override
     public void onReceive(final Context context, Intent intent) {
 

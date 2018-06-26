@@ -16,6 +16,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.ncr.interns.codecatchers.incredicabs.Dashboard.Dashboard;
+import com.ncr.interns.codecatchers.incredicabs.NCABUtils.Environment;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
 import com.ncr.interns.codecatchers.incredicabs.NCABUtils.RESTService;
 
@@ -33,7 +34,7 @@ public class CheckIn extends AppCompatActivity {
     String Route_No = null;
     String Pickup_Time = null;
     String Start_Time = null;
-    String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/checkin";
+    String url = Environment.URL_CHECK_IN;
     String url_roasterinfo = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/RoasterDetailsByEmpID";
     String Emp_Qlid;
     SharedPreferences.Editor editor;

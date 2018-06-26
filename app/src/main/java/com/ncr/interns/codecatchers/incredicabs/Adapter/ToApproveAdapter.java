@@ -1,6 +1,8 @@
 package com.ncr.interns.codecatchers.incredicabs.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,10 +24,12 @@ public class ToApproveAdapter extends RecyclerView.Adapter<ToApproveAdapter.ToAp
     JSONObject responseObject;
     int length;
     Context context;
+
     public ToApproveAdapter() {
 
     }
-    public ToApproveAdapter(JSONObject api_response,Context ctx) {
+
+    public ToApproveAdapter(JSONObject api_response, Context ctx) {
         responseObject = api_response;
         context = ctx;
         try {
@@ -37,9 +41,9 @@ public class ToApproveAdapter extends RecyclerView.Adapter<ToApproveAdapter.ToAp
     }
 
     public static class ToApproveViewHolder extends RecyclerView.ViewHolder {
-       TextView employee_name,from_date,to_date,cab_request_time,
-                source_address,destination_address,reason_for_request,request_status;
-       Button btn_approve,btn_reject;
+        TextView employee_name, from_date, to_date, cab_request_time,
+                source_address, destination_address, reason_for_request, request_status;
+        Button btn_approve, btn_reject;
 
         public ToApproveViewHolder(View itemView) {
             super(itemView);
@@ -47,7 +51,7 @@ public class ToApproveAdapter extends RecyclerView.Adapter<ToApproveAdapter.ToAp
             from_date = itemView.findViewById(R.id.from_date);
             to_date = itemView.findViewById(R.id.to_date);
             cab_request_time = itemView.findViewById(R.id.cab_request_time);
-            source_address  = itemView.findViewById(R.id.source_address);
+            source_address = itemView.findViewById(R.id.source_address);
             destination_address = itemView.findViewById(R.id.destination_address);
             reason_for_request = itemView.findViewById(R.id.reason_for_request);
             request_status = itemView.findViewById(R.id.request_status);
@@ -55,9 +59,10 @@ public class ToApproveAdapter extends RecyclerView.Adapter<ToApproveAdapter.ToAp
             btn_reject = itemView.findViewById(R.id.button_reject);
         }
     }
+
     @Override
     public ToApproveViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View rootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_to_approve ,parent, false);
+        View rootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_to_approve, parent, false);
         return new ToApproveAdapter.ToApproveViewHolder(rootView);
     }
 
@@ -99,7 +104,7 @@ public class ToApproveAdapter extends RecyclerView.Adapter<ToApproveAdapter.ToAp
                 holder.request_status.setTextColor(Color.GREEN);
                 holder.btn_approve.setVisibility(View.GONE);
                 holder.btn_reject.setVisibility(View.GONE);
-            } else if(Approval.equals("REJECTED")){
+            } else if (Approval.equals("REJECTED")) {
                 holder.request_status.setText(Approval);
                 holder.request_status.setTextColor(Color.RED);
                 holder.btn_approve.setVisibility(View.GONE);
@@ -108,30 +113,60 @@ public class ToApproveAdapter extends RecyclerView.Adapter<ToApproveAdapter.ToAp
             holder.btn_approve.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO: 6/25/2018 Approve Request via Broadcast Receiver
-                    Toast.makeText(context, "Request Approved for "+Emp_name, Toast.LENGTH_SHORT).show();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                    alertDialog.setTitle("Confirm");
+                    alertDialog.setMessage("Are you sure you want to APPROVE the request?");
+                    alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+                    alertDialog.setCancelable(false);
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "SURE", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // TODO: 6/26/2018 Positive Action Button
+                            Toast.makeText(context, "Request Approved", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // TODO: 6/26/2018 Negative Action Button
+                            alertDialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
                 }
             });
             holder.btn_reject.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO: 6/25/2018 Reject request via Broadcast Receiver
-                    Toast.makeText(context, "Request Rejected for "+Emp_name, Toast.LENGTH_SHORT).show();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                    alertDialog.setTitle("Confirm");
+                    alertDialog.setMessage("Are you sure you want to REJECT the request?");
+                    alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+                    alertDialog.setCancelable(false);
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "SURE", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // TODO: 6/26/2018 Positive Action Button
+                            Toast.makeText(context, "Request Rejected", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // TODO: 6/26/2018 Negative Action Button
+                            alertDialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
                 }
             });
-
-
-            //}
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
     public int getItemCount() {
         return length;
     }
-
-
 }

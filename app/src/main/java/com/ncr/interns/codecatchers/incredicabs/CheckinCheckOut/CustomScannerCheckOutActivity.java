@@ -22,6 +22,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.ncr.interns.codecatchers.incredicabs.Dashboard.Dashboard;
+import com.ncr.interns.codecatchers.incredicabs.NCABUtils.Environment;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ShiftContract;
@@ -51,7 +52,7 @@ public class CustomScannerCheckOutActivity extends AppCompatActivity  implements
     NcabSQLiteHelper ncabSQLiteHelper;
 
     // String ipaddress="192.168.43.45:8080";
-    String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/checkout";
+    String url = Environment.URL_CHECK_OUT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

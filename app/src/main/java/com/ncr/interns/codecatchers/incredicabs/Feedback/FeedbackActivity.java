@@ -31,6 +31,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.ncr.interns.codecatchers.incredicabs.Dashboard.Dashboard;
+import com.ncr.interns.codecatchers.incredicabs.NCABUtils.Environment;
 import com.ncr.interns.codecatchers.incredicabs.NCABUtils.RESTService;
 import com.ncr.interns.codecatchers.incredicabs.R;
 
@@ -70,8 +71,8 @@ public class FeedbackActivity extends AppCompatActivity {
     EditText cabNumber;
     String Employee_Qlid;
     private static final String MY_PREFERENCES = "MyPrefs_login";
-    private String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/RosterService/complaint";
-    private String getShiftDetailsUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/RosterService/getCabShift";
+    private String urlFeedback = Environment.URL_FEEDBACK;
+    private String urlGetShiftDetails = Environment.URL_GET_SHIFT_DETAILS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +151,7 @@ public class FeedbackActivity extends AppCompatActivity {
 
         final JSONArray jsonArray = new JSONArray();
         jsonArray.put(jsonBody);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, getShiftDetailsUrl,
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, urlGetShiftDetails,
                 jsonArray,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -521,7 +522,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            jsonObjRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
+            jsonObjRequest = new JsonObjectRequest(Request.Method.POST, urlFeedback, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.i("VOLLEY", "inside onResponse method:UnscheduledRequest");

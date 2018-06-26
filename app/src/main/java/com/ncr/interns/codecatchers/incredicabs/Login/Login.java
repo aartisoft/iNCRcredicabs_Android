@@ -26,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.ncr.interns.codecatchers.incredicabs.Dashboard.Dashboard;
+import com.ncr.interns.codecatchers.incredicabs.NCABUtils.Environment;
 import com.ncr.interns.codecatchers.incredicabs.NCABUtils.FirebaseTokenUtility;
 import com.ncr.interns.codecatchers.incredicabs.NCABUtils.RESTService;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
@@ -67,9 +68,7 @@ public class Login extends AppCompatActivity {
     SharedPreferences.Editor editor;
     private static final String TAG = Login.class.getSimpleName();
 
-    String baseUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080";
-    String loginUrl = "/NCAB/EmployeeService/doLogin-android";
-    String mainUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/EmployeeService/login-android";
+    String urlLogin = Environment.URL_LOGIN;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -295,7 +294,7 @@ public class Login extends AppCompatActivity {
 
         Log.d(TAG, "doLogin: qlid: " + qlid);
         FirebaseTokenUtility ftu = new FirebaseTokenUtility(Login.this);
-        JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, mainUrl, jsonBodyRequest,
+        JsonObjectRequest jsonObjRequest = new JsonObjectRequest(Request.Method.POST, urlLogin, jsonBodyRequest,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {

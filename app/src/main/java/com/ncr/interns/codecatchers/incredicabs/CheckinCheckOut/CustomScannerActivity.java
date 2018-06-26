@@ -22,6 +22,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.ncr.interns.codecatchers.incredicabs.Dashboard.Dashboard;
+import com.ncr.interns.codecatchers.incredicabs.NCABUtils.Environment;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ShiftContract;
@@ -53,7 +54,7 @@ public class CustomScannerActivity extends AppCompatActivity implements Decorate
     SQLiteDatabase mSqLiteDatabase;
     NcabSQLiteHelper ncabSQLiteHelper;
 
-    String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/checkin";
+    String url = Environment.URL_CHECK_IN;
     JsonObjectRequest jsonObjRequest = null;
     JsonObjectRequest jsonObjRequest2 = null;
 

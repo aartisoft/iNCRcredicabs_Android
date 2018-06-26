@@ -32,6 +32,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.ncr.interns.codecatchers.incredicabs.NCABUtils.Environment;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.EmployeeContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.NcabSQLiteHelper;
 import com.ncr.interns.codecatchers.incredicabs.R;
@@ -70,9 +71,7 @@ public class UnscheduledReqFragment extends android.support.v4.app.Fragment impl
     public int Counter;
     Context ctx;
     NcabSQLiteHelper ncabSQLiteHelper;
-    String baseUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080";
-    String pathUrl = "/NCAB/RequestService/sendRequest";
-    String mainUrl = baseUrl+pathUrl;
+    String mainUrl = Environment.URL_UNSCHEDULED_REQUEST;
     String pickupLocationArray[] = {"Select", "Home", "Office", "Other"}; //String Array
     String dropLocationArray[] = {"Select", "Home", "Office", "Other"}; //String Array
     String approverManagerArray[] = {"Lvl 1 Manager", "Lvl 2 Manager"}; //String Array

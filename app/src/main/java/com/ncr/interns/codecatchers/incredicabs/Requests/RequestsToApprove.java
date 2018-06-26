@@ -24,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.ncr.interns.codecatchers.incredicabs.Adapter.MyRequestAdapter;
 import com.ncr.interns.codecatchers.incredicabs.Adapter.ToApproveAdapter;
+import com.ncr.interns.codecatchers.incredicabs.NCABUtils.Environment;
 import com.ncr.interns.codecatchers.incredicabs.NCABUtils.RESTService;
 import com.ncr.interns.codecatchers.incredicabs.R;
 
@@ -48,7 +49,7 @@ public class RequestsToApprove extends Fragment {
     public static final String TAG = "REQUESTSTOAPPROVE";
     private static final String MY_PREFERENCES = "MyPrefs_login";
     SharedPreferences sharedPreferences;
-    String url = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/NotificationsForMe";
+    String url = Environment.URL_REQUEST_FOR_ME;
     //
 
     public RequestsToApprove() {

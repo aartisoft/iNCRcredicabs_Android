@@ -69,22 +69,16 @@ public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     LinearLayout linearLayout;
     RecyclerView mRecyclerView;
-    Button checkIn, checkOut, Complaints, request;
+    Button checkIn, checkOut, Complaints, request, button_sos;
     SQLiteDatabase mSqLiteDatabase;
     NcabSQLiteHelper ncabSQLiteHelper;
     Cursor cursor;
-    Button button_sos;
     String number, Pickuptime = "14:10";
-    String Employee_Qlid, Employee_Name, Employee_Contact_number;
-    String Cab_number;
+    String Employee_Qlid, Employee_Name, Employee_Contact_number, Cab_number;
     String Employee_HomeAddress, DriverName, DriverContactNumber;
     CabMatesAdapter adapter;
     JSONObject jsonObject;
-    String Route_No = null;
-    String Pickup_Time = null;
-    String Start_Time = null;
-    String End_Time = null;
-
+    String Route_No = null, Pickup_Time = null, Start_Time = null, End_Time = null;
     boolean checkCon;
     String query = "select a.cabmatepickuptime, a.routenumber, a.roasterid, a.shiftid, b.starttime, b.endtime  from CabMatesDetails a, ShiftTable b where a.CabMateQlid = ? and a.shiftid = b.shiftid";
     String mainUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/RoasterDetailsByEmpID"; //
@@ -133,13 +127,12 @@ public class Dashboard extends AppCompatActivity
             mRecyclerView.setLayoutManager(linearLayoutManager);
             mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
             mRecyclerView.setAdapter(adapter);
-
         }
-
         checkCon = checkConnection(Dashboard.this);
 
         //<editor-fold desc="Get teh data from SQLite database">
         // final String query = "select a.cabmatepickuptime, a.routenumber, a.roasterid, a.shiftid, b.starttime, b.endtime  from CabMatesDetails a, ShiftTable b where a.CabMateQlid = ? and a.shiftid = b.shiftid";
+
         Cursor c = mSqLiteDatabase.rawQuery(query, new String[]{Employee_Qlid.toUpperCase()});
         c.moveToFirst();
         while (!c.isAfterLast()) {
@@ -150,8 +143,7 @@ public class Dashboard extends AppCompatActivity
             c.moveToNext();
         }
 
-
-        if (Start_Time == null) {
+if (Start_Time == null) {
             Current_shift.setText("You're not in any Cabs");
         } else {
             String currentShift = "Current Shift is " + Start_Time + " to " + End_Time;
@@ -292,17 +284,6 @@ public class Dashboard extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         jsonObject = new JSONObject();
-      /*  //<editor-fold desc="Old Driver Calling Method">
-        if (id == R.id.call_driver){
-            Toast.makeText(context, "Calling Driver Now", Toast.LENGTH_SHORT).show();
-            if(DriverContactNumber.isEmpty()){
-                Toast.makeText(context, "Driver's Contact number is not Available", Toast.LENGTH_SHORT).show();
-            }
-            else{
-                makePhoneCall(DriverContactNumber);
-            }
-        }
-        //</editor-fold>*/
         if (id == R.id.call_driver) {
             showDriverDetailsDialogBox();
         }
