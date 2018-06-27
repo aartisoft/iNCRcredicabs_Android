@@ -79,7 +79,5 @@ public class Reject extends BroadcastReceiver {
         RESTService.getInstance(context).addToRequestQueue(jsonObjRequest);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(notifiID);
-
-
     }
 }

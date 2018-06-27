@@ -75,6 +75,7 @@ public class MyRequestAdapter extends RecyclerView.Adapter<MyRequestAdapter.myRe
             String Destination = requestObject.getString("Destination").trim();
             String reason = requestObject.getString("Reason").trim();
             String Approval = requestObject.getString("Approval").trim();
+            String RequestId = requestObject.getString("Req_Id").trim();
             holder.employee_name.setText(Emp_name);
             holder.from_date.setText(StartDate);
             holder.to_date.setText(End_Date);
@@ -88,17 +89,13 @@ public class MyRequestAdapter extends RecyclerView.Adapter<MyRequestAdapter.myRe
             } else if (Approval.equals("APPROVED")) {
                 holder.request_status.setText(Approval);
                 holder.request_status.setTextColor(Color.GREEN);
-            } else if(Approval.equals("REJECTED")){
+            } else if (Approval.equals("REJECTED")) {
                 holder.request_status.setText(Approval);
                 holder.request_status.setTextColor(Color.RED);
             }
-
-
-            //}
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -108,11 +105,3 @@ public class MyRequestAdapter extends RecyclerView.Adapter<MyRequestAdapter.myRe
         //return requestsArray.length();
     }
 }
-/*String Emp_name = requestObject.getString("Emp_Name");
-                String Source = requestObject.getString("Source");
-                String Destination = requestObject.getString("Destination");
-                String reason = requestObject.getString("Reason");
-                holder.employee_name.setText(Emp_name);
-                holder.source_address.setText(Source);
-                holder.destination_address.setText(Destination);
-                holder.reason_for_request.setText(reason);*/

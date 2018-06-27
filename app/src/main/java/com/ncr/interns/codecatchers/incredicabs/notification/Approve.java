@@ -53,8 +53,7 @@ public class Approve extends BroadcastReceiver {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
-                        Log.i("VOLLEY", "inside onResponse method:doLogin");
+                Log.i("VOLLEY", "inside onResponse method:doLogin");
                         Log.i("VOLLEY", response.toString());
 
                         try {
@@ -84,8 +83,9 @@ public class Approve extends BroadcastReceiver {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(notifiID);
 
-
     }
+
+
 
 
 
