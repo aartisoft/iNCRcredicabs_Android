@@ -111,7 +111,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:layout_margin="10dp"
+                        android:layout_margin="@dimen/sos_button_margin"
                         android:layout_weight="1"
                         android:background="@drawable/sos_icon"
                         android:elevation="5dp"

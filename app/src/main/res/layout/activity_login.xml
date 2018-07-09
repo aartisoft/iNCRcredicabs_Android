@@ -76,7 +76,7 @@
             android:layout_height="@dimen/login_login_button_height"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_marginBottom="220dp"
+            android:layout_marginBottom="@dimen/login_button_margin_bottom"
             android:background="@drawable/button_submit"
             android:text="@string/login_login_button_text"
             android:textColor="#ffffff"

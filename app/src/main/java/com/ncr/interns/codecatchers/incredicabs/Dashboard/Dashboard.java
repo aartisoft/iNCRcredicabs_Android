@@ -48,6 +48,7 @@ import com.ncr.interns.codecatchers.incredicabs.CheckinCheckOut.CheckIn;
 import com.ncr.interns.codecatchers.incredicabs.CheckinCheckOut.CheckOut;
 import com.ncr.interns.codecatchers.incredicabs.Feedback.FeedbackActivity;
 import com.ncr.interns.codecatchers.incredicabs.Login.Login;
+import com.ncr.interns.codecatchers.incredicabs.NCABUtils.Environment;
 import com.ncr.interns.codecatchers.incredicabs.NCABUtils.RESTService;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.CabMatesContract;
 import com.ncr.interns.codecatchers.incredicabs.NCABdatabase.ContactsContract;
@@ -82,7 +83,7 @@ public class Dashboard extends AppCompatActivity
     boolean checkCon;
     String query = "select a.cabmatepickuptime, a.routenumber, a.roasterid, a.shiftid, b.starttime, b.endtime  from CabMatesDetails a, ShiftTable b where a.CabMateQlid = ? and a.shiftid = b.shiftid";
     String mainUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/RoasterDetailsByEmpID"; //
-    String loginUrl = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/EmployeeService/login-android";
+    String loginUrl = Environment.URL_LOGIN;
     SharedPreferences sharedPreferences;
     private static final String MY_PREFERENCES = "MyPrefs_login";
     Context context = this;

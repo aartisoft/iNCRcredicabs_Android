@@ -31,4 +31,6 @@
     <dimen name="cabmate_pickuptime_textsize">18sp</dimen>
     <dimen name="cabmate_address_textsize">12sp</dimen>
     <dimen name="request_lable_text_size">16sp</dimen>
+    <dimen name="login_button_margin_bottom">220dp</dimen>
+    <dimen name="sos_button_margin">10dp</dimen>
 </resources>

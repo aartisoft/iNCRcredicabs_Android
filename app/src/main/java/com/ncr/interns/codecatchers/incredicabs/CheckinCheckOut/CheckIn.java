@@ -35,7 +35,6 @@ public class CheckIn extends AppCompatActivity {
     String Pickup_Time = null;
     String Start_Time = null;
     String url = Environment.URL_CHECK_IN;
-    String url_roasterinfo = "http://ec2-18-219-151-75.us-east-2.compute.amazonaws.com:8080/NCAB/AndroidService/RoasterDetailsByEmpID";
     String Emp_Qlid;
     SharedPreferences.Editor editor;
     String Check_In = null;
